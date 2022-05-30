@@ -35,7 +35,6 @@ jobs:
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
-      - run: cd nodejs
       - name: Install modules
         run: yarn install
 #      - name: Test
