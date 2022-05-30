@@ -1,19 +1,39 @@
 {
   "name": "@100mslive/server-sdk",
   "version": "0.0.1",
-  "main": "index.js",
   "license": "GPL-3.0-only",
   "devDependencies": {
+    "@types/jest": "^27.5.1",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
     "eslint": "^7.32.0 || ^8.2.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^28.1.0",
     "prettier": "^2.6.2",
+    "ts-jest": "^28.0.3",
     "typescript": "^4.7.2"
   },
   "scripts": {
     "lint": "eslint src/**",
     "lint:fix": "eslint src/** --fix",
-    "format": "prettier --write src/**/*.ts"
-  }
+    "format": "prettier --write src/**/*.ts",
+    "build:cjs": "node scripts/cleanup cjs && tsc -p config/tsconfig.cjs.json",
+    "build:esm": "node scripts/cleanup esm && tsc -p config/tsconfig.esm.json",
+    "build:types": "node scripts/cleanup types && tsc -p config/tsconfig.types.json",
+    "clean": "node scripts/cleanup",
+    "package": "npm run build && npm pack",
+    "test": "jest",
+    "test:cov": "jest --coverage",
+    "build": "npm run build:cjs && npm run build:esm && npm run build:types"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist"
+  ],
+  "homepage": "https://github.com/100mslive/server-sdks",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.js"
 }

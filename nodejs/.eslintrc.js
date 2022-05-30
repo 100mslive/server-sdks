@@ -41,7 +41,7 @@ module.exports = {
       },
     },
   ],
-  ignorePatterns: ["**/build/**"],
+  ignorePatterns: ["**/build/**", "**/dist/**"],
   parserOptions: {
     project: "./tsconfig.json",
   },
