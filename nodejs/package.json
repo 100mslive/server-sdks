@@ -4,6 +4,8 @@
   "license": "GPL-3.0-only",
   "devDependencies": {
     "@types/jest": "^27.5.1",
+    "@types/jsonwebtoken": "^8.5.8",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
     "eslint": "^7.32.0 || ^8.2.0",
@@ -14,17 +16,17 @@
     "typescript": "^4.7.2"
   },
   "scripts": {
-    "lint": "eslint src/**",
-    "lint:fix": "eslint src/** --fix",
-    "format": "prettier --write src/**/*.ts",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "format": "prettier --write src/**/*.ts test/**/*.ts",
     "build:cjs": "node scripts/cleanup cjs && tsc -p config/tsconfig.cjs.json",
     "build:esm": "node scripts/cleanup esm && tsc -p config/tsconfig.esm.json",
     "build:types": "node scripts/cleanup types && tsc -p config/tsconfig.types.json",
     "clean": "node scripts/cleanup",
-    "package": "npm run build && npm pack",
+    "package": "yarn build && yarn pack",
     "test": "jest",
     "test:cov": "jest --coverage",
-    "build": "npm run build:cjs && npm run build:esm && npm run build:types"
+    "build": "yarn run build:cjs && yarn run build:esm && yarn run build:types"
   },
   "publishConfig": {
     "access": "public"
@@ -35,5 +37,9 @@
   "homepage": "https://github.com/100mslive/server-sdks",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "types": "dist/types/index.d.js"
+  "types": "dist/types/index.d.js",
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1",
+    "uuid": "^8.3.2"
+  }
 }
