@@ -17,7 +17,10 @@ jobs:
         os:
           - ubuntu-latest
 #          - windows-latest
-        node: [14.x, 16.x]
+        node: [16.x]
+    defaults:
+      run:
+        working-directory: ./nodejs
 
     steps:
       - uses: actions/checkout@v2
@@ -25,7 +28,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node }}
-      - run: cd nodejs
       - name: Install modules
         run: yarn
       - name: Run tests

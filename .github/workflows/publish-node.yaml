@@ -8,6 +8,10 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./nodejs
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
