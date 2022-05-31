@@ -1,4 +1,4 @@
-import { AuthService, CreateTokenConfig } from "./AuthService";
+import { AppTokenConfig, AuthService, ManagementTokenConfig } from "./AuthService";
 
 export class HMSSDK {
   private authService: AuthService;
@@ -7,7 +7,17 @@ export class HMSSDK {
     this.authService = new AuthService(accessKey, secret);
   }
 
-  async getManagementToken(tokenConfig?: CreateTokenConfig) {
+  /**
+   * management token allows to make API calls to 100ms backend
+   */
+  async getManagementToken(tokenConfig?: ManagementTokenConfig) {
     return this.authService.getManagementToken(tokenConfig);
+  }
+
+  /**
+   * App Token allows for joining room
+   */
+  async getAppToken(tokenConfig: AppTokenConfig) {
+    return this.authService.getAppToken(tokenConfig);
   }
 }

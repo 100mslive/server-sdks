@@ -40,6 +40,7 @@
   "types": "dist/types/index.d.js",
   "dependencies": {
     "jsonwebtoken": "^8.5.1",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "winston": "^3.7.2"
   }
 }
