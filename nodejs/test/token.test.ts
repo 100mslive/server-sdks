@@ -2,11 +2,10 @@ import { HMSSDK } from "../src";
 import { verify } from "jsonwebtoken";
 
 let sdk: HMSSDK;
-let accessKey = "access_key";
-let secret = "secret123";
+let secret = process.env.HMS_SECRET;
 
 beforeEach(() => {
-  sdk = new HMSSDK(accessKey, secret);
+  sdk = new HMSSDK();
 });
 
 describe("management token", () => {
@@ -19,7 +18,9 @@ describe("management token", () => {
   it("should give same token if called again", async () => {
     const token1 = await sdk.getManagementToken();
     const token2 = await sdk.getManagementToken();
+    const token3 = await sdk.getManagementToken({ forceNew: true });
     expect(token1).toBe(token2);
+    expect(token1).not.toBe(token3);
   });
 });
 

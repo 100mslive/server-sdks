@@ -1,13 +1,17 @@
 import { sign, decode, SignOptions, JwtPayload } from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
-import { logger } from "./LoggerService";
+import { logger } from "../LoggerService";
 
 export class AuthService {
   private managementToken?: ManagementToken;
   constructor(private accessKey: string, private secret: string) {}
 
   async getManagementToken(tokenConfig?: ManagementTokenConfig): Promise<ManagementToken> {
-    if (!this.managementToken || this.isTokenExpired(this.managementToken.token)) {
+    if (
+      tokenConfig?.forceNew ||
+      !this.managementToken ||
+      this.isTokenExpired(this.managementToken.token)
+    ) {
       logger.info("generating management token");
       this.managementToken = await this.generateToken(TokenType.Management, tokenConfig);
     }
@@ -93,7 +97,12 @@ interface BaseTokenConfig {
   validForSeconds?: number;
 }
 
-export interface ManagementTokenConfig extends BaseTokenConfig {}
+export interface ManagementTokenConfig extends BaseTokenConfig {
+  /**
+   * always generate new token even if prev is unexpired
+   */
+  forceNew?: boolean;
+}
 
 export interface AppTokenConfig extends BaseTokenConfig {
   /**
