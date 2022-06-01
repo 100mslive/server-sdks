@@ -64,7 +64,3 @@ const hlsUrl = await transportService.startHLSSync({identifier, meetingUrl});
 // to stop
 await transportService.stopHLS({identifier});
 ```
-
-## Planned
-
-- Use https://github.com/typestack/class-transformer for converting between api response and Room Object etc.
