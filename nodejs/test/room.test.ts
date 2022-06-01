@@ -13,6 +13,7 @@ describe("room service", () => {
     const room = await roomService.createRoom({ name: "test-room" });
     const roomById = await roomService.getRoomById(room.id);
     const roomByName = await roomService.getRoomByName(room.name);
+    console.log(room);
     expect(room.id).toBe(roomById.id);
     expect(room.id).toBe(roomById.id);
     expect(room.name).toBe(roomById.name);

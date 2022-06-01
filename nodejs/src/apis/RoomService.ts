@@ -40,7 +40,8 @@ export class RoomService {
     return this.apiService.post("/meetings/hls/start", payload);
   }
 
-  async stopHLS(roomId: { roomId: string }) {
+  async stopHLS({ roomId }: { roomId: string }) {
+    logger.info("stopping hls for room - ", roomId);
     await this.apiService.post("/meetings/hls/stop", { room_id: roomId });
   }
 }
