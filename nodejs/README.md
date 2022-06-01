@@ -1,8 +1,7 @@
 ## 100ms NodeJs Server Side SDK
 
 ## Note
-
-This is early alpha, APIs can break/change at any time.
+## This is early alpha, APIs can break/change at any time.
 
 ## Documentation
 
@@ -43,35 +42,28 @@ const room = await roomService.createRoom({name, description, templateId, region
 console.log(room);
 ```
 
-### Start HLS
+### Start HLS For a 100ms Room from meeting URL
+
+The HLS m3u8 url will be received in webhook response.
 
 ```js
 const roomService = sdk.getRoomService();
 await roomService.startHLS({roomId, meetingUrl, recording: {hlsVod, singleFilePerLayer}});
 ```
 
-### Start HLS For a room from Meeting URL
-
-The HLS m3u8 url will be received in webhook response.
-If room id is not passed, new room will be created. Recording is optional.
-
-```js
-const roomService = sdk.getRoomService();
-const hlsUrl = await roomService.startHLS({roomId, meetingUrl, recording: {hlsVod, singleFilePerLayer}});
-```
-
 ### Start HLS from meeting url
 
 Pass in an url and get a m3u8 back which is obtained by converting that meeting URl to a HLS Stream.
 This might take significant time.
+Identifier is anything from your side to identify an HLS stream. Only one HLS can run against an identifier at a time.
 
 ```js
-const transportService = sdk.getTransportService();
+const transportService = new HMSSDK().getTransportService();
+// to start
 const hlsUrl = await transportService.startHLSSync({identifier, meetingUrl});
-await transportService.stopHLS();
+// to stop
+await transportService.stopHLS({identifier});
 ```
-
-roomId and recording can be optionally passed.
 
 ## Planned
 

@@ -37,7 +37,7 @@ export class RoomService {
         single_file_per_layer: !!config.recording.singleFilePerLayer,
       };
     }
-    return this.apiService.post("/meetings/hls/start", config);
+    return this.apiService.post("/meetings/hls/start", payload);
   }
 
   async stopHLS(roomId: { roomId: string }) {
@@ -55,8 +55,10 @@ export interface CreateRoomConfig {
 export interface StartRoomHLSConfig {
   roomId: string;
   meetingUrl: string;
-  recording?: {
-    hlsVod?: boolean;
-    singleFilePerLayer?: boolean;
-  };
+  recording?: HLSRecordingConfig;
+}
+
+export interface HLSRecordingConfig {
+  hlsVod?: boolean;
+  singleFilePerLayer?: boolean;
 }

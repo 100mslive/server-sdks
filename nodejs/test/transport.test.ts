@@ -7,7 +7,7 @@ beforeEach(() => {
 });
 
 describe("transport service", () => {
-  test("start hls for a url", async () => {
+  test.skip("start hls for a url", async () => {
     const transportService = sdk.getTransportService();
     // gets the prev again if already exists else create
     await transportService.startHLSSync({
