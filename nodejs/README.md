@@ -60,7 +60,7 @@ Identifier is anything from your side to identify an HLS stream. Only one HLS ca
 ```js
 const transportService = new HMSSDK().getTransportService();
 // to start
-const hlsUrl = await transportService.startHLSSync({identifier, meetingUrl});
+const hlsUrl = await transportService.startHLSSync({identifier, appUrl});
 // to stop
 await transportService.stopHLS({identifier});
 ```
