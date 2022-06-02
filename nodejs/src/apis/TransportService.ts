@@ -26,6 +26,11 @@ export class TransportService {
     return hlsState;
   }
 
+  async getHlsState({ identifier }: { identifier: string }) {
+    const room = await this.roomService.createRoom({ name: identifier });
+    return this.roomService.getHlsStateByRoomId(room.id);
+  }
+
   async stopHLS({ identifier }: { identifier: string }) {
     const logger = getLoggerForMethod("hls-stop", this.logger).child({ identifier });
     logger.info("stopping hls");

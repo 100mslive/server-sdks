@@ -36,6 +36,9 @@ export class HMSSDK {
     return this.roomService;
   }
 
+  /**
+   * transport service
+   */
   getTransportService() {
     return this.transportService;
   }
