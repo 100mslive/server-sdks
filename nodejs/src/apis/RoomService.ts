@@ -12,6 +12,18 @@ export class RoomService {
     return this.apiService.get(`${this.basePath}/${roomId}`);
   }
 
+  async getHlsStateByRoomId(roomId: string): Promise<HLSRoomState> {
+    const data: Record<string, any> = await this.apiService.get("/meetings/hls", { id: roomId });
+    return {
+      recording: {
+        hlsVod: data.recording?.hls_vod,
+        singleFilePerLayer: data.recording?.single_file_per_layer,
+      },
+      running: data.running,
+      url: data.url,
+    };
+  }
+
   async getRoomByName(name: string): Promise<HMSRoom> {
     const results: QueryResults<HMSRoom> = await this.apiService.get(this.basePath, { name });
     if (results.data.length === 0) {
@@ -37,6 +49,7 @@ export class RoomService {
         single_file_per_layer: !!config.recording.singleFilePerLayer,
       };
     }
+    logger.info("starting hls - ", payload);
     return this.apiService.post("/meetings/hls/start", payload);
   }
 
@@ -62,4 +75,10 @@ export interface StartRoomHLSConfig {
 export interface HLSRecordingConfig {
   hlsVod?: boolean;
   singleFilePerLayer?: boolean;
+}
+
+export interface HLSRoomState {
+  running: boolean;
+  url?: string;
+  recording?: HLSRecordingConfig;
 }

@@ -3,7 +3,10 @@ import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { logger } from "../LoggerService";
 
 export class APIService {
-  private baseUrl = "https://api.100ms.live/v2";
+  private baseUrl =
+    process.env.HMS_ENV === "nonprod"
+      ? "https://api-nonprod.100ms.live/v2"
+      : "https://api.100ms.live/v2";
   private readonly axios: AxiosInstance;
 
   constructor(private authService: AuthService) {

@@ -17,7 +17,7 @@ The `examples/nodejs` folder on root has some examples.
 ### Create SDK Instance
 
 ```js
-const sdk = new HMSSDK();
+const sdk = new HMSSDK(accessKey, secret);
 ```
 
 ### Generating management token
@@ -60,7 +60,7 @@ Identifier is anything from your side to identify an HLS stream. Only one HLS ca
 ```js
 const transportService = new HMSSDK().getTransportService();
 // to start
-const hlsUrl = await transportService.startHLSSync({identifier, appUrl});
+const hlsUrl = await transportService.startHLSAndGetUrl({ identifier, appUrl });
 // to stop
-await transportService.stopHLS({identifier});
+await transportService.stopHLS({ identifier });
 ```
