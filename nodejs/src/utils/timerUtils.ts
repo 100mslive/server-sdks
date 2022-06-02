@@ -7,7 +7,7 @@ export async function sleep(timeoutMs: number) {
   });
 }
 
-const DEFAULT_POLL_TIMEOUT_SECONDS = 40;
+const DEFAULT_POLL_TIMEOUT_SECONDS = 180;
 const DEFAULT_POLL_INTERVAL_SECONDS = 5;
 
 /**
