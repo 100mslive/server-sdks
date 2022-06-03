@@ -2,13 +2,13 @@ import { AppTokenConfig, AuthService, ManagementTokenConfig } from "./apis/AuthS
 import { logger } from "./LoggerService";
 import { APIService } from "./apis/APIService";
 import { RoomService } from "./apis/RoomService";
-import { TransportService } from "./apis/TransportService";
+import { DestinationService } from "./apis/DestinationService";
 
 export class HMSSDK {
   private readonly authService: AuthService;
   private readonly apiService: APIService;
   private readonly roomService: RoomService;
-  private readonly transportService: TransportService;
+  private readonly destinationService: DestinationService;
 
   constructor(accessKey?: string, secret?: string) {
     if (!accessKey) {
@@ -25,7 +25,7 @@ export class HMSSDK {
     this.authService = new AuthService(accessKey, secret);
     this.apiService = new APIService(this.authService);
     this.roomService = new RoomService(this.apiService);
-    this.transportService = new TransportService(this.roomService);
+    this.destinationService = new DestinationService(this.roomService);
   }
 
   getApiService() {
@@ -37,10 +37,10 @@ export class HMSSDK {
   }
 
   /**
-   * transport service
+   * use destination service to start recording/streaming
    */
-  getTransportService() {
-    return this.transportService;
+  getDestinationService() {
+    return this.destinationService;
   }
 
   /**
@@ -55,5 +55,9 @@ export class HMSSDK {
    */
   async getAppToken(tokenConfig: AppTokenConfig) {
     return this.authService.getAppToken(tokenConfig);
+  }
+
+  setLogLevel(level: string) {
+    logger.level = level;
   }
 }

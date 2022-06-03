@@ -2,8 +2,8 @@ import { HLSRecordingConfig, HLSRoomState, RoomService } from "./RoomService";
 import { getLoggerForMethod, logger } from "../LoggerService";
 import { pollTillSuccess } from "../utils/timerUtils";
 
-export class TransportService {
-  private logger = logger.child({ class: TransportService.name });
+export class DestinationService {
+  private logger = logger.child({ class: DestinationService.name });
   constructor(private roomService: RoomService) {}
 
   async startHLS(config: StartHLSConfig) {

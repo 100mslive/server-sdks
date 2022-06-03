@@ -11,19 +11,19 @@ describe("test hls start stop", () => {
   test(
     "start hls for a url",
     async () => {
-      const transportService = sdk.getTransportService();
+      const destinationService = sdk.getDestinationService();
       // gets the prev again if already exists else create
-      const hlsState = await transportService.startHLSAndGetUrl({
+      const hlsState = await destinationService.startHLSAndGetUrl({
         identifier: TEST_ROOM_NAME,
         appUrl: "https://www.google.com/",
       });
       expect(hlsState.running).toBe(true);
-      await sdk.getTransportService().stopHLS({ identifier: TEST_ROOM_NAME });
+      await sdk.getDestinationService().stopHLS({ identifier: TEST_ROOM_NAME });
     },
     120 * 1000
   );
 
   test.skip("stop hls", async () => {
-    await sdk.getTransportService().stopHLS({ identifier: TEST_ROOM_NAME });
+    await sdk.getDestinationService().stopHLS({ identifier: TEST_ROOM_NAME });
   });
 });

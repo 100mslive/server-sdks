@@ -58,9 +58,9 @@ This might take significant time.
 Identifier is anything from your side to identify an HLS stream. Only one HLS can run against an identifier at a time.
 
 ```js
-const transportService = new HMSSDK().getTransportService();
+const destinationService = new HMSSDK().getDestinationService();
 // to start
-const hlsUrl = await transportService.startHLSAndGetUrl({ identifier, appUrl });
+const hlsUrl = await destinationService.startHLSAndGetUrl({ identifier, appUrl });
 // to stop
-await transportService.stopHLS({ identifier });
+await destinationService.stopHLS({ identifier });
 ```
