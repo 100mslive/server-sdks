@@ -1,6 +1,7 @@
 import { AuthService } from "./AuthService";
-import axios, { AxiosInstance, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 import { logger } from "../LoggerService";
+import { ErrorFactory } from "./Errors";
 
 export class APIService {
   private baseUrl =
@@ -50,10 +51,10 @@ export class APIService {
         return response;
       },
       async (error) => {
-        logger.error("error in making api call", error.response.data);
+        logger.error("error in making api call", { response: error.response?.data });
         const originalRequest = error.config;
         if (
-          (error.response.status === 403 || error.response.status === 401) &&
+          (error.response?.status === 403 || error.response?.status === 401) &&
           !originalRequest._retry
         ) {
           logger.info("retrying request with refreshed token");
@@ -62,10 +63,23 @@ export class APIService {
             forceNew: true,
           });
           this.axios.defaults.headers.common["Authorization"] = "Bearer " + authToken;
-          return this.axios(originalRequest);
+          try {
+            return this.axios(originalRequest);
+          } catch (error) {
+            throw this.convertAxiosErrorToHMS(error as AxiosError);
+          }
         }
-        return Promise.reject(error);
+        return Promise.reject(this.convertAxiosErrorToHMS(error));
       }
+    );
+  }
+
+  private convertAxiosErrorToHMS(error: AxiosError) {
+    return ErrorFactory.PassThrough(
+      error.response?.status,
+      error.response?.statusText,
+      // @ts-ignore
+      error.response?.data?.message
     );
   }
 }

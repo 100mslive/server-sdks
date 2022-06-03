@@ -1,7 +1,10 @@
 import { HMSSDK } from "@100mslive/server-sdk";
 
+const accessKey = process.env.HMS_ACCESS_KEY;
+const secret = process.env.HMS_SECRET;
+
 // initialise sdk
-const sdk = new HMSSDK();
+const sdk = new HMSSDK(accessKey, secret);
 const destinationService = sdk.getDestinationService();
 
 // start hls and get m3u8 url back

@@ -13,7 +13,9 @@ export class RoomService {
   }
 
   async getHlsStateByRoomId(roomId: string): Promise<HLSRoomState> {
-    const data: Record<string, any> = await this.apiService.get("/meetings/hls", { id: roomId });
+    const data: Record<string, any> = await this.apiService.get("/meetings/hls", {
+      room_id: roomId,
+    });
     return {
       recording: {
         hlsVod: data.recording?.hls_vod,

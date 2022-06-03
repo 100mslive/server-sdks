@@ -25,4 +25,12 @@ export const ErrorFactory = {
       message,
     };
   },
+
+  PassThrough(code?: number, status?: string, message?: string) {
+    return {
+      code,
+      name: status,
+      message,
+    };
+  },
 };

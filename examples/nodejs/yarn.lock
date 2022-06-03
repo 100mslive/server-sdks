@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@100mslive/server-sdk@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@100mslive/server-sdk/-/server-sdk-0.0.5.tgz#44f1ef226545ddef3df22925b8f820b48d33ba88"
-  integrity sha512-DJKzpk3VsL4fy4StHPBYsbWtz72R2i4leV9RQKx9c07sjzXUuWGS4MzfJTBBVNxUJRr7hTNXq8JFUDBAR95hsw==
+"@100mslive/server-sdk@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@100mslive/server-sdk/-/server-sdk-0.0.9.tgz#60a8a5a847154d8bf5fe028b62d1b16c7f88f615"
+  integrity sha512-+fgy5EzIO5seFni6QdcryemXN558sGXP8aWnanMWmemdNmNlMruwl6bBk18bBBzAyj6BjGAnyX3TkQIvLkBI+w==
   dependencies:
     axios "^0.27.2"
     jsonwebtoken "^8.5.1"

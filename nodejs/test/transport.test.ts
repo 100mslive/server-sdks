@@ -18,12 +18,22 @@ describe("test hls start stop", () => {
         appUrl: "https://www.google.com/",
       });
       expect(hlsState.running).toBe(true);
+      const hlsState2 = await destinationService.getHlsState({ identifier: TEST_ROOM_NAME });
+      expect(hlsState2.url).toBe(hlsState.url);
       await sdk.getDestinationService().stopHLS({ identifier: TEST_ROOM_NAME });
+      let notFoundError;
+      try {
+        await destinationService.getHlsState({ identifier: TEST_ROOM_NAME });
+      } catch (err: any) {
+        console.log(err);
+        notFoundError = err;
+      }
+      expect(notFoundError?.code).toBe(404);
     },
     120 * 1000
   );
 
-  test.skip("stop hls", async () => {
+  test("stop hls", async () => {
     await sdk.getDestinationService().stopHLS({ identifier: TEST_ROOM_NAME });
   });
 });
