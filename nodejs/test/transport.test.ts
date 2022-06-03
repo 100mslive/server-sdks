@@ -33,7 +33,7 @@ describe("test hls start stop", () => {
     120 * 1000
   );
 
-  test("stop hls", async () => {
+  test.skip("stop hls", async () => {
     await sdk.getDestinationService().stopHLS({ identifier: TEST_ROOM_NAME });
   });
 });
