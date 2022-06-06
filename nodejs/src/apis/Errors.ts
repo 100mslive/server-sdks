@@ -18,15 +18,7 @@ export const ErrorFactory = {
     };
   },
 
-  NotFound(message: string) {
-    return {
-      code: ErrorCodes.NOT_FOUND,
-      name: "NOT_FOUND",
-      message,
-    };
-  },
-
-  PassThrough(code?: number, status?: string, message?: string) {
+  MakeError(code?: number, status?: string, message?: string) {
     return {
       code,
       name: status,

@@ -75,7 +75,7 @@ export class APIService {
   }
 
   private convertAxiosErrorToHMS(error: AxiosError) {
-    return ErrorFactory.PassThrough(
+    return ErrorFactory.MakeError(
       error.response?.status,
       error.response?.statusText,
       // @ts-ignore
