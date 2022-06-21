@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@100mslive/server-sdk": "^0.0.9"
+    "@100mslive/server-sdk": "^0.0.12"
   },
   "type": "module",
   "scripts": {
