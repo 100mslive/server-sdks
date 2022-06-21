@@ -1,20 +1,19 @@
 import { HLSRecordingConfig, HLSRoomState, RoomService } from "./RoomService";
-import { getLoggerForMethod, logger } from "../LoggerService";
+import { logger } from "../LoggerService";
 import { pollTillSuccess } from "../utils/timerUtils";
 
 export class DestinationService {
-  private logger = logger.child({ class: DestinationService.name });
   constructor(private roomService: RoomService) {}
 
   async startHLS(config: StartHLSConfig) {
-    logger.info("starting hls", config);
+    logger.debug("starting hls", config);
     const room = await this.roomService.createRoom({ name: config.identifier });
     await this.startHLSForRoom(room.id, config);
-    logger.info("hls started", config);
+    logger.debug("hls started", config);
   }
 
   async startHLSAndGetUrl(config: StartHLSConfig): Promise<HLSRoomState> {
-    logger.info("starting hls", config);
+    logger.debug("starting hls", config);
     const room = await this.roomService.createRoom({ name: config.identifier });
     await this.startHLSForRoom(room.id, config);
     logger.info("hls started", config);
@@ -22,7 +21,7 @@ export class DestinationService {
       return this.roomService.getHlsStateByRoomId(room.id);
     };
     const hlsState: HLSRoomState = await pollTillSuccess(getHlsState, (hlsState) => !hlsState.url);
-    logger.info("got hls state", hlsState);
+    logger.info("hls started, got hls state", config, hlsState);
     return hlsState;
   }
 
@@ -32,11 +31,10 @@ export class DestinationService {
   }
 
   async stopHLS({ identifier }: { identifier: string }) {
-    const logger = getLoggerForMethod("hls-stop", this.logger).child({ identifier });
-    logger.info("stopping hls");
+    logger.debug("stopping hls", { identifier });
     const room = await this.roomService.getRoomByName(identifier);
     await this.roomService.stopHLS({ roomId: room.id });
-    logger.info("hls stopped");
+    logger.info("hls stopped", { identifier });
   }
 
   private async startHLSForRoom(roomId: string, config: StartHLSConfig) {

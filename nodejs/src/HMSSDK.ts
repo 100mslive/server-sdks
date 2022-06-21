@@ -1,5 +1,5 @@
 import { AppTokenConfig, AuthService, ManagementTokenConfig } from "./apis/AuthService";
-import { logger } from "./LoggerService";
+import { logger, LogLevelOptions, setLogLevel } from "./LoggerService";
 import { APIService } from "./apis/APIService";
 import { RoomService } from "./apis/RoomService";
 import { DestinationService } from "./apis/DestinationService";
@@ -57,7 +57,7 @@ export class HMSSDK {
     return this.authService.getAppToken(tokenConfig);
   }
 
-  setLogLevel(level: string) {
-    logger.level = level;
+  setLogLevel(level: LogLevelOptions) {
+    setLogLevel(level);
   }
 }

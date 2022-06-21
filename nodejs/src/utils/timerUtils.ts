@@ -27,7 +27,7 @@ export async function pollTillSuccess<T>(
   while (true) {
     const hasTimeRunOut = Date.now() - startTime > timeoutMs;
     if (hasTimeRunOut) {
-      logger.info("polling timed out");
+      logger.error("polling timed out");
       throw ErrorFactory.Timeout("stopping fn poll due to timeout");
     }
     try {

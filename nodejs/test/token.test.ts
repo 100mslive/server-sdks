@@ -10,7 +10,7 @@ beforeEach(() => {
 
 describe("management token", () => {
   it("should give management token without any options passed in", async () => {
-    const token = await sdk.getManagementToken();
+    const token = await sdk.getManagementToken({ validForSeconds: 30 * 24 * 3600 });
     console.log({ token });
     verify(token.token, secret);
   });

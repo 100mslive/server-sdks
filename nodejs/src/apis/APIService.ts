@@ -57,7 +57,7 @@ export class APIService {
           (error.response?.status === 403 || error.response?.status === 401) &&
           !originalRequest._retry
         ) {
-          logger.info("retrying request with refreshed token");
+          logger.debug("retrying request with refreshed token");
           originalRequest._retry = true;
           const { token: authToken } = await this.authService.getManagementToken({
             forceNew: true,

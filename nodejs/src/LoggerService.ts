@@ -1,18 +1,13 @@
-import winston, { Logger } from "winston";
+import log, { LogLevelDesc } from "loglevel";
 
 const isDev = process.env.NODE_ENV !== "production";
+const level = isDev ? "debug" : "info";
+log.setLevel(level);
 
-export const logger = winston.createLogger({
-  level: isDev ? "debug" : "info",
-  format: winston.format.json(),
-  defaultMeta: { module: "hms-sdk" },
-  transports: [
-    new winston.transports.Console({
-      format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
-    }),
-  ],
-});
+export const logger = log;
 
-export const getLoggerForMethod = (method: string, customLogger?: Logger) => {
-  return (customLogger || logger).child({ method });
-};
+export function setLogLevel(level: LogLevelDesc) {
+  log.setLevel(level);
+}
+
+export type LogLevelOptions = LogLevelDesc;

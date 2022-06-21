@@ -12,7 +12,7 @@ export class AuthService {
       !this.managementToken ||
       this.isTokenExpired(this.managementToken.token)
     ) {
-      logger.info("generating management token");
+      logger.debug("generating management token", tokenConfig);
       this.managementToken = await this.generateToken(TokenType.Management, tokenConfig);
     }
     return this.managementToken;
