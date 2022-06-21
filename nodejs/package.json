@@ -1,6 +1,6 @@
 {
   "name": "@100mslive/server-sdk",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "license": "GPL-3.0-only",
   "devDependencies": {
     "@types/jest": "^27.5.1",
@@ -42,7 +42,7 @@
   "dependencies": {
     "axios": "^0.27.2",
     "jsonwebtoken": "^8.5.1",
-    "uuid": "^8.3.2",
-    "winston": "^3.7.2"
+    "loglevel": "^1.8.0",
+    "uuid": "^8.3.2"
   }
 }
