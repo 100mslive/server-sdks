@@ -56,7 +56,7 @@ The HLS m3u8 url will be received in webhook response.
 const roomService = sdk.getRoomService();
 await roomService.startHLS({roomId, meetingUrl})
 // with recording -
-await roomService.startHLS({roomId, meetingUrl, recording: {hlsVod, singleFilePerLayer}});
+await roomService.startHLS({roomId, meetingUrl, recording: {hlsVod: true, singleFilePerLayer: true}});
 ```
 
 ### Start HLS from meeting url
@@ -68,7 +68,8 @@ Identifier is anything from your side to identify an HLS stream. Only one HLS ca
 ```js
 const destinationService = sdk.getDestinationService();
 // to start
-const hlsUrl = await destinationService.startHLSAndGetUrl({ identifier, appUrl });
+const recording = {hlsVod: true, singleFilePerLayer: true}; // recording is optional field
+const hlsUrl = await destinationService.startHLSAndGetUrl({ identifier, appUrl, recording });
 // to stop
 await destinationService.stopHLS({ identifier });
 ```
