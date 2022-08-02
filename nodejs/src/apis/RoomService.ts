@@ -36,6 +36,11 @@ export class RoomService {
     return results.data[0];
   }
 
+  async getHlsURL(roomID: string): Promise<string> {
+    const result: HLSRoomState = await this.apiService.get("/meetings/hls/url", { "room_id": roomID});
+    return result.url || ""
+  }
+
   async createRoom(config?: CreateRoomConfig): Promise<HMSRoom> {
     return this.apiService.post(this.basePath, config);
   }
@@ -50,6 +55,9 @@ export class RoomService {
         hls_vod: !!config.recording.hlsVod,
         single_file_per_layer: !!config.recording.singleFilePerLayer,
       };
+    }
+    if (config.scheduleAt) {
+      payload.scheduled_at = Math.floor(config.scheduleAt.getTime() / 1000)
     }
     logger.info("starting hls - ", payload);
     return this.apiService.post("/meetings/hls/start", payload);
@@ -72,6 +80,7 @@ export interface StartRoomHLSConfig {
   roomId: string;
   meetingUrl: string;
   recording?: HLSRecordingConfig;
+  scheduleAt?: Date;
 }
 
 export interface HLSRecordingConfig {

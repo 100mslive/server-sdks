@@ -18,7 +18,11 @@ export class DestinationService {
     await this.startHLSForRoom(room.id, config);
     logger.info("hls started", config);
     const getHlsState: () => Promise<HLSRoomState> = async () => {
-      return this.roomService.getHlsStateByRoomId(room.id);
+      const state = await this.roomService.getHlsStateByRoomId(room.id);
+      if (config.scheduleAt) {
+        state.url = await this.roomService.getHlsURL(room.id)
+      }
+      return state
     };
     const hlsState: HLSRoomState = await pollTillSuccess(getHlsState, (hlsState) => !hlsState.url);
     logger.info("hls started, got hls state", config, hlsState);
@@ -42,6 +46,7 @@ export class DestinationService {
       meetingUrl: config.appUrl,
       roomId: roomId,
       recording: config.recording,
+      scheduleAt: config.scheduleAt
     });
   }
 }
@@ -56,4 +61,5 @@ export interface StartHLSConfig {
    */
   identifier: string;
   recording?: HLSRecordingConfig;
+  scheduleAt?: Date;
 }
