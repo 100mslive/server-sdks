@@ -14,7 +14,7 @@ export class DestinationService {
 
   async startHLSAndGetUrl(config: StartHLSConfig): Promise<HLSRoomState> {
     logger.debug("starting hls", config);
-    const room = await this.roomService.createRoom({ name: config.identifier });
+    const room = await this.roomService.createRoom({ name: config.identifier, template: config.template });
     await this.startHLSForRoom(room.id, config);
     logger.info("hls started", config);
     const getHlsState: () => Promise<HLSRoomState> = async () => {
@@ -62,4 +62,5 @@ export interface StartHLSConfig {
   identifier: string;
   recording?: HLSRecordingConfig;
   scheduleAt?: Date;
+  template?: string;
 }
