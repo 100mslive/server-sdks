@@ -57,7 +57,7 @@ export class RoomService {
       };
     }
     if (config.scheduleAt) {
-      payload.scheduled_at = Math.floor(config.scheduleAt.getTime() / 1000)
+      payload.schedule_at = Math.floor(config.scheduleAt.getTime() / 1000)
     }
     logger.info("starting hls - ", payload);
     return this.apiService.post("/meetings/hls/start", payload);

@@ -1,6 +1,7 @@
 import { HLSRecordingConfig, HLSRoomState, RoomService } from "./RoomService";
 import { logger } from "../LoggerService";
 import { pollTillSuccess } from "../utils/timerUtils";
+import { HMSException } from "./Errors";
 
 export class DestinationService {
   constructor(private roomService: RoomService) {}
@@ -18,11 +19,17 @@ export class DestinationService {
     await this.startHLSForRoom(room.id, config);
     logger.info("hls started", config);
     const getHlsState: () => Promise<HLSRoomState> = async () => {
-      const state = await this.roomService.getHlsStateByRoomId(room.id);
-      if (config.scheduleAt) {
-        state.url = await this.roomService.getHlsURL(room.id)
+      try {
+        const state = await this.roomService.getHlsStateByRoomId(room.id);
+        if (config.scheduleAt) {
+          
+            state.url = await this.roomService.getHlsURL(room.id);
+        } 
+        return state;
       }
-      return state
+      catch (err) {
+        return {running: false }
+      }
     };
     const hlsState: HLSRoomState = await pollTillSuccess(getHlsState, (hlsState) => !hlsState.url);
     logger.info("hls started, got hls state", config, hlsState);
