@@ -68,9 +68,9 @@ Identifier is anything from your side to identify an HLS stream. Only one HLS ca
 ```js
 const destinationService = sdk.getDestinationService();
 // to start
-const recording = {hlsVod: true, singleFilePerLayer: true};               // recording is optional field
+const recording = { hlsVod: true, singleFilePerLayer: true };               // recording is optional field
 const template = "default_createown_9aecff0b-09b6-416d-a160-6d829ca59cb8" // template is optional field
-const hlsUrl = await destinationService.startHLSAndGetUrl({ identifier, appUrl, recording, template });
+const hlsUrl = await destinationService.startHLSAndGetUrl({ identifier, appUrl, recording, templateId: template });
 // to stop
 await destinationService.stopHLS({ identifier });
 ```
