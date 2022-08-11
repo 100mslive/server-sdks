@@ -43,8 +43,14 @@ export class RoomService {
     return result.url || "";
   }
 
-  async createRoom(config?: CreateRoomConfig): Promise<HMSRoom> {
-    return this.apiService.post(this.basePath, config);
+  async createRoom(config: CreateRoomConfig): Promise<HMSRoom> {
+    const payload: Record<string, any> = {
+      name: config.name,
+      description: config.description,
+      template_id: config.templateId,
+      region: config.region,
+    };
+    return this.apiService.post(this.basePath, payload);
   }
 
   async startHLS(config: StartRoomHLSConfig) {
