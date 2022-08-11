@@ -22,8 +22,8 @@ export async function pollTillSuccess<T>(
   timeoutSeconds ||= DEFAULT_POLL_TIMEOUT_SECONDS;
   intervalSeconds ||= DEFAULT_POLL_INTERVAL_SECONDS;
   const timeoutMs = timeoutSeconds * 1000;
-  let result = await fn();
   const startTime = Date.now();
+  
   while (true) {
     const hasTimeRunOut = Date.now() - startTime > timeoutMs;
     if (hasTimeRunOut) {
@@ -31,15 +31,14 @@ export async function pollTillSuccess<T>(
       throw ErrorFactory.Timeout("stopping fn poll due to timeout");
     }
     try {
-      result = await fn();
+      let result = await fn();
       if (!tillCondition(result)) {
         logger.debug("done with");
-        break;
+        return result
       }
     } catch (err) {}
     await sleep(intervalSeconds * 1000);
   }
-  return result;
 }
 
 export interface APIPollConfig {

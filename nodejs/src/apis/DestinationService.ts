@@ -12,13 +12,26 @@ export class DestinationService {
     logger.debug("hls started", config);
   }
 
+  /**
+   * starts HLS immediately or schedules a HLS to start in the future depending on whether scheduleAt is passed
+   * in config. If it's scheduled give the eventual url
+   * immediately, else wait till HLS is actually started for giving out the url.
+   */
   async startHLSAndGetUrl(config: StartHLSConfig): Promise<HLSRoomState> {
     logger.debug("starting hls", config);
-    const room = await this.roomService.createRoom({ name: config.identifier });
+    const room = await this.roomService.createRoom({
+      name: config.identifier,
+      templateId: config.templateId,
+    });
     await this.startHLSForRoom(room.id, config);
     logger.info("hls started", config);
     const getHlsState: () => Promise<HLSRoomState> = async () => {
-      return this.roomService.getHlsStateByRoomId(room.id);
+      const state = await this.roomService.getHlsStateByRoomId(room.id);
+      if (!state.url && config.scheduleAt) {
+        // hls is scheduled for future, running will be false, but we can still get the url
+        state.url = await this.roomService.getHlsURL(room.id);
+      }
+      return state;
     };
     const hlsState: HLSRoomState = await pollTillSuccess(getHlsState, (hlsState) => !hlsState.url);
     logger.info("hls started, got hls state", config, hlsState);
@@ -42,6 +55,7 @@ export class DestinationService {
       meetingUrl: config.appUrl,
       roomId: roomId,
       recording: config.recording,
+      scheduleAt: config.scheduleAt,
     });
   }
 }
@@ -56,4 +70,9 @@ export interface StartHLSConfig {
    */
   identifier: string;
   recording?: HLSRecordingConfig;
+  /**
+   * a future date to start hls at
+   */
+  scheduleAt?: Date;
+  templateId?: string;
 }

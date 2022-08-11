@@ -65,11 +65,20 @@ Pass in an url and get a m3u8 back which is obtained by converting that meeting 
 This might take significant time.
 Identifier is anything from your side to identify an HLS stream. Only one HLS can run against an identifier at a time.
 
+There is also an optional field `scheduleAt` if you want to schedule the HLS to run at some time in future than start right away.
+
 ```js
 const destinationService = sdk.getDestinationService();
 // to start
-const recording = {hlsVod: true, singleFilePerLayer: true}; // recording is optional field
-const hlsUrl = await destinationService.startHLSAndGetUrl({ identifier, appUrl, recording });
+const recording = { hlsVod: true, singleFilePerLayer: true }; // optional
+const templateId = "1234" // optional
+const hlsUrl = await destinationService.startHLSAndGetUrl({ identifier, appUrl, recording, templateId });
+
+// scheduling a start for future
+const scheduleAt = new Date(new Date().getTime() + (2*24*60*60*1000)); // after 2 days
+// the hls url received will become functional once hls has started at scheduled time
+const hlsUrl = await destinationService.startHLSAndGetUrl({ identifier, appUrl, scheduleAt });
+
 // to stop
 await destinationService.stopHLS({ identifier });
 ```
