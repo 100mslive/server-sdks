@@ -1,7 +1,7 @@
 ## 100ms NodeJs Server Side SDK
 
 ## Note
-## This is early alpha, APIs can break/change at any time.
+## This is beta, APIs might change
 
 ## Documentation
 
