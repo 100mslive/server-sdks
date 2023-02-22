@@ -1,7 +1,7 @@
-import { APIService } from "./APIService";
 import { HMSRoom } from "./interfaces/roomInterfaces";
 import { QueryResults } from "./interfaces/common";
 import { logger } from "../LoggerService";
+import { APIService } from "../services/APIService";
 
 export class RoomService {
   private basePath = "/rooms";
@@ -26,15 +26,15 @@ export class RoomService {
     };
   }
 
-  async getRoomByName(name: string): Promise<HMSRoom> {
-    const results: QueryResults<HMSRoom> = await this.apiService.get(this.basePath, { name });
-    if (results.data.length === 0) {
-      const err = new Error(`no room found with passed in name - ${name}`);
-      logger.error("no room found", err);
-      throw err;
-    }
-    return results.data[0];
-  }
+  // async getRoomByName(name: string): Promise<HMSRoom> {
+  //   const results: QueryResults<HMSRoom> = await this.apiService.get(this.basePath, { name });
+  //   if (results.data.length === 0) {
+  //     const err = new Error(`no room found with passed in name - ${name}`);
+  //     logger.error("no room found", err);
+  //     throw err;
+  //   }
+  //   return results.data[0];
+  // }
 
   async getHlsURL(roomId: string): Promise<string> {
     const result: HLSRoomState = await this.apiService.get("/meetings/hls/url", {

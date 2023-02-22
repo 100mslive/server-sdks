@@ -1,14 +1,14 @@
-import { AppTokenConfig, AuthService, ManagementTokenConfig } from "./apis/AuthService";
 import { logger, LogLevelOptions, setLogLevel } from "./LoggerService";
-import { APIService } from "./apis/APIService";
 import { RoomService } from "./apis/RoomService";
 import { DestinationService } from "./apis/DestinationService";
+import { RoomAPIs } from "./apis/RoomAPIs";
+import { AppTokenConfig, AuthService, ManagementTokenConfig } from "./services/AuthService";
+import { APIService } from "./services/APIService";
 
 export class HMSSDK {
   private readonly authService: AuthService;
   private readonly apiService: APIService;
-  private readonly roomService: RoomService;
-  private readonly destinationService: DestinationService;
+  private readonly roomAPIs: RoomAPIs;
 
   constructor(accessKey?: string, secret?: string) {
     if (!accessKey) {
@@ -24,8 +24,7 @@ export class HMSSDK {
     }
     this.authService = new AuthService(accessKey, secret);
     this.apiService = new APIService(this.authService);
-    this.roomService = new RoomService(this.apiService);
-    this.destinationService = new DestinationService(this.roomService);
+    this.roomAPIs = new RoomAPIs(this.apiService);
   }
 
   getApiService() {
@@ -33,14 +32,7 @@ export class HMSSDK {
   }
 
   getRoomService() {
-    return this.roomService;
-  }
-
-  /**
-   * use destination service to start recording/streaming
-   */
-  getDestinationService() {
-    return this.destinationService;
+    return this.roomAPIs;
   }
 
   /**
