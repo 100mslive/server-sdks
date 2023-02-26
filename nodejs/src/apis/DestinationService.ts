@@ -1,5 +1,5 @@
 import { HLSRecordingConfig, HLSRoomState, RoomService } from "./RoomService";
-import { logger } from "../LoggerService";
+import { logger } from "../services/LoggerService";
 import { pollTillSuccess } from "../utils/timerUtils";
 
 export class DestinationService {

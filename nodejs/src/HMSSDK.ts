@@ -1,4 +1,4 @@
-import { logger, LogLevelOptions, setLogLevel } from "./LoggerService";
+import { logger, LogLevelOptions, setLogLevel } from "./services/LoggerService";
 import { RoomService } from "./apis/RoomService";
 import { DestinationService } from "./apis/DestinationService";
 import { RoomAPIs } from "./apis/RoomAPIs";

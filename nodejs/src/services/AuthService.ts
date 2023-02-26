@@ -1,6 +1,6 @@
 import { sign, decode, SignOptions, JwtPayload } from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
-import { logger } from "../LoggerService";
+import { logger } from "./LoggerService";
 
 export class AuthService {
   private managementToken?: ManagementToken;

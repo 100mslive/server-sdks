@@ -1,6 +1,6 @@
 import { HMSRoom } from "./interfaces/roomInterfaces";
 import { QueryResults } from "./interfaces/common";
-import { logger } from "../LoggerService";
+import { logger } from "../services/LoggerService";
 import { APIService } from "../services/APIService";
 
 export class RoomService {

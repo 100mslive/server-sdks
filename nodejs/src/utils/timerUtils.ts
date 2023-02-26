@@ -1,5 +1,5 @@
 import { ErrorFactory } from "../apis/Errors";
-import { logger } from "../LoggerService";
+import { logger } from "../services/LoggerService";
 
 export async function sleep(timeoutMs: number) {
   return new Promise((resolve) => {

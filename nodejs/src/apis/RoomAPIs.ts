@@ -1,4 +1,4 @@
-import { logger } from "../LoggerService";
+import { logger } from "../services/LoggerService";
 import { APIService } from "../services/APIService";
 import { QueryResults } from "./interfaces/common";
 import { HMSCreateRoomConfig, HMSRoom, HMSUpdateRoomConfig } from "./interfaces/roomInterfaces";

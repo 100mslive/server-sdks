@@ -1,6 +1,6 @@
 import { AuthService } from "./AuthService";
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
-import { logger } from "../LoggerService";
+import { logger } from "./LoggerService";
 import { ErrorFactory } from "./Errors";
 
 export class APIService {
