@@ -2,16 +2,19 @@ import { logger } from "../services/LoggerService";
 import { APIService } from "../services/APIService";
 import { QueryResults } from "./interfaces/common";
 import { HMSCreateRoomConfig, HMSRoom, HMSUpdateRoomConfig } from "./interfaces/roomInterfaces";
+import { QueryResultsIterator } from "../utils/queryResultsIterator";
 
 export class RoomAPIs {
   private basePath = "/rooms";
 
   constructor(private apiService: APIService) {}
 
-  async getRooms(): Promise<HMSRoom[]> {
-    const results: QueryResults<HMSRoom> = await this.apiService.get(this.basePath);
-    // atleast 1 room(default) will be present
-    return results.data ?? [];
+  async getRoomsIterator(): Promise<QueryResultsIterator<HMSRoom>> {
+    const queryResultsIterator = await QueryResultsIterator.create<HMSRoom>(
+      (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
+      {}
+    );
+    return queryResultsIterator;
   }
 
   async getRoomById(roomId: string): Promise<HMSRoom> {
@@ -28,20 +31,27 @@ export class RoomAPIs {
     return results.data[0];
   }
 
-  async getRoomsByEnabled(enabled: boolean): Promise<HMSRoom[]> {
-    const results: QueryResults<HMSRoom> = await this.apiService.get(this.basePath, { enabled });
-    return results.data ?? [];
+  async getRoomsByEnabledIterator(enabled: boolean): Promise<QueryResultsIterator<HMSRoom>> {
+    const queryResultsIterator = await QueryResultsIterator.create<HMSRoom>(
+      (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
+      { enabled }
+    );
+    return queryResultsIterator;
   }
 
-  async getRoomsByTimeRange(before?: Date, after?: Date): Promise<HMSRoom[]> {
+  async getRoomsByTimeRangeIterator(
+    before?: Date,
+    after?: Date
+  ): Promise<QueryResultsIterator<HMSRoom>> {
     const timeQueryParams: Record<string, Date> = {};
     if (before) timeQueryParams["before"] = before;
     if (after) timeQueryParams["after"] = after;
-    const results: QueryResults<HMSRoom> = await this.apiService.get(
-      this.basePath,
+
+    const queryResultsIterator = await QueryResultsIterator.create<HMSRoom>(
+      (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       timeQueryParams
     );
-    return results.data ?? [];
+    return queryResultsIterator;
   }
 
   async createRoom(roomConfig: HMSCreateRoomConfig): Promise<HMSRoom> {
