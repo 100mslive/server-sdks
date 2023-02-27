@@ -1,3 +1,5 @@
+import { HMSBasicPeer } from "./common";
+
 export interface HMSActiveRoom {
   id: string;
   name: string;
@@ -11,13 +13,11 @@ export interface HMSActiveRoomSession {
   peers: string[];
 }
 
-export interface HMSPeer {
-  id: string;
-  name: string;
-  user_id: string;
+export interface HMSActiveRoomPeer extends HMSBasicPeer {
   metadata: string;
-  role: string;
-  joined_at: string;
+}
+
+export interface HMSActiveRoomPeerWithTrack extends HMSActiveRoomPeer {
   tracks: Record<string, HMSPeerTrack>;
 }
 
@@ -31,9 +31,7 @@ export interface HMSPeerTrack {
   description: string;
 }
 
-export type HMSBasicPeer = Omit<HMSPeer, "tracks">;
-
-export type HMSPeerUpdateConfig = Partial<Pick<HMSPeer, "name" | "role" | "metadata">>;
+export type HMSPeerUpdateConfig = Partial<Pick<HMSActiveRoomPeer, "name" | "role" | "metadata">>;
 
 export interface HMSRoomMessageConfig {
   peerId?: string;

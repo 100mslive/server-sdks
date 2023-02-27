@@ -11,7 +11,7 @@ export class RoomAPIs {
   async getRooms(): Promise<HMSRoom[]> {
     const results: QueryResults<HMSRoom> = await this.apiService.get(this.basePath);
     // atleast 1 room(default) will be present
-    return results.data!;
+    return results.data ?? [];
   }
 
   async getRoomById(roomId: string): Promise<HMSRoom> {

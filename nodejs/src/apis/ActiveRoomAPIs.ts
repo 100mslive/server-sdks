@@ -1,10 +1,10 @@
 import { APIService } from "../services/APIService";
 import {
   HMSActiveRoom,
-  HMSBasicPeer,
-  HMSPeer,
+  HMSActiveRoomPeerWithTrack,
   HMSPeerUpdateConfig,
   HMSRoomMessageConfig,
+  HMSActiveRoomPeer,
 } from "./interfaces/activeRoomInterfaces";
 
 export class ActiveRoomAPIs {
@@ -16,18 +16,22 @@ export class ActiveRoomAPIs {
     return this.apiService.get(`${this.basePath}/${roomId}`);
   }
 
-  async getPeerDetails(roomId: string, peerId: string): Promise<HMSPeer> {
+  async getPeerDetails(roomId: string, peerId: string): Promise<HMSActiveRoomPeerWithTrack> {
     return this.apiService.get(`${this.basePath}/${roomId}/peers/${peerId}`);
   }
 
-  async getActivePeers(roomId: string): Promise<Record<string, HMSBasicPeer>> {
+  async getActivePeers(roomId: string): Promise<Record<string, HMSActiveRoomPeer>> {
     const activePeers = await this.apiService.get<GetActivePeersResponse>(
       `${this.basePath}/${roomId}/peers`
     );
     return activePeers.peers;
   }
 
-  async updatePeer(roomId: string, peerId: string, config: HMSPeerUpdateConfig): Promise<HMSPeer> {
+  async updatePeer(
+    roomId: string,
+    peerId: string,
+    config: HMSPeerUpdateConfig
+  ): Promise<HMSActiveRoomPeerWithTrack> {
     return this.apiService.post(`${this.basePath}/${roomId}/peers/${peerId}`, config);
   }
 
@@ -51,7 +55,7 @@ export class ActiveRoomAPIs {
 }
 
 export interface GetActivePeersResponse {
-  peers: Record<string, HMSBasicPeer>;
+  peers: Record<string, HMSActiveRoomPeer>;
 }
 
 export interface RemovePeerConfigById {
