@@ -2,7 +2,7 @@ import { APIService } from "../services/APIService";
 import { QueryResultsIterator } from "../utils/queryResultsIterator";
 import { HMSSession } from "./interfaces/sessionInterfaces";
 
-export class SessionAPIs {
+export class SessionService {
   private basePath = "/sessions";
 
   constructor(private apiService: APIService) {}

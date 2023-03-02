@@ -7,7 +7,7 @@ import {
   HMSActiveRoomPeer,
 } from "./interfaces/activeRoomInterfaces";
 
-export class ActiveRoomAPIs {
+export class ActiveRoomService {
   private basePath = "/active-rooms";
 
   constructor(private apiService: APIService) {}

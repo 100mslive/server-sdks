@@ -1,14 +1,17 @@
 import { logger, LogLevelOptions, setLogLevel } from "./services/LoggerService";
 import { RoomService } from "./apis/RoomService";
-import { DestinationService } from "./apis/DestinationService";
-import { RoomAPIs } from "./apis/RoomAPIs";
 import { AppTokenConfig, AuthService, ManagementTokenConfig } from "./services/AuthService";
 import { APIService } from "./services/APIService";
+import { ActiveRoomService } from "./apis/ActiveRoomService";
+import { SessionService } from "./apis/SessionService";
 
 export class HMSSDK {
   private readonly authService: AuthService;
   private readonly apiService: APIService;
-  private readonly roomAPIs: RoomAPIs;
+
+  private readonly roomService: RoomService;
+  private readonly activeRoomService: ActiveRoomService;
+  private readonly sessionService: SessionService;
 
   constructor(accessKey?: string, secret?: string) {
     if (!accessKey) {
@@ -24,15 +27,22 @@ export class HMSSDK {
     }
     this.authService = new AuthService(accessKey, secret);
     this.apiService = new APIService(this.authService);
-    this.roomAPIs = new RoomAPIs(this.apiService);
-  }
 
-  getApiService() {
-    return this.apiService;
+    this.roomService = new RoomService(this.apiService);
+    this.activeRoomService = new ActiveRoomService(this.apiService);
+    this.sessionService = new SessionService(this.apiService);
   }
 
   getRoomService() {
-    return this.roomAPIs;
+    return this.roomService;
+  }
+
+  getActiveRoomService() {
+    return this.activeRoomService;
+  }
+
+  getSessionService() {
+    return this.sessionService;
   }
 
   /**

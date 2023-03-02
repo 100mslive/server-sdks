@@ -1,103 +1,68 @@
-import { HMSRoom } from "./interfaces/roomInterfaces";
-import { QueryResults } from "./interfaces/common";
 import { logger } from "../services/LoggerService";
 import { APIService } from "../services/APIService";
+import { QueryResults } from "./interfaces/common";
+import { HMSCreateRoomConfig, HMSRoom, HMSUpdateRoomConfig } from "./interfaces/roomInterfaces";
+import { QueryResultsIterator } from "../utils/queryResultsIterator";
 
 export class RoomService {
   private basePath = "/rooms";
 
   constructor(private apiService: APIService) {}
 
+  async getRoomsIterator(): Promise<QueryResultsIterator<HMSRoom>> {
+    const queryResultsIterator = await QueryResultsIterator.create<HMSRoom>(
+      (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
+      {}
+    );
+    return queryResultsIterator;
+  }
+
   async getRoomById(roomId: string): Promise<HMSRoom> {
     return this.apiService.get(`${this.basePath}/${roomId}`);
   }
 
-  async getHlsStateByRoomId(roomId: string): Promise<HLSRoomState> {
-    const data: Record<string, any> = await this.apiService.get("/meetings/hls", {
-      room_id: roomId,
-    });
-    return {
-      recording: {
-        hlsVod: data.recording?.hls_vod,
-        singleFilePerLayer: data.recording?.single_file_per_layer,
-      },
-      running: data.running,
-      url: data.url,
-    };
-  }
-
-  // async getRoomByName(name: string): Promise<HMSRoom> {
-  //   const results: QueryResults<HMSRoom> = await this.apiService.get(this.basePath, { name });
-  //   if (results.data.length === 0) {
-  //     const err = new Error(`no room found with passed in name - ${name}`);
-  //     logger.error("no room found", err);
-  //     throw err;
-  //   }
-  //   return results.data[0];
-  // }
-
-  async getHlsURL(roomId: string): Promise<string> {
-    const result: HLSRoomState = await this.apiService.get("/meetings/hls/url", {
-      room_id: roomId,
-    });
-    return result.url || "";
-  }
-
-  async createRoom(config: CreateRoomConfig): Promise<HMSRoom> {
-    const payload: Record<string, any> = {
-      name: config.name,
-      description: config.description,
-      template_id: config.templateId,
-      region: config.region,
-    };
-    return this.apiService.post(this.basePath, payload);
-  }
-
-  async startHLS(config: StartRoomHLSConfig) {
-    const payload: Record<string, any> = {
-      room_id: config.roomId,
-      variants: [{ meeting_url: config.meetingUrl }],
-    };
-    if (config.recording) {
-      payload.recording = {
-        hls_vod: !!config.recording.hlsVod,
-        single_file_per_layer: !!config.recording.singleFilePerLayer,
-      };
+  async getRoomByName(name: string): Promise<HMSRoom> {
+    const results: QueryResults<HMSRoom> = await this.apiService.get(this.basePath, { name });
+    if (!results.data || results.data.length === 0) {
+      const err = new Error(`no room found with passed in name - ${name}`);
+      logger.error("no room found", err);
+      throw err;
     }
-    if (config.scheduleAt) {
-      payload.schedule_at = Math.floor(config.scheduleAt.getTime() / 1000);
-    }
-    logger.info("starting hls - ", payload);
-    return this.apiService.post("/meetings/hls/start", payload);
+    return results.data[0];
   }
 
-  async stopHLS({ roomId }: { roomId: string }) {
-    logger.info("stopping hls for room - ", roomId);
-    await this.apiService.post("/meetings/hls/stop", { room_id: roomId });
+  async getRoomsByEnabledIterator(enabled: boolean): Promise<QueryResultsIterator<HMSRoom>> {
+    const queryResultsIterator = await QueryResultsIterator.create<HMSRoom>(
+      (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
+      { enabled }
+    );
+    return queryResultsIterator;
   }
-}
 
-export interface CreateRoomConfig {
-  name?: string;
-  description?: string;
-  templateId?: string;
-  region?: string;
-}
+  async getRoomsByTimeRangeIterator(
+    before?: Date,
+    after?: Date
+  ): Promise<QueryResultsIterator<HMSRoom>> {
+    const timeQueryParams: Record<string, Date> = {};
+    if (before) timeQueryParams["before"] = before;
+    if (after) timeQueryParams["after"] = after;
 
-export interface StartRoomHLSConfig {
-  roomId: string;
-  meetingUrl: string;
-  recording?: HLSRecordingConfig;
-  scheduleAt?: Date;
-}
+    const queryResultsIterator = await QueryResultsIterator.create<HMSRoom>(
+      (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
+      timeQueryParams
+    );
+    return queryResultsIterator;
+  }
 
-export interface HLSRecordingConfig {
-  hlsVod?: boolean;
-  singleFilePerLayer?: boolean;
-}
+  async createRoom(roomConfig: HMSCreateRoomConfig): Promise<HMSRoom> {
+    return this.apiService.post(this.basePath, roomConfig);
+  }
 
-export interface HLSRoomState {
-  running: boolean;
-  url?: string;
-  recording?: HLSRecordingConfig;
+  async updateRoom(roomConfig: HMSUpdateRoomConfig): Promise<HMSRoom> {
+    return this.apiService.post(this.basePath, roomConfig);
+  }
+
+  async enableOrDisableRoom(roomId: string, enabled: boolean): Promise<HMSRoom> {
+    return this.apiService.post(`${this.basePath}/${roomId}`, { enabled });
+  }
 }
