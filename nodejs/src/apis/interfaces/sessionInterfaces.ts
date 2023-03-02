@@ -7,11 +7,11 @@ export interface HMSSession {
   app_id: string;
   active: boolean;
   peers: Record<string, HMSSessionPeer>;
-  created_at: string;
-  updated_at: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface HMSSessionPeer extends HMSBasicPeer {
   session_id: string;
-  left_at: string;
+  left_at: Date;
 }

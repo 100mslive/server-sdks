@@ -9,7 +9,7 @@ export interface HMSActiveRoom {
 
 export interface HMSActiveRoomSession {
   id: string;
-  created_at: string;
+  created_at: Date;
   peers: string[];
 }
 
@@ -27,7 +27,7 @@ export interface HMSPeerTrack {
   mute: boolean;
   type: string;
   source: string;
-  started_at: string;
+  started_at: Date;
   description: string;
 }
 

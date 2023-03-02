@@ -12,8 +12,8 @@ export interface HMSRoom {
   template_id: string;
   template: string;
   region: string;
-  created_at: string;
-  updated_at: string;
+  created_at: Date;
+  updated_at: Date;
   customer: string;
 }
 

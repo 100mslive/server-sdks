@@ -9,5 +9,5 @@ export interface HMSBasicPeer {
   name: string;
   role: string;
   user_id: string;
-  joined_at: string;
+  joined_at: Date;
 }
