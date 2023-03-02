@@ -1,4 +1,4 @@
-import { ErrorFactory } from "../apis/Errors";
+import { ErrorFactory } from "../services/Errors";
 import { logger } from "../services/LoggerService";
 
 export async function sleep(timeoutMs: number) {
@@ -23,7 +23,7 @@ export async function pollTillSuccess<T>(
   intervalSeconds ||= DEFAULT_POLL_INTERVAL_SECONDS;
   const timeoutMs = timeoutSeconds * 1000;
   const startTime = Date.now();
-  
+
   while (true) {
     const hasTimeRunOut = Date.now() - startTime > timeoutMs;
     if (hasTimeRunOut) {
@@ -34,7 +34,7 @@ export async function pollTillSuccess<T>(
       let result = await fn();
       if (!tillCondition(result)) {
         logger.debug("done with");
-        return result
+        return result;
       }
     } catch (err) {}
     await sleep(intervalSeconds * 1000);

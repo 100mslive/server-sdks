@@ -1,10 +1,13 @@
 import { logger, LogLevelOptions, setLogLevel } from "./services/LoggerService";
 import { RoomService } from "./apis/RoomService";
-import { AppTokenConfig, AuthService, ManagementTokenConfig } from "./services/AuthService";
+import { AuthTokenConfig, AuthService, ManagementTokenConfig } from "./services/AuthService";
 import { APIService } from "./services/APIService";
 import { ActiveRoomService } from "./apis/ActiveRoomService";
 import { SessionService } from "./apis/SessionService";
 
+/**
+ * Server-side SDK for 100ms REST API endpoints.
+ */
 export class HMSSDK {
   private readonly authService: AuthService;
   private readonly apiService: APIService;
@@ -13,6 +16,11 @@ export class HMSSDK {
   private readonly activeRoomService: ActiveRoomService;
   private readonly sessionService: SessionService;
 
+  /**
+   * @param accessKey App Access Key from Dashboard
+   * @param secret App Secret from Dashboard
+   * @returns an instance of `HMSSDK`
+   */
   constructor(accessKey?: string, secret?: string) {
     if (!accessKey) {
       accessKey = process.env.HMS_ACCESS_KEY;
@@ -33,30 +41,52 @@ export class HMSSDK {
     this.sessionService = new SessionService(this.apiService);
   }
 
+  /**
+   * Can be used to make 100ms API calls not supported in the SDK.
+   * @returns an instance of `APIService`
+   */
+  getAPIService() {
+    return this.apiService;
+  }
+
+  /**
+   * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/object Room API calls}.
+   * @returns an instance of `RoomService`
+   */
   getRoomService() {
     return this.roomService;
   }
 
+  /**
+   * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/object Active Room API calls}.
+   * @returns an instance of `ActiveRoomService`
+   */
   getActiveRoomService() {
     return this.activeRoomService;
   }
 
+  /**
+   * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/Sessions/object Session API calls}.
+   * @returns an instance of `SessionService`
+   */
   getSessionService() {
     return this.sessionService;
   }
 
   /**
-   * management token allows to make API calls to 100ms backend
+   * Management token allows to make API calls to 100ms backend.
+   * @returns Management token of type `Token`
    */
   async getManagementToken(tokenConfig?: ManagementTokenConfig) {
     return this.authService.getManagementToken(tokenConfig);
   }
 
   /**
-   * App Token allows for joining room on client side
+   * Auth Token allows for joining Room on client side.
+   * @returns Auth token of type `Token`
    */
-  async getAppToken(tokenConfig: AppTokenConfig) {
-    return this.authService.getAppToken(tokenConfig);
+  async getAuthToken(tokenConfig: AuthTokenConfig) {
+    return this.authService.getAuthToken(tokenConfig);
   }
 
   setLogLevel(level: LogLevelOptions) {

@@ -5,7 +5,6 @@ export interface HMSRoom {
   description: string;
   customer_id: string;
   app_id: string;
-  // not sure about the next two
   recording_source_template?: boolean;
   enabled_source_template?: boolean;
   recording_info?: HMSRoomRecordingInfo;

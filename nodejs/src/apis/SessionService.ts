@@ -7,7 +7,11 @@ export class SessionService {
 
   constructor(private apiService: APIService) {}
 
-  async getAllSessionsIterator(): Promise<QueryResultsIterator<HMSSession>> {
+  /**
+   *
+   * @returns a `QueryResultsIterator<HMSSession>` object
+   */
+  async getAllSessionsIterable(): Promise<QueryResultsIterator<HMSSession>> {
     const queryResultsIterator = await QueryResultsIterator.create<HMSSession>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       {}
@@ -15,11 +19,21 @@ export class SessionService {
     return queryResultsIterator;
   }
 
+  /**
+   *
+   * @param sessionId Session ID
+   * @returns a `HMSSession` object
+   */
   async getSessionById(sessionId: string): Promise<HMSSession> {
     return this.apiService.get(`${this.basePath}/${sessionId}`);
   }
 
-  async getSessionsByRoomIdIterator(roomId: string): Promise<QueryResultsIterator<HMSSession>> {
+  /**
+   *
+   * @param roomId Room ID
+   * @returns a `QueryResultsIterator<HMSSession>` object
+   */
+  async getSessionsByRoomIdIterable(roomId: string): Promise<QueryResultsIterator<HMSSession>> {
     const queryResultsIterator = await QueryResultsIterator.create<HMSSession>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       { room_id: roomId }
@@ -27,7 +41,14 @@ export class SessionService {
     return queryResultsIterator;
   }
 
-  async getSessionsByActiveIterator(active: boolean): Promise<QueryResultsIterator<HMSSession>> {
+  /**
+   *
+   * @param active Active status of the Session
+   * @returns a `QueryResultsIterator<HMSSession>` object
+   */
+  async getSessionsByActiveIterable(
+    active: boolean = true
+  ): Promise<QueryResultsIterator<HMSSession>> {
     const queryResultsIterator = await QueryResultsIterator.create<HMSSession>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       { active }
@@ -35,7 +56,13 @@ export class SessionService {
     return queryResultsIterator;
   }
 
-  async getSessionsByTimeRangeIterator(
+  /**
+   *
+   * @param before Timestamp before which the Session took place
+   * @param after Timestamp after which the Session took place
+   * @returns a `QueryResultsIterator<HMSSession>` object
+   */
+  async getSessionsByTimeRangeIterable(
     before?: Date,
     after?: Date
   ): Promise<QueryResultsIterator<HMSSession>> {

@@ -31,11 +31,30 @@ export interface HMSPeerTrack {
   description: string;
 }
 
-export type HMSPeerUpdateConfig = Partial<Pick<HMSActiveRoomPeer, "name" | "role" | "metadata">>;
+export type HMSPeerUpdateOptions = Partial<Pick<HMSActiveRoomPeer, "name" | "role" | "metadata">>;
 
-export interface HMSRoomMessageConfig {
+export interface HMSRoomMessageOptions {
   peerId?: string;
   role?: string;
   message: string;
   type?: string;
+}
+
+export interface HMSActivePeersResponse {
+  peers: Record<string, HMSActiveRoomPeer>;
+}
+
+export interface HMSRemovePeerOptionsById {
+  peer_id: string;
+  reason?: string;
+}
+
+export interface HMSRemovePeerOptionsByRole {
+  role: string;
+  reason?: string;
+}
+
+export interface HMSEndActiveRoomOptions {
+  reason?: string;
+  lock?: boolean;
 }

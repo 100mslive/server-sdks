@@ -3,10 +3,10 @@ import { v4 as uuidv4 } from "uuid";
 import { logger } from "./LoggerService";
 
 export class AuthService {
-  private managementToken?: ManagementToken;
+  private managementToken?: Token;
   constructor(private accessKey: string, private secret: string) {}
 
-  async getManagementToken(tokenConfig?: ManagementTokenConfig): Promise<ManagementToken> {
+  async getManagementToken(tokenConfig?: ManagementTokenConfig): Promise<Token> {
     if (
       tokenConfig?.forceNew ||
       !this.managementToken ||
@@ -18,7 +18,7 @@ export class AuthService {
     return this.managementToken;
   }
 
-  async getAppToken(tokenConfig: AppTokenConfig) {
+  async getAuthToken(tokenConfig: AuthTokenConfig) {
     const details: Record<string, string> = {
       room_id: tokenConfig.roomId,
       role: tokenConfig.role,
@@ -33,7 +33,7 @@ export class AuthService {
     type: TokenType,
     { issuedAt, notValidBefore, validForSeconds }: BaseTokenConfig = {},
     extras: Record<string, any> = {}
-  ): Promise<ManagementToken> {
+  ): Promise<Token> {
     // buffer to handle slight mismatch between time of token creating server and HMS backend
     const bufferSeconds = 10;
     const currTimeSeconds = Math.floor(Date.now() / 1000);
@@ -104,9 +104,9 @@ export interface ManagementTokenConfig extends BaseTokenConfig {
   forceNew?: boolean;
 }
 
-export interface AppTokenConfig extends BaseTokenConfig {
+export interface AuthTokenConfig extends BaseTokenConfig {
   /**
-   * room id for which the app token needs to be generated
+   * Room id for which the auth token needs to be generated
    */
   roomId: string;
   /**
@@ -119,7 +119,7 @@ export interface AppTokenConfig extends BaseTokenConfig {
   role: string;
 }
 
-export interface ManagementToken {
+export interface Token {
   token: string;
 }
 
