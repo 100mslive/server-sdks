@@ -1,17 +1,18 @@
 ## 100ms NodeJs Server Side SDK
 
 ## Note
+
 ## This is beta, APIs might change
 
 ## Documentation
 
 The `examples/nodejs` folder on root has some examples.
 
-
 ## Docs
 
 ### Env Variables to configure(optional)
-- `HMS_ACCES_KEY` => access key as present in dashboard's developer section
+
+- `HMS_ACCESS_KEY` => access key as present in dashboard's developer section
 - `HMS_SECRET` => app secret as present in dashboard's developer section
 
 ### Create SDK Instance
@@ -25,62 +26,54 @@ const sdk = new HMSSDK(accessKey, secret);
 ```js
 console.log(await sdk.getManagementToken());
 // with token options -
-console.log(await sdk.getManagementToken({issuedAt, notValidBefore, validForSeconds}));
+console.log(await sdk.getManagementToken({ issuedAt, notValidBefore, validForSeconds }));
 ```
 
-### Generating app token
+### Generating Auth token
 
 ```js
-console.log(await sdk.getAppToken({roomId, role, userId}));
+console.log(await sdk.getAuthToken({ roomId, role, userId }));
 // with token options -
-console.log(await sdk.getAppToken({roomId, role, userId, issuedAt, notValidBefore, validForSeconds}));
+console.log(
+  await sdk.getAuthToken({ roomId, role, userId, issuedAt, notValidBefore, validForSeconds })
+);
 ```
 
-### Creating and Updating room
-
-You can pass in an existing room name to get the room object for previously created room.
+### Creating and Updating Room
 
 ```js
 const roomService = sdk.getRoomService();
 const room = await roomService.createRoom();
 // with room options -
-const roomWithOptions = await roomService.createRoom({name, description, templateId, region});
-console.log(room, roomWithOptions);
+const roomWithOptions = await roomService.createRoom({ name, description, recording_info, region });
+
+const updatedRoom = await roomService.updateRoom(room.id, { name });
+console.log(room, roomWithOptions, updatedRoom);
 ```
 
-### Start HLS For a 100ms Room from meeting URL
-
-The HLS m3u8 url will be received in webhook response.
+### List Peers in an Active Room and send a Message
 
 ```js
-const roomService = sdk.getRoomService();
-await roomService.startHLS({roomId, meetingUrl})
-// with recording -
-await roomService.startHLS({roomId, meetingUrl, recording: {hlsVod: true, singleFilePerLayer: true}});
+const activeRoomService = sdk.getActiveRoomService();
+const peers = await getActivePeers(roomId);
+console.log(peers);
+
+await sendMessage(roomId, { message: "test" });
 ```
 
-### Start HLS from meeting url
-
-Pass in an url and get a m3u8 back which is obtained by converting that meeting URl to a HLS Stream.
-This might take significant time.
-Identifier is anything from your side to identify an HLS stream. Only one HLS can run against an identifier at a time.
-
-There is also an optional field `scheduleAt` if you want to schedule the HLS to run at some time in future than start right away.
+### Get all Sessions
 
 ```js
-const destinationService = sdk.getDestinationService();
-// to start
-const recording = { hlsVod: true, singleFilePerLayer: true }; // optional
-const templateId = "1234" // optional
-const hlsUrl = await destinationService.startHLSAndGetUrl({ identifier, appUrl, recording, templateId });
+const sessionService = sdk.getSessionService();
+const allSessionsIterable = await getAllSessionsIterable();
 
-// scheduling a start for future
-const scheduleAt = new Date(new Date().getTime() + (2*24*60*60*1000)); // after 2 days
-// the hls url received will become functional once hls has started at scheduled time
-const hlsUrl = await destinationService.startHLSAndGetUrl({ identifier, appUrl, scheduleAt });
-
-// to stop
-await destinationService.stopHLS({ identifier });
+const allSessions = [];
+while (true) {
+  const someSessions = await allSessionsIterable.next();
+  if (someSessions.length == 0) break;
+  sessions.push(...someSessions);
+}
+console.log(allSessions);
 ```
 
 ### Errors
@@ -96,10 +89,11 @@ interface HMSException {
 ```
 
 e.g.
+
 ```js
 const hlsErr = {
   code: 404,
   name: "Not Found",
-  message: "hls not running"
-}
+  message: "hls not running",
+};
 ```

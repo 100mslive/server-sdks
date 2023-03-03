@@ -1,5 +1,5 @@
 import { APIService } from "../services/APIService";
-import { QueryResultsIterator } from "../utils/queryResultsIterator";
+import { QueryResultsIterator } from "../utils/QueryResultsIterator";
 import { HMSSession } from "./interfaces/sessionInterfaces";
 
 export class SessionService {
@@ -12,11 +12,11 @@ export class SessionService {
    * @returns a `QueryResultsIterator<HMSSession>` object
    */
   async getAllSessionsIterable(): Promise<QueryResultsIterator<HMSSession>> {
-    const queryResultsIterator = await QueryResultsIterator.create<HMSSession>(
+    const queryResultsIterable = await QueryResultsIterator.create<HMSSession>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       {}
     );
-    return queryResultsIterator;
+    return queryResultsIterable;
   }
 
   /**
@@ -34,11 +34,11 @@ export class SessionService {
    * @returns a `QueryResultsIterator<HMSSession>` object
    */
   async getSessionsByRoomIdIterable(roomId: string): Promise<QueryResultsIterator<HMSSession>> {
-    const queryResultsIterator = await QueryResultsIterator.create<HMSSession>(
+    const queryResultsIterable = await QueryResultsIterator.create<HMSSession>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       { room_id: roomId }
     );
-    return queryResultsIterator;
+    return queryResultsIterable;
   }
 
   /**
@@ -49,11 +49,11 @@ export class SessionService {
   async getSessionsByActiveIterable(
     active: boolean = true
   ): Promise<QueryResultsIterator<HMSSession>> {
-    const queryResultsIterator = await QueryResultsIterator.create<HMSSession>(
+    const queryResultsIterable = await QueryResultsIterator.create<HMSSession>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       { active }
     );
-    return queryResultsIterator;
+    return queryResultsIterable;
   }
 
   /**
@@ -70,10 +70,10 @@ export class SessionService {
     if (before) timeQueryParams["before"] = before;
     if (after) timeQueryParams["after"] = after;
 
-    const queryResultsIterator = await QueryResultsIterator.create<HMSSession>(
+    const queryResultsIterable = await QueryResultsIterator.create<HMSSession>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       timeQueryParams
     );
-    return queryResultsIterator;
+    return queryResultsIterable;
   }
 }

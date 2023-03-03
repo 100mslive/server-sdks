@@ -6,7 +6,7 @@ import {
   HMSRoom,
   HMSUpdateRoomConfig as HMSUpdateRoomOptions,
 } from "./interfaces/roomInterfaces";
-import { QueryResultsIterator } from "../utils/queryResultsIterator";
+import { QueryResultsIterator } from "../utils/QueryResultsIterator";
 
 export class RoomService {
   private basePath = "/rooms";
@@ -18,11 +18,11 @@ export class RoomService {
    * @returns a `QueryResultsIterator<HMSRoom>` object
    */
   async getRoomsIterable(): Promise<QueryResultsIterator<HMSRoom>> {
-    const queryResultsIterator = await QueryResultsIterator.create<HMSRoom>(
+    const queryResultsIterable = await QueryResultsIterator.create<HMSRoom>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       {}
     );
-    return queryResultsIterator;
+    return queryResultsIterable;
   }
 
   /**
@@ -55,11 +55,11 @@ export class RoomService {
    * @returns a `QueryResultsIterator<HMSRoom>` object
    */
   async getRoomsByEnabledIterable(enabled: boolean): Promise<QueryResultsIterator<HMSRoom>> {
-    const queryResultsIterator = await QueryResultsIterator.create<HMSRoom>(
+    const queryResultsIterable = await QueryResultsIterator.create<HMSRoom>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       { enabled }
     );
-    return queryResultsIterator;
+    return queryResultsIterable;
   }
 
   /**
@@ -76,11 +76,11 @@ export class RoomService {
     if (before) timeQueryParams["before"] = before;
     if (after) timeQueryParams["after"] = after;
 
-    const queryResultsIterator = await QueryResultsIterator.create<HMSRoom>(
+    const queryResultsIterable = await QueryResultsIterator.create<HMSRoom>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       timeQueryParams
     );
-    return queryResultsIterator;
+    return queryResultsIterable;
   }
 
   /**
@@ -88,17 +88,18 @@ export class RoomService {
    * @param config Config of the Room to be created
    * @returns a `HMSRoom` object
    */
-  async createRoom(config: HMSCreateRoomConfig): Promise<HMSRoom> {
+  async createRoom(config?: HMSCreateRoomConfig): Promise<HMSRoom> {
     return this.apiService.post(this.basePath, config);
   }
 
   /**
    *
+   * @param roomId Room ID
    * @param options Options of the Room to be updated
    * @returns a `HMSRoom` object
    */
-  async updateRoom(options: HMSUpdateRoomOptions): Promise<HMSRoom> {
-    return this.apiService.post(this.basePath, options);
+  async updateRoom(roomId: string, options: HMSUpdateRoomOptions): Promise<HMSRoom> {
+    return this.apiService.post(`${this.basePath}/${roomId}`, options);
   }
 
   /**
