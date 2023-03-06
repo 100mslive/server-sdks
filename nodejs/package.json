@@ -1,6 +1,6 @@
 {
   "name": "@100mslive/server-sdk",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha",
   "license": "GPL-3.0-only",
   "devDependencies": {
     "@types/jest": "^27.5.1",
