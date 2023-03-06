@@ -1,0 +1,29 @@
+name: Publish alpha
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publishAlpha:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./nodejs
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install modules
+        run: yarn install
+#      - name: Test
+#        run: yarn test
+      - name: Build
+        run: yarn build
+      - name: Publish to npm
+        run: yarn publish --access public --tag alpha
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
