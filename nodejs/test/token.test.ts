@@ -1,8 +1,8 @@
 import { HMSSDK } from "../src";
-import { verify } from "jsonwebtoken";
+import { verify, Secret } from "jsonwebtoken";
 
 let sdk: HMSSDK;
-let secret = process.env.HMS_SECRET;
+let secret: Secret = process.env.HMS_SECRET!;
 
 beforeEach(() => {
   sdk = new HMSSDK();
@@ -26,9 +26,9 @@ describe("management token", () => {
 
 describe("app token", () => {
   it("should give app token", async () => {
-    const withoutUserId = await sdk.getAppToken({ roomId: "room123", role: "teacher" });
+    const withoutUserId = await sdk.getAuthToken({ roomId: "room123", role: "teacher" });
     console.log("without user id", withoutUserId);
-    const withUserId = await sdk.getAppToken({
+    const withUserId = await sdk.getAuthToken({
       roomId: "room123",
       role: "teacher",
       userId: "user232",

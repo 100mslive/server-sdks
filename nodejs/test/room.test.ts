@@ -16,7 +16,7 @@ describe("room service", () => {
     const roomByName = await roomService.getRoomByName(room.name);
     console.log(room);
     expect(room.id).toBe(roomById.id);
-    expect(room.id).toBe(roomById.id);
+    expect(room.id).toBe(roomByName.id);
     expect(room.name).toBe(roomById.name);
     expect(room.name).toBe(roomByName.name);
   });
