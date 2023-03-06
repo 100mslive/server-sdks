@@ -17,8 +17,8 @@ export class RoomService {
    *
    * @returns a `QueryResultsIterator<HMSRoom>` object
    */
-  async getRoomsIterable(): Promise<QueryResultsIterator<HMSRoom>> {
-    const queryResultsIterable = await QueryResultsIterator.create<HMSRoom>(
+  getRoomsIterable(): QueryResultsIterator<HMSRoom> {
+    const queryResultsIterable = new QueryResultsIterator<HMSRoom>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       {}
     );
@@ -54,8 +54,8 @@ export class RoomService {
    * @param enabled Enabled status of Room
    * @returns a `QueryResultsIterator<HMSRoom>` object
    */
-  async getRoomsByEnabledIterable(enabled: boolean): Promise<QueryResultsIterator<HMSRoom>> {
-    const queryResultsIterable = await QueryResultsIterator.create<HMSRoom>(
+  getRoomsByEnabledIterable(enabled: boolean): QueryResultsIterator<HMSRoom> {
+    const queryResultsIterable = new QueryResultsIterator<HMSRoom>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       { enabled }
     );
@@ -68,15 +68,12 @@ export class RoomService {
    * @param after Timestamp after which the Rooms were created
    * @returns a `QueryResultsIterator<HMSRoom>` object
    */
-  async getRoomsByTimeRangeIterable(
-    before?: Date,
-    after?: Date
-  ): Promise<QueryResultsIterator<HMSRoom>> {
+  getRoomsByTimeRangeIterable(before?: Date, after?: Date): QueryResultsIterator<HMSRoom> {
     const timeQueryParams: Record<string, Date> = {};
     if (before) timeQueryParams["before"] = before;
     if (after) timeQueryParams["after"] = after;
 
-    const queryResultsIterable = await QueryResultsIterator.create<HMSRoom>(
+    const queryResultsIterable = new QueryResultsIterator<HMSRoom>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       timeQueryParams
     );

@@ -11,8 +11,8 @@ export class SessionService {
    *
    * @returns a `QueryResultsIterator<HMSSession>` object
    */
-  async getAllSessionsIterable(): Promise<QueryResultsIterator<HMSSession>> {
-    const queryResultsIterable = await QueryResultsIterator.create<HMSSession>(
+  getAllSessionsIterable(): QueryResultsIterator<HMSSession> {
+    const queryResultsIterable = new QueryResultsIterator<HMSSession>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       {}
     );
@@ -33,8 +33,8 @@ export class SessionService {
    * @param roomId Room ID
    * @returns a `QueryResultsIterator<HMSSession>` object
    */
-  async getSessionsByRoomIdIterable(roomId: string): Promise<QueryResultsIterator<HMSSession>> {
-    const queryResultsIterable = await QueryResultsIterator.create<HMSSession>(
+  getSessionsByRoomIdIterable(roomId: string): QueryResultsIterator<HMSSession> {
+    const queryResultsIterable = new QueryResultsIterator<HMSSession>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       { room_id: roomId }
     );
@@ -46,10 +46,8 @@ export class SessionService {
    * @param active Active status of the Session
    * @returns a `QueryResultsIterator<HMSSession>` object
    */
-  async getSessionsByActiveIterable(
-    active: boolean = true
-  ): Promise<QueryResultsIterator<HMSSession>> {
-    const queryResultsIterable = await QueryResultsIterator.create<HMSSession>(
+  getSessionsByActiveIterable(active: boolean = true): QueryResultsIterator<HMSSession> {
+    const queryResultsIterable = new QueryResultsIterator<HMSSession>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       { active }
     );
@@ -62,15 +60,12 @@ export class SessionService {
    * @param after Timestamp after which the Session took place
    * @returns a `QueryResultsIterator<HMSSession>` object
    */
-  async getSessionsByTimeRangeIterable(
-    before?: Date,
-    after?: Date
-  ): Promise<QueryResultsIterator<HMSSession>> {
+  getSessionsByTimeRangeIterable(before?: Date, after?: Date): QueryResultsIterator<HMSSession> {
     const timeQueryParams: Record<string, any> = {};
     if (before) timeQueryParams["before"] = before;
     if (after) timeQueryParams["after"] = after;
 
-    const queryResultsIterable = await QueryResultsIterator.create<HMSSession>(
+    const queryResultsIterable = new QueryResultsIterator<HMSSession>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       timeQueryParams
     );

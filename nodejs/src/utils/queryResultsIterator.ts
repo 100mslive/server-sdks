@@ -2,19 +2,15 @@ import { QueryResults } from "../apis/interfaces/common";
 
 export class QueryResultsIterator<T> {
   private results!: QueryResults<T>;
-  private queryFunc!: (queryParams: Record<string, any>) => Promise<QueryResults<T>>;
-  private queryParams!: Record<string, any>;
+  private queryFunc: (queryParams: Record<string, any>) => Promise<QueryResults<T>>;
+  private queryParams: Record<string, any>;
 
-  private constructor() {}
-
-  public static async create<T>(
+  constructor(
     queryFunction: (queryParams: Record<string, any>) => Promise<QueryResults<T>>,
     queryParams: Record<string, any>
-  ): Promise<QueryResultsIterator<T>> {
-    const queryResultsIterator = new QueryResultsIterator<T>();
-    queryResultsIterator.queryFunc = queryFunction;
-    queryResultsIterator.queryParams = queryParams;
-    return queryResultsIterator;
+  ) {
+    this.queryFunc = queryFunction;
+    this.queryParams = queryParams;
   }
 
   async next() {
