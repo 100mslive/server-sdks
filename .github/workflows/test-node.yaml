@@ -32,3 +32,6 @@ jobs:
         run: yarn
       - name: Run tests
         run: yarn test
+        env:
+          HMS_ACCESS_KEY: ${{ secrets.HMS_ACCESS_KEY }}
+          HMS_SECRET: ${{ secrets.HMS_SECRET }}
