@@ -55,23 +55,23 @@ console.log(room, roomWithOptions, updatedRoom);
 
 ```js
 const activeRoomService = sdk.getActiveRoomService();
-const peers = await getActivePeers(roomId);
+const peers = await activeRoomService.getActivePeers(roomId);
 console.log(peers);
 
-await sendMessage(roomId, { message: "test" });
+await activeRoomService.sendMessage(roomId, { message: "test" });
 ```
 
 ### Get all Sessions
 
 ```js
 const sessionService = sdk.getSessionService();
-const allSessionsIterable = await getAllSessionsIterable();
+const allSessionsIterable = await sessionService.getAllSessionsIterable();
 
 const allSessions = [];
 while (true) {
   const someSessions = await allSessionsIterable.next();
   if (someSessions.length == 0) break;
-  sessions.push(...someSessions);
+  allSessions.push(...someSessions);
 }
 console.log(allSessions);
 ```
