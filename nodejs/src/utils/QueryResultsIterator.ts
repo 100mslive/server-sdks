@@ -1,9 +1,9 @@
 import { QueryResults } from "../apis/interfaces/common";
 
 export class QueryResultsIterator<T> {
-  private results!: QueryResults<T>;
-  private queryFunc: (queryParams: Record<string, any>) => Promise<QueryResults<T>>;
+  private results?: QueryResults<T>;
   private queryParams: Record<string, any>;
+  private queryFunc: (queryParams: Record<string, any>) => Promise<QueryResults<T>>;
 
   constructor(
     queryFunction: (queryParams: Record<string, any>) => Promise<QueryResults<T>>,
@@ -13,7 +13,7 @@ export class QueryResultsIterator<T> {
     this.queryParams = queryParams;
   }
 
-  async next() {
+  async *[Symbol.iterator]() {
     if (this.results?.last) {
       this.queryParams["start"] = this.results?.last;
     }

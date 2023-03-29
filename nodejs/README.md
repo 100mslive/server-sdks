@@ -45,7 +45,13 @@ console.log(
 const roomService = sdk.getRoomService();
 const room = await roomService.createRoom();
 // with room options -
-const roomWithOptions = await roomService.createRoom({ name, description, recording_info, region });
+const roomWithOptions = await roomService.createRoom({
+  name,
+  description,
+  templateId,
+  recording_info,
+  region,
+});
 
 const updatedRoom = await roomService.updateRoom(room.id, { name });
 console.log(room, roomWithOptions, updatedRoom);
