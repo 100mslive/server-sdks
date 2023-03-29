@@ -11,12 +11,13 @@ beforeEach(() => {
 describe("session service", () => {
   test("get session details work", async () => {
     const sessionService = sdk.getSessionService();
-    const allSessionsIterable = sessionService.getAllSessionsIterable();
+    const sessionsIterable = sessionService.getAllSessionsIterable();
     const allSessions: HMSSession[] = [];
-    while (true) {
-      const severalSessions = await allSessionsIterable.next();
-      if (severalSessions.length == 0) break;
-      allSessions.push(...severalSessions);
+    for await (const session of sessionsIterable) {
+      allSessions.push(session);
+      if (!sessionsIterable.isNextCached) {
+        console.log("the next loop is gonna take some time");
+      }
     }
     const firstSession = await sessionService.getSessionById(allSessions.at(0)!.id);
     expect(firstSession.id).toBe(allSessions.at(0)!.id);
