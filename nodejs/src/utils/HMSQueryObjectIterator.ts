@@ -39,19 +39,28 @@ export class HMSQueryObjectIterator<T> {
    * `queryFunction` and yields an object of type `T`.
    */
   async *[Symbol.asyncIterator](): AsyncIterator<T> {
+    // if first iteration (results is undefined) or latest query returned data
     while (!this.results || this.results?.data) {
+      // set "last" of latest query as "start" for current query
       if (this.results?.last) {
         this.queryParams["start"] = this.results?.last;
       }
+      // call query function and set `isNextCached` to true
       this.results = await this.queryFunction(this.queryParams);
       this.isNextCached = true;
-      if (this.results.data)
+      if (this.results.data) {
+        // iterate through returned data if present and yield it
         for (let i = 0; i < this.results.data.length; i++) {
+          // before yielding the last element in data, set `isNextCached` to false
           if (i == this.results.data.length - 1) {
             this.isNextCached = false;
           }
           yield this.results.data[i];
         }
+        // if returned data count is less than specified `limit` or default 20
+        // break the loop since the final page has been reached
+        if (this.results.data.length < this.queryParams["limit"] ?? 20) break;
+      }
     }
   }
 }
