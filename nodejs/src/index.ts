@@ -20,6 +20,7 @@ export {
   HMSRoomRecordingInfo,
   HMSRoomRecordingUploadInfo,
 } from "./apis/interfaces/roomInterfaces";
+export { HMSRoomCode } from "./apis/interfaces/roomCodeInterfaces";
 export { HMSSession, HMSSessionPeer } from "./apis/interfaces/sessionInterfaces";
 
 // param interfaces
@@ -35,4 +36,5 @@ export {
   HMSRoomFilterOptions,
   HMSRoomUpdateOptions,
 } from "./apis/RoomService";
+export { HMSRoomCodeFilterOptions } from "./apis/RoomCodeService";
 export { HMSSessionFilterOptions } from "./apis/SessionService";

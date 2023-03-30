@@ -1,5 +1,5 @@
 export interface QueryResults<T> {
-  limit: number;
+  limit?: number;
   data?: T[];
   last?: string;
 }

@@ -4,6 +4,7 @@ import { AuthTokenConfig, AuthService, ManagementTokenConfig } from "./services/
 import { APIService } from "./services/APIService";
 import { ActiveRoomService } from "./apis/ActiveRoomService";
 import { SessionService } from "./apis/SessionService";
+import { RoomCodeService } from "./apis/RoomCodeService";
 
 /**
  * Server-side SDK for 100ms REST API endpoints.
@@ -15,6 +16,7 @@ export class HMSSDK {
   private readonly roomService: RoomService;
   private readonly activeRoomService: ActiveRoomService;
   private readonly sessionService: SessionService;
+  private readonly roomCodeService: RoomCodeService;
 
   /**
    * @param accessKey App Access Key from Dashboard
@@ -39,6 +41,7 @@ export class HMSSDK {
     this.roomService = new RoomService(this.apiService);
     this.activeRoomService = new ActiveRoomService(this.apiService);
     this.sessionService = new SessionService(this.apiService);
+    this.roomCodeService = new RoomCodeService(this.apiService);
   }
 
   /**
@@ -71,6 +74,14 @@ export class HMSSDK {
    */
   getSessionService() {
     return this.sessionService;
+  }
+
+  /**
+   * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/room-codes/room-code-object Room Code API calls}.
+   * @returns an instance of `RoomCodeService`
+   */
+  getRoomCodeService() {
+    return this.roomCodeService;
   }
 
   /**
