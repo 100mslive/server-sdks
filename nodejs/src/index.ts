@@ -8,7 +8,7 @@ export {
   HMSActiveRoomSession,
   HMSPeerTrack,
 } from "./apis/interfaces/activeRoomInterfaces";
-export { HMSBasePeer, QueryResults } from "./apis/interfaces/common";
+export { HMSBasePeer } from "./apis/interfaces/common";
 export {
   HMSRoom,
   HMSRoomRecordingInfo,

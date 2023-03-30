@@ -1,16 +1,16 @@
 import { QueryResults } from "../apis/interfaces/common";
 
-export class QueryResultsIterator<T> {
+export class HMSQueryObjectIterator<T> {
   private results?: QueryResults<T>;
   private queryParams: Record<string, any>;
-  private readonly queryFunc: (queryParams: Record<string, any>) => Promise<QueryResults<T>>;
+  private readonly queryFunction: (queryParams: Record<string, any>) => Promise<QueryResults<T>>;
   isNextCached: boolean;
 
   constructor(
     queryFunction: (queryParams: Record<string, any>) => Promise<QueryResults<T>>,
     queryParams: Record<string, any>
   ) {
-    this.queryFunc = queryFunction;
+    this.queryFunction = queryFunction;
     this.queryParams = queryParams;
     this.isNextCached = false;
   }
@@ -20,7 +20,7 @@ export class QueryResultsIterator<T> {
       if (this.results?.last) {
         this.queryParams["start"] = this.results?.last;
       }
-      this.results = await this.queryFunc(this.queryParams);
+      this.results = await this.queryFunction(this.queryParams);
       this.isNextCached = true;
       if (this.results.data)
         for (const val of this.results.data) {

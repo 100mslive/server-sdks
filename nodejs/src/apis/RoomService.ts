@@ -1,8 +1,8 @@
 import { logger } from "../services/LoggerService";
 import { APIService } from "../services/APIService";
-import { QueryResults } from "./interfaces/common";
 import { HMSRoom, HMSRoomRecordingInfo } from "./interfaces/roomInterfaces";
-import { QueryResultsIterator } from "../utils/QueryResultsIterator";
+import { HMSQueryObjectIterator } from "../utils/HMSQueryObjectIterator";
+import { QueryResults } from "./interfaces/common";
 
 export class RoomService {
   private basePath = "/rooms";
@@ -15,8 +15,8 @@ export class RoomService {
    * @returns a `QueryResultsIterator<HMSRoom>` object
    */
 
-  getRoomsIterable(filters?: HMSRoomFilterOptions): QueryResultsIterator<HMSRoom> {
-    const queryResultsIterable = new QueryResultsIterator<HMSRoom>(
+  getRoomsIterable(filters?: HMSRoomFilterOptions): HMSQueryObjectIterator<HMSRoom> {
+    const queryResultsIterable = new HMSQueryObjectIterator<HMSRoom>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       filters ?? {}
     );
@@ -81,6 +81,7 @@ export interface HMSRoomFilterOptions {
   enabled?: boolean;
   before?: Date;
   after?: Date;
+  limit?: number;
 }
 
 export interface HMSRoomUpdateOptions {

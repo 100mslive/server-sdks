@@ -1,5 +1,5 @@
 import { APIService } from "../services/APIService";
-import { QueryResultsIterator } from "../utils/QueryResultsIterator";
+import { HMSQueryObjectIterator } from "../utils/HMSQueryObjectIterator";
 import { HMSSession } from "./interfaces/sessionInterfaces";
 
 export class SessionService {
@@ -12,8 +12,8 @@ export class SessionService {
    * @param filters Session filters like room id, active status and time range
    * @returns a `QueryResultsIterator<HMSSession>` object
    */
-  getSessionsIterable(filters?: HMSSessionFilterOptions): QueryResultsIterator<HMSSession> {
-    const queryResultsIterable = new QueryResultsIterator<HMSSession>(
+  getSessionsIterable(filters?: HMSSessionFilterOptions): HMSQueryObjectIterator<HMSSession> {
+    const queryResultsIterable = new HMSQueryObjectIterator<HMSSession>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       filters ?? {}
     );
@@ -35,4 +35,5 @@ export interface HMSSessionFilterOptions {
   active?: boolean;
   before?: Date;
   after?: Date;
+  limit?: number;
 }
