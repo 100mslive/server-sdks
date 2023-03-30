@@ -57,9 +57,9 @@ export class HMSQueryObjectIterator<T> {
           }
           yield this.results.data[i];
         }
-        // if returned data count is less than specified `limit` or default 20
+        // if returned data count is less than specified `limit` or default 10
         // break the loop since the final page has been reached
-        if (this.results.data.length < this.queryParams["limit"] ?? 20) break;
+        if (this.results.data.length < this.queryParams["limit"] ?? 10) break;
       }
     }
   }
