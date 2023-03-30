@@ -24,8 +24,8 @@ describe("management token", () => {
   });
 });
 
-describe("app token", () => {
-  it("should give app token", async () => {
+describe("auth token", () => {
+  it("should give auth token", async () => {
     const withoutUserId = await sdk.getAuthToken({ roomId: "room123", role: "teacher" });
     console.log("without user id", withoutUserId);
     const withUserId = await sdk.getAuthToken({
