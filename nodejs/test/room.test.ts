@@ -14,7 +14,11 @@ describe("room service", () => {
     const room = await roomService.createRoom({ name: TEST_ROOM_NAME });
     const roomById = await roomService.getRoomById(room.id);
     const roomByName = await roomService.getRoomByName(room.name);
+    const inactiveRooms = roomService.getRoomsIterable({ enabled: false });
     console.log(room);
+    for await (const inactiveRoom of inactiveRooms) {
+      expect(room.id).not.toBe(inactiveRoom.id);
+    }
     expect(room.id).toBe(roomById.id);
     expect(room.id).toBe(roomByName.id);
     expect(room.name).toBe(roomById.name);

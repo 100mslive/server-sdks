@@ -11,7 +11,7 @@ beforeEach(() => {
 describe("session service", () => {
   test("get session details work", async () => {
     const sessionService = sdk.getSessionService();
-    const sessionsIterable = sessionService.getAllSessionsIterable();
+    const sessionsIterable = sessionService.getSessionsIterable();
     const allSessions: HMSSession[] = [];
     for await (const session of sessionsIterable) {
       allSessions.push(session);

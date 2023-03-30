@@ -15,3 +15,10 @@ export interface HMSSessionPeer extends HMSBasicPeer {
   session_id: string;
   left_at: Date;
 }
+
+export type HMSSessionFilters = {
+  roomId?: string;
+  active?: boolean;
+  before?: Date;
+  after?: Date;
+};

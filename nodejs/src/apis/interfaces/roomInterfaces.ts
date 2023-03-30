@@ -34,6 +34,12 @@ export interface HMSRoomRecordingUploadInfo {
   };
 }
 
+export type HMSRoomFilters = {
+  enabled?: boolean;
+  before?: Date;
+  after?: Date;
+};
+
 export type HMSCreateRoomConfig = Partial<
   Pick<HMSRoom, "name" | "description" | "template_id" | "recording_info" | "region">
 >;

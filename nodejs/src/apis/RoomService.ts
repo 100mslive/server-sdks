@@ -4,6 +4,7 @@ import { QueryResults } from "./interfaces/common";
 import {
   HMSCreateRoomConfig,
   HMSRoom,
+  HMSRoomFilters,
   HMSUpdateRoomConfig as HMSUpdateRoomOptions,
 } from "./interfaces/roomInterfaces";
 import { QueryResultsIterator } from "../utils/QueryResultsIterator";
@@ -15,12 +16,13 @@ export class RoomService {
 
   /**
    *
+   * @param filters Room filters like enabled status and time range
    * @returns a `QueryResultsIterator<HMSRoom>` object
    */
-  getRoomsIterable(): QueryResultsIterator<HMSRoom> {
+  getRoomsIterable(filters?: HMSRoomFilters): QueryResultsIterator<HMSRoom> {
     const queryResultsIterable = new QueryResultsIterator<HMSRoom>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
-      {}
+      filters ?? {}
     );
     return queryResultsIterable;
   }
@@ -47,37 +49,6 @@ export class RoomService {
       throw err;
     }
     return results.data[0];
-  }
-
-  /**
-   *
-   * @param enabled Enabled status of Room
-   * @returns a `QueryResultsIterator<HMSRoom>` object
-   */
-  getRoomsByEnabledIterable(enabled: boolean): QueryResultsIterator<HMSRoom> {
-    const queryResultsIterable = new QueryResultsIterator<HMSRoom>(
-      (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
-      { enabled }
-    );
-    return queryResultsIterable;
-  }
-
-  /**
-   *
-   * @param before Timestamp before which the Rooms were created
-   * @param after Timestamp after which the Rooms were created
-   * @returns a `QueryResultsIterator<HMSRoom>` object
-   */
-  getRoomsByTimeRangeIterable(before?: Date, after?: Date): QueryResultsIterator<HMSRoom> {
-    const timeQueryParams: Record<string, Date> = {};
-    if (before) timeQueryParams["before"] = before;
-    if (after) timeQueryParams["after"] = after;
-
-    const queryResultsIterable = new QueryResultsIterator<HMSRoom>(
-      (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
-      timeQueryParams
-    );
-    return queryResultsIterable;
   }
 
   /**
