@@ -1,5 +1,4 @@
 import { HMSSDK } from "@100mslive/server-sdk";
-import { HMSSession } from "@100mslive/server-sdk/dist/types/apis/interfaces/sessionInterfaces";
 
 const accessKey = process.env.HMS_ACCESS_KEY;
 const secret = process.env.HMS_SECRET;
@@ -63,14 +62,30 @@ async function sessionOperationsExample() {
   const sessionService = sdk.getSessionService();
 
   // get all sessions
-  const allSessionsIterable = await sessionService.getAllSessionsIterable();
-  const allSessions: HMSSession[] = [];
-  while (true) {
-    const someSessions = await allSessionsIterable.next();
-    if (someSessions.length == 0) break;
-    allSessions.push(...someSessions);
+  const allSessions = sessionService.getSessionsIterable({
+    limit: 10,
+  });
+  for await (const session of allSessions) {
+    console.log(session);
+    if (!allSessions.isNextCached) {
+      console.log("the next session will take some time to load");
+      console.log("this happens once every `limit` times i.e 10 in this case");
+    }
   }
-  console.log(allSessions);
+
+  // get the active session in a room
+  const activeSessionInRoom = sessionService.getSessionsIterable({
+    room_id: "test_room_id",
+    active: true,
+  });
+  let flag = false;
+  for await (const session of activeSessionInRoom) {
+    flag = true;
+    console.log("A session is active in the room: ", session);
+  }
+  if (!flag) {
+    console.log("No active session found!");
+  }
 }
 
 roomOperationsExample();

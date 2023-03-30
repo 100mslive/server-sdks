@@ -2,6 +2,12 @@ export { HMSSDK } from "./HMSSDK";
 
 // HMS object interfaces
 export {
+  AuthToken,
+  AuthTokenConfig,
+  ManagementToken,
+  ManagementTokenConfig,
+} from "./services/AuthService";
+export {
   HMSActiveRoom,
   HMSActiveRoomPeer,
   HMSActiveRoomPeerWithTrack,

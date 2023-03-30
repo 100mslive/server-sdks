@@ -39,10 +39,11 @@ console.log(
 );
 ```
 
-### Creating and Updating Room
+### Creating and updating room
 
 ```js
 const roomService = sdk.getRoomService();
+// creating a room -
 const room = await roomService.createRoom();
 // with room options -
 const roomWithOptions = await roomService.createRoom({
@@ -52,34 +53,41 @@ const roomWithOptions = await roomService.createRoom({
   recording_info,
   region,
 });
-
+// updating a room -
 const updatedRoom = await roomService.updateRoom(room.id, { name });
 console.log(room, roomWithOptions, updatedRoom);
 ```
 
-### List Peers in an Active Room and send a Message
+### List Peers in an active room and send a message
 
 ```js
 const activeRoomService = sdk.getActiveRoomService();
+// list peers in active room -
 const peers = await activeRoomService.getActivePeers(roomId);
 console.log(peers);
-
+// send broadcast message to all peers -
 await activeRoomService.sendMessage(roomId, { message: "test" });
 ```
 
-### Get all Sessions
+### Get all sessions and sessions in a room
 
 ```js
 const sessionService = sdk.getSessionService();
-const allSessionsIterable = await sessionService.getAllSessionsIterable();
-
-const allSessions = [];
-while (true) {
-  const someSessions = await allSessionsIterable.next();
-  if (someSessions.length == 0) break;
-  allSessions.push(...someSessions);
+// list all sessions -
+const allSessionsIterable = await sessionService.getSessionsIterable();
+for await (const session of allSessionsIterable) {
+  console.log(session);
+  if (!allSessionsIterable.isNextCached) {
+    console.log("the next loop is gonna take some time");
+  }
 }
-console.log(allSessions);
+// list sessions associated with a specific room -
+const sessionsByRoomIterable = await sessionService.getSessionsIterable({
+  room_id: "test_room_id",
+});
+for await (const session of sessionsByRoomIterable) {
+  console.log(session);
+}
 ```
 
 ### Errors

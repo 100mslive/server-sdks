@@ -38,7 +38,7 @@ export class SessionService {
 }
 
 export interface HMSSessionFilterOptions {
-  roomId?: string;
+  room_id?: string;
   active?: boolean;
   before?: Date;
   after?: Date;
