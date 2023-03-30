@@ -75,7 +75,7 @@ export class HMSSDK {
 
   /**
    * Management token allows to make API calls to 100ms backend.
-   * @returns Management token of type `Token`
+   * @returns Management token of type `ManagementToken`
    */
   async getManagementToken(tokenConfig?: ManagementTokenConfig) {
     return this.authService.getManagementToken(tokenConfig);
@@ -83,7 +83,7 @@ export class HMSSDK {
 
   /**
    * Auth Token allows for joining Room on client side.
-   * @returns Auth token of type `Token`
+   * @returns Auth token of type `AuthToken`
    */
   async getAuthToken(tokenConfig: AuthTokenConfig) {
     return this.authService.getAuthToken(tokenConfig);

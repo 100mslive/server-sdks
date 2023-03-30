@@ -1,5 +1,24 @@
 import { QueryResults } from "../apis/interfaces/common";
 
+/**
+ * An Iterator class that accepts a `queryFunction` and iterates through it
+ * asynchronously and yields an object of type `T`.
+ * This is to be used for queries like {@link https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/list-rooms List Rooms}
+ * that return only a certain number(limit) of objects in one request, and subsequent requests have
+ * to be made to completely iterate through it.
+ * @internal
+ * @example
+ * ## Using the Iterable
+ * ```ts
+ * const randomObjects = createRandomObjectIterable();
+ * for await (const randomObj of randomObjects){
+ *  console.log(randomObj);
+ *  if(randomObjects.isNextCached){
+ *    console.log("next randomObj is ready to be consumed")
+ *  }
+ * }
+ * ```
+ */
 export class HMSQueryObjectIterator<T> {
   private results?: QueryResults<T>;
   private queryParams: Record<string, any>;
@@ -15,6 +34,10 @@ export class HMSQueryObjectIterator<T> {
     this.isNextCached = false;
   }
 
+  /**
+   * The implementation of `Symbol.asyncIterator` that iteratively runs the
+   * `queryFunction` and yields an object of type `T`.
+   */
   async *[Symbol.asyncIterator](): AsyncIterator<T> {
     while (!this.results || this.results?.data) {
       if (this.results?.last) {
@@ -23,10 +46,12 @@ export class HMSQueryObjectIterator<T> {
       this.results = await this.queryFunction(this.queryParams);
       this.isNextCached = true;
       if (this.results.data)
-        for (const val of this.results.data) {
-          yield val;
+        for (let i = 0; i < this.results.data.length; i++) {
+          if (i == this.results.data.length - 1) {
+            this.isNextCached = false;
+          }
+          yield this.results.data[i];
         }
-      this.isNextCached = false;
     }
   }
 }
