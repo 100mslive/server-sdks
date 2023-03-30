@@ -2,13 +2,7 @@ import { APIService } from "../services/APIService";
 import {
   HMSActiveRoom,
   HMSActiveRoomPeerWithTrack,
-  HMSPeerUpdateOptions,
-  HMSRoomMessageOptions,
   HMSActiveRoomPeer,
-  HMSRemovePeerOptionsById,
-  HMSRemovePeerOptionsByRole,
-  HMSEndActiveRoomOptions,
-  HMSActivePeersResponse,
 } from "./interfaces/activeRoomInterfaces";
 
 export class ActiveRoomService {
@@ -79,7 +73,7 @@ export class ActiveRoomService {
    */
   async removePeer(
     roomId: string,
-    options: HMSRemovePeerOptionsById | HMSRemovePeerOptionsByRole
+    options: HMSRemovePeerByIdOptions | HMSRemovePeerByRoleOptions
   ): Promise<void> {
     await this.apiService.post(`${this.basePath}/${roomId}/remove-peers`, options);
     return;
@@ -94,4 +88,36 @@ export class ActiveRoomService {
     await this.apiService.post(`${this.basePath}/${roomId}/end-room`, options);
     return;
   }
+}
+
+interface HMSActivePeersResponse {
+  peers: Record<string, HMSActiveRoomPeer>;
+}
+
+export interface HMSPeerUpdateOptions {
+  name?: string;
+  role?: string;
+  metadata?: string;
+}
+
+export interface HMSRoomMessageOptions {
+  peerId?: string;
+  role?: string;
+  message: string;
+  type?: string;
+}
+
+export interface HMSRemovePeerByIdOptions {
+  peer_id: string;
+  reason?: string;
+}
+
+export interface HMSRemovePeerByRoleOptions {
+  role: string;
+  reason?: string;
+}
+
+export interface HMSEndActiveRoomOptions {
+  reason?: string;
+  lock?: boolean;
 }

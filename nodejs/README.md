@@ -48,7 +48,7 @@ const room = await roomService.createRoom();
 const roomWithOptions = await roomService.createRoom({
   name,
   description,
-  templateId,
+  template_id,
   recording_info,
   region,
 });

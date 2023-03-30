@@ -4,7 +4,7 @@ export interface QueryResults<T> {
   last?: string;
 }
 
-export interface HMSBasicPeer {
+export interface HMSBasePeer {
   id: string;
   name: string;
   role: string;

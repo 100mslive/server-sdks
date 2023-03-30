@@ -1,6 +1,5 @@
 import { HMSSDK } from "../src";
 import { HMSSession } from "../src/apis/interfaces/sessionInterfaces";
-import { TEST_ROOM_NAME } from "./testCommon";
 
 let sdk: HMSSDK;
 

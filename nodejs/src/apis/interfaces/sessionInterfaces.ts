@@ -1,4 +1,4 @@
-import { HMSBasicPeer } from "./common";
+import { HMSBasePeer } from "./common";
 
 export interface HMSSession {
   id: string;
@@ -11,14 +11,7 @@ export interface HMSSession {
   updated_at: Date;
 }
 
-export interface HMSSessionPeer extends HMSBasicPeer {
+export interface HMSSessionPeer extends HMSBasePeer {
   session_id: string;
   left_at: Date;
 }
-
-export type HMSSessionFilters = {
-  roomId?: string;
-  active?: boolean;
-  before?: Date;
-  after?: Date;
-};

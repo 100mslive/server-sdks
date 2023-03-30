@@ -1,12 +1,7 @@
 import { logger } from "../services/LoggerService";
 import { APIService } from "../services/APIService";
 import { QueryResults } from "./interfaces/common";
-import {
-  HMSCreateRoomConfig,
-  HMSRoom,
-  HMSRoomFilters,
-  HMSUpdateRoomConfig as HMSUpdateRoomOptions,
-} from "./interfaces/roomInterfaces";
+import { HMSRoom, HMSRoomRecordingInfo } from "./interfaces/roomInterfaces";
 import { QueryResultsIterator } from "../utils/QueryResultsIterator";
 
 export class RoomService {
@@ -19,7 +14,8 @@ export class RoomService {
    * @param filters Room filters like enabled status and time range
    * @returns a `QueryResultsIterator<HMSRoom>` object
    */
-  getRoomsIterable(filters?: HMSRoomFilters): QueryResultsIterator<HMSRoom> {
+
+  getRoomsIterable(filters?: HMSRoomFilterOptions): QueryResultsIterator<HMSRoom> {
     const queryResultsIterable = new QueryResultsIterator<HMSRoom>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       filters ?? {}
@@ -56,7 +52,7 @@ export class RoomService {
    * @param config Config of the Room to be created
    * @returns a `HMSRoom` object
    */
-  async createRoom(config?: HMSCreateRoomConfig): Promise<HMSRoom> {
+  async createRoom(config?: HMSRoomCreateOptions): Promise<HMSRoom> {
     return this.apiService.post(this.basePath, config);
   }
 
@@ -66,7 +62,7 @@ export class RoomService {
    * @param options Options of the Room to be updated
    * @returns a `HMSRoom` object
    */
-  async updateRoom(roomId: string, options: HMSUpdateRoomOptions): Promise<HMSRoom> {
+  async updateRoom(roomId: string, options: HMSRoomUpdateOptions): Promise<HMSRoom> {
     return this.apiService.post(`${this.basePath}/${roomId}`, options);
   }
 
@@ -79,4 +75,21 @@ export class RoomService {
   async enableOrDisableRoom(roomId: string, enabled: boolean): Promise<HMSRoom> {
     return this.apiService.post(`${this.basePath}/${roomId}`, { enabled });
   }
+}
+
+export interface HMSRoomFilterOptions {
+  enabled?: boolean;
+  before?: Date;
+  after?: Date;
+}
+
+export interface HMSRoomUpdateOptions {
+  name?: string;
+  description?: string;
+  recording_info?: HMSRoomRecordingInfo;
+  region?: string;
+}
+
+export interface HMSRoomCreateOptions extends HMSRoomUpdateOptions {
+  template_id?: string;
 }
