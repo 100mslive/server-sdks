@@ -8,6 +8,7 @@
 [![Register](https://img.shields.io/badge/Contact-Know%20More-blue)](https://dashboard.100ms.live/register)
 
 # Node.js Server Side SDK
+
 The 100ms Node.js SDK provides an easy-to-use wrapper around [100ms REST APIs](https://www.100ms.live/docs/server-side/v2/introduction/request-and-response) to be used on the server side.
 
 🔧 **This is beta, APIs might change**
@@ -17,6 +18,7 @@ The 100ms Node.js SDK provides an easy-to-use wrapper around [100ms REST APIs](h
 The `examples/nodejs` folder on root has some examples on how to use the SDK.
 
 ## Installation
+
 Install the package with:
 
 ```
@@ -28,7 +30,9 @@ yarn add @100mslive/server-sdk
 ## Usage
 
 The SDK needs to be configured with the **Access Key** and **App Secret** from the [100ms Dashboard's Developer Section](https://dashboard.100ms.live/developer). This can be done in 2 ways:
+
 1. Passing in the credentials when initializing the SDK.
+
 ```js
 import { HMSSDK } from "@100mslive/server-sdk";
 
@@ -38,11 +42,14 @@ const sdk = new HMSSDK(accessKey, secret);
 **OR**
 
 2. Configuring Environment variables with the credentials,
+
 ```
 HMS_ACCESS_KEY=accessKey123 // access key
 HMS_SECRET=secret456 // app secret
 ```
+
 Then initializing the SDK like this:
+
 ```js
 import { HMSSDK } from "@100mslive/server-sdk";
 
@@ -101,7 +108,7 @@ const roomCreateOptions = {
   recording_info,
   region,
 };
-const roomWithOptions = await sdk.rooms.create(roomOptions);
+const roomWithOptions = await sdk.rooms.create(roomCreateOptions);
 
 // updating a room -
 const roomUpdateOptions = { name };
@@ -110,7 +117,9 @@ console.log(room, roomWithOptions, updatedRoom);
 ```
 
 ### > Usage with TypeScript
+
 The SDK supports `ts`, `esm` and `cjs` completely. Here's how you can import the types from the SDK and use them.
+
 ```ts
 import { HMSSDK, HMS } from "@100mslive/server-sdk";
 
@@ -124,7 +133,22 @@ const roomCreateOptions: HMS.RoomCreateOptions = {
   recording_info,
   region,
 };
-roomWithOptions = await sdk.rooms.create(roomOptions);
+roomWithOptions = await sdk.rooms.create(roomCreateOptions);
+```
+
+### Create room codes for a room and then disable one of them
+
+```js
+import { HMSSDK } from "@100mslive/server-sdk";
+
+const sdk = new HMSSDK();
+// create room codes -
+const roomCodesForRoom = await sdk.roomCodes.create(roomId);
+console.log(roomCodesForRoom);
+
+// disable a room code -
+const disabledRoomCode = await sdk.roomCodes.enableOrDisable(roomCodesForRoom[0].code, false);
+console.log(disabledRoomCode);
 ```
 
 ### List Peers in an active room and send a message to the room
@@ -168,29 +192,15 @@ for await (const session of sessionsByRoomIterable) {
 }
 ```
 
-### Create room codes for a room and then disable one of them
-```js
-import { HMSSDK } from "@100mslive/server-sdk";
-
-const sdk = new HMSSDK();
-// create room codes -
-const roomCodesForRoom = await sdk.roomCodes.create(roomId);
-console.log(roomCodesForRoom);
-
-// disable a room code -
-const disabledRoomCode = await sdk.roomCodes.enableOrDisable(
-  roomCodesForRoom[0].code,
-  false
-);
-console.log(disabledRoomCode);
-```
 ## Currently Supported Endpoints
+
 1. [Rooms APIs](https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/object)
 2. [Active Rooms APIs](https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/object)
 3. [Room Codes APIs](https://www.100ms.live/docs/server-side/v2/api-reference/room-codes/room-code-object)
 4. [Sessions](https://www.100ms.live/docs/server-side/v2/api-reference/Sessions/object)
 
 Support for other endpoints are being added. If you want to consume them before it's available in the SDK, feel free to use the `api` property to make the API calls:
+
 ```js
 import { HMSSDK } from "@100mslive/server-sdk";
 

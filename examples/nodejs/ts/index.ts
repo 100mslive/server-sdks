@@ -1,4 +1,4 @@
-import { HMSSDK } from "@100mslive/server-sdk";
+import { HMS, HMSSDK } from "@100mslive/server-sdk";
 
 const accessKey = process.env.HMS_ACCESS_KEY;
 const secret = process.env.HMS_SECRET;
@@ -6,7 +6,7 @@ const secret = process.env.HMS_SECRET;
 const sdk = new HMSSDK(accessKey, secret);
 
 // Get Auth Token
-sdk
+sdk.auth
   .getAuthToken({
     roomId: "test_room_id",
     role: "host",
@@ -15,69 +15,80 @@ sdk
   .then((tokenObj) => console.log(`Auth Token: ${tokenObj.token}`));
 
 // Get Management Token
-sdk
+sdk.auth
   .getManagementToken()
   .then((tokenObj) => console.log(`Management Token: ${tokenObj.token}`));
 
-// Room Operations
-async function roomOperationsExample() {
-  // get the RoomService instance
-  const roomService = sdk.getRoomService();
+// Rooms Example
+async function roomsExample() {
+  // creating a room -
+  const room = await sdk.rooms.create();
+  // with room options -
+  const roomCreateOptions: HMS.RoomCreateOptions = {
+    name: "room-name",
+    description: "room description",
+    region: "us",
+  };
+  const roomWithOptions = await sdk.rooms.create(roomCreateOptions);
 
-  // create a new room with config
-  const testRoom = await roomService.createRoom({
-    name: "test_room",
-    description: "this is a test room created from the NodeJs SDK example",
-  });
-
-  // retrieve the room by the name
-  const sameRoom = await roomService.getRoomByName("test_room");
-  if (testRoom == sameRoom) {
-    console.log("this is the room we just created");
-  }
+  // updating a room -
+  const roomUpdateOptions: HMS.RoomUpdateOptions = { name: "new-room-name" };
+  const updatedRoom = await sdk.rooms.update(room.id, roomUpdateOptions);
+  console.log(room, roomWithOptions, updatedRoom);
 }
 
-// Active Room Operations
-async function activeRoomOperationsExample() {
-  // get the ActiveRoomService instance
-  const activeRoomService = sdk.getActiveRoomService();
+// Room Codes Example
+async function roomCodesExample() {
+  // create room codes -
+  const roomCodesForRoom = await sdk.roomCodes.create("roomId");
+  console.log(roomCodesForRoom);
 
-  // get the peer object from an active room
-  const activePeersRecord = await activeRoomService.getActivePeers(
-    "test_room_id"
+  // disable a room code -
+  const disabledRoomCode = await sdk.roomCodes.enableOrDisable(
+    roomCodesForRoom[0].code,
+    false
   );
-  console.log(activePeersRecord);
-
-  // send a message to a specific peer
-  const lastPeerId = Object.keys(activePeersRecord).at(-1);
-  await activeRoomService.sendMessage("test_room_id", {
-    message: "hello last peer!",
-    peerId: lastPeerId,
-  });
+  console.log(disabledRoomCode);
 }
 
-// Session Operations
-async function sessionOperationsExample() {
-  // get the SessionService instance
-  const sessionService = sdk.getSessionService();
+// Active Rooms Example
+async function activeRoomsExample() {
+  // list peers in active room -
+  const peers = await sdk.activeRooms.retrieveActivePeers("roomId");
+  console.log(peers);
 
-  // get all sessions
-  const allSessions = sessionService.getSessionsIterable({
-    limit: 10,
-  });
-  for await (const session of allSessions) {
+  // send broadcast message to all peers -
+  await sdk.activeRooms.sendMessage("roomId", { message: "test" });
+}
+
+// Sessions Example
+async function sessionsExample() {
+  // list all sessions -
+  const allSessionsIterable = sdk.sessions.list();
+  for await (const session of allSessionsIterable) {
     console.log(session);
-    if (!allSessions.isNextCached) {
-      console.log("the next session will take some time to load");
-      console.log("this happens once every `limit` times i.e 10 in this case");
+    if (!allSessionsIterable.isNextCached) {
+      console.log("the next loop is gonna take some time");
     }
   }
 
+  // list sessions associated with a specific room -
+  const sessionFilters = {
+    room_id: "test_room_id",
+    limit: 10, // specifies the max no. of objects in one page
+    // this means `iterable.isNextCached` will be `false` once every 10 times
+  };
+  const sessionsByRoomIterable = sdk.sessions.list(sessionFilters);
+  for await (const session of sessionsByRoomIterable) {
+    console.log(session);
+  }
+
   // get the active session in a room
-  const activeSessionInRoom = sessionService.getSessionsIterable({
+  const anotherSessionFilters = {
     room_id: "test_room_id",
     active: true,
-  });
+  };
+  const activeSessionInRoom = sdk.sessions.list(anotherSessionFilters);
   let flag = false;
   for await (const session of activeSessionInRoom) {
     flag = true;
@@ -88,6 +99,7 @@ async function sessionOperationsExample() {
   }
 }
 
-roomOperationsExample();
-activeRoomOperationsExample();
-sessionOperationsExample();
+roomsExample();
+roomCodesExample();
+activeRoomsExample();
+sessionsExample();
