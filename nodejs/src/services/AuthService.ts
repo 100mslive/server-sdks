@@ -14,6 +14,10 @@ export class AuthService {
   private managementToken?: ManagementToken;
   constructor(private accessKey: string, private secret: string) {}
 
+  /**
+   * Management token allows to make API calls to 100ms backend.
+   * @returns Management token of type `ManagementToken`
+   */
   async getManagementToken(tokenConfig?: ManagementTokenConfig): Promise<ManagementToken> {
     if (
       tokenConfig?.forceNew ||
@@ -26,6 +30,10 @@ export class AuthService {
     return this.managementToken;
   }
 
+  /**
+   * Auth Token allows for joining Room on client side.
+   * @returns Auth token of type `AuthToken`
+   */
   async getAuthToken(tokenConfig: AuthTokenConfig): Promise<AuthToken> {
     const details: Record<string, string> = {
       room_id: tokenConfig.roomId,

@@ -1,23 +1,50 @@
 import { logger, LogLevelOptions, setLogLevel } from "./services/LoggerService";
-import { RoomService } from "./apis/RoomService";
 import { AuthService } from "./services/AuthService";
 import { APIService } from "./services/APIService";
+import { RoomService } from "./apis/RoomService";
 import { ActiveRoomService } from "./apis/ActiveRoomService";
 import { SessionService } from "./apis/SessionService";
 import { RoomCodeService } from "./apis/RoomCodeService";
-import { AuthTokenConfig, ManagementTokenConfig } from "./types";
 
 /**
  * Server-side SDK for 100ms REST API endpoints.
  */
 export class HMSSDK {
-  private readonly authService: AuthService;
-  private readonly apiService: APIService;
+  /**
+   * Can be used to generate `ManagementToken` that allows to make API calls to
+   * 100ms backend and `AuthToken` that allows for joining Room on client side.
+   */
+  readonly auth: AuthService;
 
-  private readonly roomService: RoomService;
-  private readonly activeRoomService: ActiveRoomService;
-  private readonly sessionService: SessionService;
-  private readonly roomCodeService: RoomCodeService;
+  /**
+   * Can be used to make 100ms API calls not supported in the SDK.
+   * @returns an instance of `APIService`
+   */
+  readonly api: APIService;
+
+  /**
+   * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/object Room API calls}.
+   * @returns an instance of `RoomService`
+   */
+  readonly room: RoomService;
+
+  /**
+   * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/object Active Room API calls}.
+   * @returns an instance of `ActiveRoomService`
+   */
+  readonly activeRoom: ActiveRoomService;
+
+  /**
+   * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/Sessions/object Session API calls}.
+   * @returns an instance of `SessionService`
+   */
+  readonly session: SessionService;
+
+  /**
+   * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/room-codes/room-code-object Room Code API calls}.
+   * @returns an instance of `RoomCodeService`
+   */
+  readonly roomCode: RoomCodeService;
 
   /**
    * @param accessKey App Access Key from Dashboard
@@ -36,69 +63,13 @@ export class HMSSDK {
       logger.error("access key or secret is not defined", err);
       throw err;
     }
-    this.authService = new AuthService(accessKey, secret);
-    this.apiService = new APIService(this.authService);
+    this.auth = new AuthService(accessKey, secret);
+    this.api = new APIService(this.auth);
 
-    this.roomService = new RoomService(this.apiService);
-    this.activeRoomService = new ActiveRoomService(this.apiService);
-    this.sessionService = new SessionService(this.apiService);
-    this.roomCodeService = new RoomCodeService(this.apiService);
-  }
-
-  /**
-   * Can be used to make 100ms API calls not supported in the SDK.
-   * @returns an instance of `APIService`
-   */
-  getAPIService() {
-    return this.apiService;
-  }
-
-  /**
-   * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/object Room API calls}.
-   * @returns an instance of `RoomService`
-   */
-  getRoomService() {
-    return this.roomService;
-  }
-
-  /**
-   * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/object Active Room API calls}.
-   * @returns an instance of `ActiveRoomService`
-   */
-  getActiveRoomService() {
-    return this.activeRoomService;
-  }
-
-  /**
-   * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/Sessions/object Session API calls}.
-   * @returns an instance of `SessionService`
-   */
-  getSessionService() {
-    return this.sessionService;
-  }
-
-  /**
-   * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/room-codes/room-code-object Room Code API calls}.
-   * @returns an instance of `RoomCodeService`
-   */
-  getRoomCodeService() {
-    return this.roomCodeService;
-  }
-
-  /**
-   * Management token allows to make API calls to 100ms backend.
-   * @returns Management token of type `ManagementToken`
-   */
-  async getManagementToken(tokenConfig?: ManagementTokenConfig) {
-    return this.authService.getManagementToken(tokenConfig);
-  }
-
-  /**
-   * Auth Token allows for joining Room on client side.
-   * @returns Auth token of type `AuthToken`
-   */
-  async getAuthToken(tokenConfig: AuthTokenConfig) {
-    return this.authService.getAuthToken(tokenConfig);
+    this.room = new RoomService(this.api);
+    this.activeRoom = new ActiveRoomService(this.api);
+    this.session = new SessionService(this.api);
+    this.roomCode = new RoomCodeService(this.api);
   }
 
   setLogLevel(level: LogLevelOptions) {

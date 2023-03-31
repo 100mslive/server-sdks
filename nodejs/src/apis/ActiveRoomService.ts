@@ -21,11 +21,11 @@ export class ActiveRoomService {
   constructor(private apiService: APIService) {}
 
   /**
-   * Get the details of an active room by specifying room id.
+   * Retrieve the details of an active room by specifying room id.
    * @param roomId Room ID
    * @returns a `HMS.ActiveRoom` object
    */
-  async getActiveRoomDetails(roomId: string): Promise<ActiveRoom> {
+  async retrieve(roomId: string): Promise<ActiveRoom> {
     return this.apiService.get(`${this.basePath}/${roomId}`);
   }
 
@@ -36,12 +36,12 @@ export class ActiveRoomService {
    * @param peerId Peer ID
    * @returns a `HMS.ActiveRoomPeerWithTrack` object
    */
-  async getPeerDetails(roomId: string, peerId: string): Promise<ActiveRoomPeerWithTrack> {
+  async retrievePeerDetails(roomId: string, peerId: string): Promise<ActiveRoomPeerWithTrack> {
     return this.apiService.get(`${this.basePath}/${roomId}/peers/${peerId}`);
   }
 
   /**
-   * Get the list of peers currently present in an active room
+   * Retrieve the list of peers currently present in an active room
    * with the room id. The returned list is a `Record` where every
    * `HMS.ActiveRoomPeer` object is matched by its corresponding peer id.
    * ### Example
@@ -55,7 +55,7 @@ export class ActiveRoomService {
    * @param roomId Room ID
    * @returns a `Record<string, HMS.ActiveRoomPeer>` object
    */
-  async getActivePeers(roomId: string): Promise<Record<string, ActiveRoomPeer>> {
+  async retrieveActivePeers(roomId: string): Promise<Record<string, ActiveRoomPeer>> {
     const activePeers = await this.apiService.get<ActivePeersResponse>(
       `${this.basePath}/${roomId}/peers`
     );
@@ -113,7 +113,7 @@ export class ActiveRoomService {
    * @param roomId Room ID
    * @param options Options for Ending an Active Room
    */
-  async endActiveRoom(roomId: string, options: EndActiveRoomOptions): Promise<void> {
+  async end(roomId: string, options: EndActiveRoomOptions): Promise<void> {
     await this.apiService.post(`${this.basePath}/${roomId}/end-room`, options);
     return;
   }

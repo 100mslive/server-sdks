@@ -25,7 +25,7 @@ export class RoomService {
    * @param filters Room filters like enabled status and time range
    * @returns a `HMS.QueryObjectIterator<HMS.Room>` object
    */
-  getRoomsIterable(filters?: RoomFilterOptions): QueryObjectIterator<Room> {
+  list(filters?: RoomFilterOptions): QueryObjectIterator<Room> {
     const queryResultsIterable = new QueryObjectIterator<Room>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       filters ?? {}
@@ -38,7 +38,7 @@ export class RoomService {
    * @param roomId Room ID
    * @returns a `HMS.Room` object
    */
-  async getRoomById(roomId: string): Promise<Room> {
+  async retrieveById(roomId: string): Promise<Room> {
     return this.apiService.get(`${this.basePath}/${roomId}`);
   }
 
@@ -47,7 +47,7 @@ export class RoomService {
    * @param name Room name
    * @returns a `HMS.Room` object
    */
-  async getRoomByName(name: string): Promise<Room> {
+  async retrieveByName(name: string): Promise<Room> {
     const results: QueryResults<Room> = await this.apiService.get(this.basePath, { name });
     if (!results.data || results.data.length === 0) {
       const err = new Error(`no Roomfound with passed in name - ${name}`);
@@ -63,7 +63,7 @@ export class RoomService {
    * @param config Config of the Room to be created
    * @returns a `HMS.Room` object
    */
-  async createRoom(config?: RoomCreateOptions): Promise<Room> {
+  async create(config?: RoomCreateOptions): Promise<Room> {
     return this.apiService.post(this.basePath, config);
   }
 
@@ -74,7 +74,7 @@ export class RoomService {
    * @param options Options of the Room to be updated
    * @returns a `HMS.Room` object
    */
-  async updateRoom(roomId: string, options: RoomUpdateOptions): Promise<Room> {
+  async update(roomId: string, options: RoomUpdateOptions): Promise<Room> {
     return this.apiService.post(`${this.basePath}/${roomId}`, options);
   }
 
@@ -85,7 +85,7 @@ export class RoomService {
    * @param enabled Enabled status of Room
    * @returns a `HMS.Room` object
    */
-  async enableOrDisableRoom(roomId: string, enabled: boolean): Promise<Room> {
+  async enableOrDisable(roomId: string, enabled: boolean): Promise<Room> {
     return this.apiService.post(`${this.basePath}/${roomId}`, { enabled });
   }
 }

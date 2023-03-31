@@ -10,15 +10,15 @@ beforeEach(() => {
 
 describe("management token", () => {
   it("should give management token without any options passed in", async () => {
-    const token = await sdk.getManagementToken({ validForSeconds: 30 * 24 * 3600 });
+    const token = await sdk.auth.getManagementToken({ validForSeconds: 30 * 24 * 3600 });
     console.log({ token });
     verify(token.token, secret);
   });
 
   it("should give same token if called again", async () => {
-    const token1 = await sdk.getManagementToken();
-    const token2 = await sdk.getManagementToken();
-    const token3 = await sdk.getManagementToken({ forceNew: true });
+    const token1 = await sdk.auth.getManagementToken();
+    const token2 = await sdk.auth.getManagementToken();
+    const token3 = await sdk.auth.getManagementToken({ forceNew: true });
     expect(token1).toBe(token2);
     expect(token1).not.toBe(token3);
   });
@@ -26,9 +26,9 @@ describe("management token", () => {
 
 describe("auth token", () => {
   it("should give auth token", async () => {
-    const withoutUserId = await sdk.getAuthToken({ roomId: "room123", role: "teacher" });
+    const withoutUserId = await sdk.auth.getAuthToken({ roomId: "room123", role: "teacher" });
     console.log("without user id", withoutUserId);
-    const withUserId = await sdk.getAuthToken({
+    const withUserId = await sdk.auth.getAuthToken({
       roomId: "room123",
       role: "teacher",
       userId: "user232",

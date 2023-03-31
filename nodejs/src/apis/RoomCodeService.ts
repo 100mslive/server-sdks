@@ -14,10 +14,7 @@ export class RoomCodeService {
    * @param filters Room Code filters like `enabled` status and `role`
    * @returns a `HMS.QueryObjectIterator<HMS.RoomCode>` object
    */
-  getRoomCodesIterable(
-    roomId: string,
-    filters?: RoomCodeFilterOptions
-  ): QueryObjectIterator<RoomCode> {
+  list(roomId: string, filters?: RoomCodeFilterOptions): QueryObjectIterator<RoomCode> {
     const queryResultsIterable = new QueryObjectIterator<RoomCode>(
       (queryParams: Record<string, any>) =>
         this.apiService.get(`${this.basePath}/room/${roomId}`, queryParams),
@@ -32,7 +29,7 @@ export class RoomCodeService {
    * @param roomId Room ID
    * @returns a `RoomCode[]` object
    */
-  async createRoomCodes(roomId: string): Promise<RoomCode[]> {
+  async create(roomId: string): Promise<RoomCode[]> {
     const results: QueryResults<RoomCode> = await this.apiService.post(
       `${this.basePath}/room/${roomId}`,
       {}
@@ -47,7 +44,7 @@ export class RoomCodeService {
    * @param role Role for which the Room Code is to be created
    * @returns a `RoomCode` object
    */
-  async createRoomCodeForRole(roomId: string, role: string): Promise<RoomCode> {
+  async createForRole(roomId: string, role: string): Promise<RoomCode> {
     return this.apiService.post(`${this.basePath}/room/${roomId}/role/${role}`, {});
   }
 
@@ -58,7 +55,7 @@ export class RoomCodeService {
    * @param enabled Enabled status of the Room Code
    * @returns a `RoomCode` object
    */
-  async enableOrDisableRoomCode(code: string, enabled: boolean): Promise<RoomCode> {
+  async enableOrDisable(code: string, enabled: boolean): Promise<RoomCode> {
     return this.apiService.post(`${this.basePath}/code`, {
       code,
       enabled,

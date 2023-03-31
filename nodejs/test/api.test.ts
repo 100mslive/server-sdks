@@ -8,8 +8,7 @@ beforeEach(() => {
 
 describe("api service", () => {
   test("get rooms endpoint is working", async () => {
-    const apiService = sdk.getAPIService();
-    const rooms: { data: any[] } = await apiService.get("/rooms");
+    const rooms: { data: any[] } = await sdk.api.get("/rooms");
     expect(rooms.data.length).toBeGreaterThan(0);
   });
 });

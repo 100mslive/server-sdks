@@ -18,7 +18,7 @@ export class SessionService {
    * @param filters Session filters like room id, active status and time range
    * @returns a `HMS.QueryObjectIterator<HMS.Session>` object
    */
-  getSessionsIterable(filters?: SessionFilterOptions): QueryObjectIterator<Session> {
+  list(filters?: SessionFilterOptions): QueryObjectIterator<Session> {
     const queryResultsIterable = new QueryObjectIterator<Session>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       filters ?? {}
@@ -31,7 +31,7 @@ export class SessionService {
    * @param sessionId Session ID
    * @returns a `HMS.Session` object
    */
-  async getSessionById(sessionId: string): Promise<Session> {
+  async retrieveById(sessionId: string): Promise<Session> {
     return this.apiService.get(`${this.basePath}/${sessionId}`);
   }
 }
