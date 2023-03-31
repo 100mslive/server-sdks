@@ -1,15 +1,15 @@
-import { HMSSDK, HMS } from "../src";
+import { SDK, Session } from "../src";
 
-let sdk: HMSSDK;
+let sdk: SDK;
 
 beforeEach(() => {
-  sdk = new HMSSDK();
+  sdk = new SDK();
 });
 
 describe("session service", () => {
   test("get session details work", async () => {
     const sessionsIterable = sdk.sessions.list();
-    const allSessions: HMS.Session[] = [];
+    const allSessions: Session[] = [];
     for await (const session of sessionsIterable) {
       allSessions.push(session);
       if (!sessionsIterable.isNextCached) {

@@ -1,10 +1,10 @@
-import { HMSSDK } from "../src";
+import { SDK } from "../src";
 import { TEST_ROOM_ID } from "./testCommon";
 
-let sdk: HMSSDK;
+let sdk: SDK;
 
 beforeEach(() => {
-  sdk = new HMSSDK();
+  sdk = new SDK();
 });
 
 describe("active room service", () => {
