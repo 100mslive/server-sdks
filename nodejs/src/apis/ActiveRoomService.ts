@@ -9,7 +9,7 @@ import {
   RemovePeerByIdOptions,
   RemovePeerByRoleOptions,
   RoomMessageOptions,
-} from "../types";
+} from "../../types";
 
 /**
  * The wrapper class that implements all

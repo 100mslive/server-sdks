@@ -7,7 +7,7 @@ import {
   RoomUpdateOptions,
   QueryResults,
   QueryObjectIterator,
-} from "../types";
+} from "../../types";
 
 /**
  * The wrapper class that implements all

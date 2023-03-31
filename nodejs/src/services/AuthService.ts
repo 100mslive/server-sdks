@@ -7,7 +7,7 @@ import {
   ManagementToken,
   ManagementTokenConfig,
   TokenType,
-} from "../types";
+} from "../../types";
 import { logger } from "./LoggerService";
 
 export class AuthService {
