@@ -1,11 +1,11 @@
-export interface HMSTemplate {
+export interface Template {
   id: string;
   name: string;
   default?: boolean;
   customerId: string;
-  roles: Record<string, HMSTemplateRole>;
-  settings: HMSRoomSettings;
-  destinations: HMSRoomDestinations;
+  roles: Record<string, TemplateRole>;
+  settings: RoomSettings;
+  destinations: RoomDestinations;
   createdAt: Date;
   updatedAt: Date;
   customer: string;
@@ -13,83 +13,83 @@ export interface HMSTemplate {
 }
 
 // Role
-export interface HMSTemplateRole {
+export interface TemplateRole {
   name: string;
-  publishParams: HMSRolePublishParams;
-  subscribeParams: HMSRoleSubscribeParams;
-  permissions: HMSRolePermissions;
+  publishParams: RolePublishParams;
+  subscribeParams: RoleSubscribeParams;
+  permissions: RolePermissions;
   priority: number;
   maxPeerCount: number;
 }
 
 //// Role Publish Params
-export interface HMSRolePublishParams {
-  allowed: HMSAllowedTracks[];
-  audio: HMSAudio;
-  video: HMSVideo;
-  screen: HMSVideo;
-  simulcast: HMSSimulcast;
+export interface RolePublishParams {
+  allowed: AllowedTracks[];
+  audio: Audio;
+  video: Video;
+  screen: Video;
+  simulcast: Simulcast;
 }
 
-export enum HMSAllowedTracks {
+export enum AllowedTracks {
   Audio = "audio",
   Screen = "screen",
   Video = "video",
   Simulcast = "simulcast",
 }
 
-export interface HMSAudio {
-  codec: HMSAudioCodec;
+export interface Audio {
+  codec: AudioCodec;
   bitRate: number;
 }
-export enum HMSAudioCodec {
+export enum AudioCodec {
   Opus = "opus",
 }
 
-export interface HMSVideo {
-  codec: HMSVideoCodec;
+export interface Video {
+  codec: VideoCodec;
   frameRate: number;
   width: number;
   height: number;
   bitRate?: number;
 }
-export enum HMSVideoCodec {
+export enum VideoCodec {
   VP8 = "vp8",
 }
 
-export interface HMSSimulcast {
-  video: HMSSimulcastVideo;
-  screen: HMSSimulcastVideo;
+export interface Simulcast {
+  video: SimulcastVideo;
+  screen: SimulcastVideo;
 }
-export interface HMSSimulcastVideo {
-  layers?: HMSSimulcastVideoLayer[];
+export interface SimulcastVideo {
+  layers?: SimulcastVideoLayer[];
 }
-export interface HMSSimulcastVideoLayer {
-  rid: HMSSimulcastVideoLayerRid;
+export interface SimulcastVideoLayer {
+  rid: SimulcastVideoLayerRid;
   scaleResolutionDownBy: number;
   maxBitrate: number;
   maxFramerate: number;
 }
-export enum HMSSimulcastVideoLayerRid {
+export enum SimulcastVideoLayerRid {
   F = "f",
   H = "h",
   Q = "q",
 }
 
 //// Role Subscribe Params
-export interface HMSRoleSubscribeParams {
+export interface RoleSubscribeParams {
   subscribeToRoles: string[];
   maxSubsBitRate: number;
-  subscribeDegradation: HMSSubscribeDegradation;
+  subscribeDegradation: SubscribeDegradation;
 }
-export interface HMSSubscribeDegradation {
+export interface SubscribeDegradation {
   packetLossThreshold: number;
   degradeGracePeriodSeconds: number;
   recoverGracePeriodSeconds: number;
 }
 
 //// Role Permissions
-export interface HMSRolePermissions {
+export interface RolePermissions {
   endRoom?: boolean;
   removeOthers?: boolean;
   mute?: boolean;
@@ -101,59 +101,59 @@ export interface HMSRolePermissions {
   browserRecording: boolean;
 }
 
-export interface HMSRoomSettings {
+export interface RoomSettings {
   region: string;
-  recording?: HMSRoomRecording;
-  roomState: HMSRoomState;
+  recording?: RoomRecording;
+  roomState: RoomState;
   retry: {};
 }
 
-export interface HMSRoomRecording {
+export interface RoomRecording {
   enabled: boolean;
-  upload: HMSRoomRecordingUpload;
+  upload: RoomRecordingUpload;
 }
-export interface HMSRoomRecordingUpload {
+export interface RoomRecordingUpload {
   location: string;
   type: string;
   prefix: string;
-  credentials: HMSRoomRecordingUploadCredentials;
-  options: HMSRoomRecordingUploadOptions;
+  credentials: RoomRecordingUploadCredentials;
+  options: RoomRecordingUploadOptions;
 }
-export interface HMSRoomRecordingUploadCredentials {
+export interface RoomRecordingUploadCredentials {
   key: string;
   secretKey: string;
 }
-export interface HMSRoomRecordingUploadOptions {
+export interface RoomRecordingUploadOptions {
   region: string;
 }
 
-export interface HMSRoomState {
+export interface RoomState {
   messageInterval?: number;
   sendPeerList?: boolean;
   stopRoomStateOnJoin?: boolean;
   enabled?: boolean;
 }
 
-export interface HMSRoomDestinations {
-  browserRecordings?: Record<string, HMSRoomBrowserRecording>;
-  rtmpDestinations?: Record<string, HMSRoomRTMPDestination>;
-  hlsDestinations?: Record<string, HMSRoomHLSDestination>;
+export interface RoomDestinations {
+  browserRecordings?: Record<string, RoomBrowserRecording>;
+  rtmpDestinations?: Record<string, RoomRTMPDestination>;
+  hlsDestinations?: Record<string, RoomHLSDestination>;
 }
 
-export interface HMSRoomBrowserRecording {
+export interface RoomBrowserRecording {
   name: string;
   width: number;
   height: number;
   maxDuration: number;
-  thumbnails: HMSRoomBrowserRecordingThumbnail;
+  thumbnails: RoomBrowserRecordingThumbnail;
   presignDuration: number;
 }
-export interface HMSRoomBrowserRecordingThumbnail {
+export interface RoomBrowserRecordingThumbnail {
   width: number;
   height: number;
 }
 
-export interface HMSRoomRTMPDestination {
+export interface RoomRTMPDestination {
   name: string;
   width: number;
   height: number;
@@ -162,33 +162,33 @@ export interface HMSRoomRTMPDestination {
   recordingEnabled: boolean;
 }
 
-export interface HMSRoomHLSDestination {
+export interface RoomHLSDestination {
   name: string;
   maxDuration: number;
-  layers: HMSRoomHLSVideoLayer[];
+  layers: RoomHLSVideoLayer[];
   playlistType: string;
   numPlaylistSegments: number;
   videoFrameRate: number;
   enableMetadataInsertion: boolean;
   enableStaticUrl: boolean;
-  recording: HMSRoomHLSRecording;
+  recording: RoomHLSRecording;
 }
 
-export interface HMSRoomHLSVideoLayer {
+export interface RoomHLSVideoLayer {
   width?: number;
   height?: number;
   videoBitrate?: number;
   audioBitrate?: number;
 }
 
-export interface HMSRoomHLSRecording {
+export interface RoomHLSRecording {
   hlsVod: boolean;
   singleFilePerLayer: boolean;
-  layers: HMSRoomHLSVideoLayer[];
-  thumbnails: HMSRoomHLSRecordingThumbnails;
+  layers: RoomHLSVideoLayer[];
+  thumbnails: RoomHLSRecordingThumbnails;
   presignDuration: number;
 }
-export interface HMSRoomHLSRecordingThumbnails {
+export interface RoomHLSRecordingThumbnails {
   enabled: boolean;
   width: number;
   height: number;

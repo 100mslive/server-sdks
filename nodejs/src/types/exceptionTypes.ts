@@ -3,7 +3,7 @@ export enum ErrorCodes {
   NOT_FOUND = 404,
 }
 
-export interface HMSException {
+export interface SDKException {
   code?: number;
   name: string;
   message: string;

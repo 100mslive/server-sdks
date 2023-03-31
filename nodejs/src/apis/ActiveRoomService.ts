@@ -1,14 +1,14 @@
 import { APIService } from "../services/APIService";
 import {
-  HMSActivePeersResponse,
-  HMSActiveRoom,
-  HMSActiveRoomPeer,
-  HMSActiveRoomPeerWithTrack,
-  HMSEndActiveRoomOptions,
-  HMSPeerUpdateOptions,
-  HMSRemovePeerByIdOptions,
-  HMSRemovePeerByRoleOptions,
-  HMSRoomMessageOptions,
+  ActivePeersResponse,
+  ActiveRoom,
+  ActiveRoomPeer,
+  ActiveRoomPeerWithTrack,
+  EndActiveRoomOptions,
+  PeerUpdateOptions,
+  RemovePeerByIdOptions,
+  RemovePeerByRoleOptions,
+  RoomMessageOptions,
 } from "../types";
 
 /**
@@ -23,9 +23,9 @@ export class ActiveRoomService {
   /**
    * Get the details of an active room by specifying room id.
    * @param roomId Room ID
-   * @returns a `HMSActiveRoom` object
+   * @returns a `HMS.ActiveRoom` object
    */
-  async getActiveRoomDetails(roomId: string): Promise<HMSActiveRoom> {
+  async getActiveRoomDetails(roomId: string): Promise<ActiveRoom> {
     return this.apiService.get(`${this.basePath}/${roomId}`);
   }
 
@@ -34,29 +34,29 @@ export class ActiveRoomService {
    * room id and peer id.
    * @param roomId Room ID
    * @param peerId Peer ID
-   * @returns a `HMSActiveRoomPeerWithTrack` object
+   * @returns a `HMS.ActiveRoomPeerWithTrack` object
    */
-  async getPeerDetails(roomId: string, peerId: string): Promise<HMSActiveRoomPeerWithTrack> {
+  async getPeerDetails(roomId: string, peerId: string): Promise<ActiveRoomPeerWithTrack> {
     return this.apiService.get(`${this.basePath}/${roomId}/peers/${peerId}`);
   }
 
   /**
    * Get the list of peers currently present in an active room
    * with the room id. The returned list is a `Record` where every
-   * `HMSActiveRoomPeer` object is matched by its corresponding peer id.
+   * `HMS.ActiveRoomPeer` object is matched by its corresponding peer id.
    * ### Example
    * ```ts
-   * Record<string, HMSActiveRoomPeer>{
+   * Record<string, HMS.ActiveRoomPeer>{
    *  "peer_id_1": peerObj1
    *  "peer_id_2": peerObj2
    *  ...
    * }
    * ```
    * @param roomId Room ID
-   * @returns a `Record<string, HMSActiveRoomPeer>` object
+   * @returns a `Record<string, HMS.ActiveRoomPeer>` object
    */
-  async getActivePeers(roomId: string): Promise<Record<string, HMSActiveRoomPeer>> {
-    const activePeers = await this.apiService.get<HMSActivePeersResponse>(
+  async getActivePeers(roomId: string): Promise<Record<string, ActiveRoomPeer>> {
+    const activePeers = await this.apiService.get<ActivePeersResponse>(
       `${this.basePath}/${roomId}/peers`
     );
     return activePeers.peers;
@@ -69,13 +69,13 @@ export class ActiveRoomService {
    * @param roomId Room ID
    * @param peerId Peer ID
    * @param options Options of the Peer to be updated
-   * @returns a `HMSActiveRoomPeerWithTrack` object
+   * @returns a `HMS.ActiveRoomPeerWithTrack` object
    */
   async updatePeer(
     roomId: string,
     peerId: string,
-    options: HMSPeerUpdateOptions
-  ): Promise<HMSActiveRoomPeerWithTrack> {
+    options: PeerUpdateOptions
+  ): Promise<ActiveRoomPeerWithTrack> {
     return this.apiService.post(`${this.basePath}/${roomId}/peers/${peerId}`, options);
   }
 
@@ -88,7 +88,7 @@ export class ActiveRoomService {
    * @param roomId Room ID
    * @param options Options of the Message to be sent
    */
-  async sendMessage(roomId: string, options: HMSRoomMessageOptions): Promise<void> {
+  async sendMessage(roomId: string, options: RoomMessageOptions): Promise<void> {
     await this.apiService.post(`${this.basePath}/${roomId}/send-message`, options);
     return;
   }
@@ -101,7 +101,7 @@ export class ActiveRoomService {
    */
   async removePeer(
     roomId: string,
-    options: HMSRemovePeerByIdOptions | HMSRemovePeerByRoleOptions
+    options: RemovePeerByIdOptions | RemovePeerByRoleOptions
   ): Promise<void> {
     await this.apiService.post(`${this.basePath}/${roomId}/remove-peers`, options);
     return;
@@ -113,7 +113,7 @@ export class ActiveRoomService {
    * @param roomId Room ID
    * @param options Options for Ending an Active Room
    */
-  async endActiveRoom(roomId: string, options: HMSEndActiveRoomOptions): Promise<void> {
+  async endActiveRoom(roomId: string, options: EndActiveRoomOptions): Promise<void> {
     await this.apiService.post(`${this.basePath}/${roomId}/end-room`, options);
     return;
   }

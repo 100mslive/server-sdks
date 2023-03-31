@@ -1,6 +1,6 @@
 import { APIService } from "../services/APIService";
-import { HMSRoomCode, HMSRoomCodeFilterOptions, QueryResults } from "../types";
-import { HMSQueryObjectIterator } from "../utils/HMSQueryObjectIterator";
+import { RoomCode, RoomCodeFilterOptions, QueryResults } from "../types";
+import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 
 export class RoomCodeService {
   private basePath = "/room-codes";
@@ -9,15 +9,15 @@ export class RoomCodeService {
 
   /**
    *
-   * @param roomId
-   * @param filters
-   * @returns
+   * @param roomId Room ID
+   * @param filters Room Code filters like `enabled` status and `role`
+   * @returns a `HMS.QueryObjectIterator<HMS.RoomCode>` object
    */
   getRoomCodesIterable(
     roomId: string,
-    filters?: HMSRoomCodeFilterOptions
-  ): HMSQueryObjectIterator<HMSRoomCode> {
-    const queryResultsIterable = new HMSQueryObjectIterator<HMSRoomCode>(
+    filters?: RoomCodeFilterOptions
+  ): QueryObjectIterator<RoomCode> {
+    const queryResultsIterable = new QueryObjectIterator<RoomCode>(
       (queryParams: Record<string, any>) =>
         this.apiService.get(`${this.basePath}/room/${roomId}`, queryParams),
       filters ?? {}
@@ -27,11 +27,11 @@ export class RoomCodeService {
 
   /**
    *
-   * @param roomId
-   * @returns
+   * @param roomId Room ID
+   * @returns a `RoomCode[]` object
    */
-  async createRoomCodes(roomId: string): Promise<HMSRoomCode[]> {
-    const results: QueryResults<HMSRoomCode> = await this.apiService.post(
+  async createRoomCodes(roomId: string): Promise<RoomCode[]> {
+    const results: QueryResults<RoomCode> = await this.apiService.post(
       `${this.basePath}/room/${roomId}`,
       {}
     );
@@ -40,21 +40,21 @@ export class RoomCodeService {
 
   /**
    *
-   * @param roomId
-   * @param role
-   * @returns
+   * @param roomId Room ID
+   * @param role Role for which the Room Code is to be created
+   * @returns a `RoomCode` object
    */
-  async createRoomCodeForRole(roomId: string, role: string): Promise<HMSRoomCode> {
+  async createRoomCodeForRole(roomId: string, role: string): Promise<RoomCode> {
     return this.apiService.post(`${this.basePath}/room/${roomId}/role/${role}`, {});
   }
 
   /**
    *
-   * @param code
-   * @param enabled
-   * @returns
+   * @param code THe Room Code string
+   * @param enabled Enabled status of the Room Code
+   * @returns a `RoomCode` object
    */
-  async enableOrDisableRoomCode(code: string, enabled: boolean): Promise<HMSRoomCode> {
+  async enableOrDisableRoomCode(code: string, enabled: boolean): Promise<RoomCode> {
     return this.apiService.post(`${this.basePath}/code`, {
       code,
       enabled,

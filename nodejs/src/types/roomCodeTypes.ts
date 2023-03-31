@@ -1,4 +1,4 @@
-export interface HMSRoomCode {
+export interface RoomCode {
   code: string;
   room_id: string;
   role: string;
@@ -8,7 +8,7 @@ export interface HMSRoomCode {
 }
 
 //param types
-export interface HMSRoomCodeFilterOptions {
+export interface RoomCodeFilterOptions {
   role?: string;
   enabled?: boolean;
   limit?: number;

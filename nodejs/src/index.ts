@@ -1,2 +1,2 @@
 export { HMSSDK } from "./HMSSDK";
-export * from "./types";
+export * as HMS from "./types";

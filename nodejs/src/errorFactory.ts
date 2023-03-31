@@ -1,7 +1,7 @@
-import { ErrorCodes, HMSException } from "./types";
+import { ErrorCodes, SDKException } from "./types";
 
 export const ErrorFactory = {
-  Timeout(message: string): HMSException {
+  Timeout(message: string): SDKException {
     return {
       code: ErrorCodes.TIMEOUT,
       name: "TIMEOUT",
@@ -9,7 +9,7 @@ export const ErrorFactory = {
     };
   },
 
-  MakeError(code?: number, status?: string, message?: string): HMSException {
+  MakeError(code?: number, status?: string, message?: string): SDKException {
     return {
       code,
       name: status ?? "Unknown",

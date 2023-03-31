@@ -1,4 +1,4 @@
-export interface HMSRoom {
+export interface Room {
   id: string;
   name: string;
   enabled: boolean;
@@ -7,7 +7,7 @@ export interface HMSRoom {
   app_id: string;
   recording_source_template?: boolean;
   enabled_source_template?: boolean;
-  recording_info?: HMSRoomRecordingInfo;
+  recording_info?: RoomRecordingInfo;
   template_id: string;
   template: string;
   region: string;
@@ -16,12 +16,12 @@ export interface HMSRoom {
   customer: string;
 }
 
-export interface HMSRoomRecordingInfo {
+export interface RoomRecordingInfo {
   enabled: boolean;
-  upload_info?: HMSRoomRecordingUploadInfo;
+  upload_info?: RoomRecordingUploadInfo;
 }
 
-export interface HMSRoomRecordingUploadInfo {
+export interface RoomRecordingUploadInfo {
   type: string;
   location: string;
   prefix?: string;
@@ -35,20 +35,20 @@ export interface HMSRoomRecordingUploadInfo {
 }
 
 //param types
-export interface HMSRoomFilterOptions {
+export interface RoomFilterOptions {
   enabled?: boolean;
   before?: Date;
   after?: Date;
   limit?: number;
 }
 
-export interface HMSRoomUpdateOptions {
+export interface RoomUpdateOptions {
   name?: string;
   description?: string;
-  recording_info?: HMSRoomRecordingInfo;
+  recording_info?: RoomRecordingInfo;
   region?: string;
 }
 
-export interface HMSRoomCreateOptions extends HMSRoomUpdateOptions {
+export interface RoomCreateOptions extends RoomUpdateOptions {
   template_id?: string;
 }

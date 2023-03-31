@@ -19,7 +19,7 @@ import { QueryResults } from "../types";
  * }
  * ```
  */
-export class HMSQueryObjectIterator<T> {
+export class QueryObjectIterator<T> {
   private results?: QueryResults<T>;
   private queryParams: Record<string, any>;
   private readonly queryFunction: (queryParams: Record<string, any>) => Promise<QueryResults<T>>;

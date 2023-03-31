@@ -1,27 +1,27 @@
-import { HMSBasePeer } from "./common";
+import { BasePeer } from "./common";
 
-export interface HMSActiveRoom {
+export interface ActiveRoom {
   id: string;
   name: string;
   customer_id: string;
-  session: HMSActiveRoomSession;
+  session: ActiveRoomSession;
 }
 
-export interface HMSActiveRoomSession {
+export interface ActiveRoomSession {
   id: string;
   created_at: Date;
   peers: string[];
 }
 
-export interface HMSActiveRoomPeer extends HMSBasePeer {
+export interface ActiveRoomPeer extends BasePeer {
   metadata: string;
 }
 
-export interface HMSActiveRoomPeerWithTrack extends HMSActiveRoomPeer {
-  tracks: Record<string, HMSPeerTrack>;
+export interface ActiveRoomPeerWithTrack extends ActiveRoomPeer {
+  tracks: Record<string, PeerTrack>;
 }
 
-export interface HMSPeerTrack {
+export interface PeerTrack {
   id: string;
   stream_id: string;
   mute: boolean;
@@ -32,34 +32,34 @@ export interface HMSPeerTrack {
 }
 
 // param types
-export interface HMSActivePeersResponse {
-  peers: Record<string, HMSActiveRoomPeer>;
+export interface ActivePeersResponse {
+  peers: Record<string, ActiveRoomPeer>;
 }
 
-export interface HMSPeerUpdateOptions {
+export interface PeerUpdateOptions {
   name?: string;
   role?: string;
   metadata?: string;
 }
 
-export interface HMSRoomMessageOptions {
+export interface RoomMessageOptions {
   peerId?: string;
   role?: string;
   message: string;
   type?: string;
 }
 
-export interface HMSRemovePeerByIdOptions {
+export interface RemovePeerByIdOptions {
   peer_id: string;
   reason?: string;
 }
 
-export interface HMSRemovePeerByRoleOptions {
+export interface RemovePeerByRoleOptions {
   role: string;
   reason?: string;
 }
 
-export interface HMSEndActiveRoomOptions {
+export interface EndActiveRoomOptions {
   reason?: string;
   lock?: boolean;
 }
