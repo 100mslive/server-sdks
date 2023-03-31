@@ -1,6 +1,5 @@
 import { APIService } from "../services/APIService";
-import { RoomCode, RoomCodeFilterOptions, QueryResults } from "../types";
-import { QueryObjectIterator } from "../utils/QueryObjectIterator";
+import { RoomCode, RoomCodeFilterOptions, QueryResults, QueryObjectIterator } from "../types";
 
 export class RoomCodeService {
   private basePath = "/room-codes";
@@ -8,7 +7,9 @@ export class RoomCodeService {
   constructor(private apiService: APIService) {}
 
   /**
-   *
+   * Retrieve room codes for all roles in a room. Use the filters to get room
+   * codes for a specific role or only the enabled room codes. A `HMS.RoomCode`
+   * iterable is returned that can be iterated with a `for await` loop.
    * @param roomId Room ID
    * @param filters Room Code filters like `enabled` status and `role`
    * @returns a `HMS.QueryObjectIterator<HMS.RoomCode>` object
@@ -26,7 +27,8 @@ export class RoomCodeService {
   }
 
   /**
-   *
+   * Creates room code for all the roles in the room at once. The created
+   * room codes list is returned.
    * @param roomId Room ID
    * @returns a `RoomCode[]` object
    */
@@ -39,7 +41,8 @@ export class RoomCodeService {
   }
 
   /**
-   *
+   * Creates room code for a specific role in the room. The created
+   * room code is returned.
    * @param roomId Room ID
    * @param role Role for which the Room Code is to be created
    * @returns a `RoomCode` object
@@ -49,7 +52,8 @@ export class RoomCodeService {
   }
 
   /**
-   *
+   * Updates the current state for a given room code. This can be used
+   * to enable or disable a room code.
    * @param code THe Room Code string
    * @param enabled Enabled status of the Room Code
    * @returns a `RoomCode` object
