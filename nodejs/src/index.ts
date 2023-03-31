@@ -1,2 +1,3 @@
 export { HMSSDK } from "./HMSSDK";
-export * as HMS from "../types";
+export { QueryObjectIterator as HMSObjectIterator } from "./utils/QueryObjectIterator";
+export * as HMS from "./types";

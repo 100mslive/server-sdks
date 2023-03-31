@@ -1,4 +1,4 @@
-import { ErrorCodes, SDKException } from "../types";
+import { ErrorCodes, SDKException } from "./types";
 
 export const ErrorFactory = {
   Timeout(message: string): SDKException {

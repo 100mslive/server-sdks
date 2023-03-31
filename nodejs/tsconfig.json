@@ -8,6 +8,7 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "outDir": "dist",
+    "declaration": true
   },
   "include": ["src/**/*"]
 }

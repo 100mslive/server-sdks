@@ -7,6 +7,3 @@ export * from "./policyTypes";
 export * from "./roomCodeTypes";
 export * from "./roomTypes";
 export * from "./sessionTypes";
-
-// others
-export * from "./QueryObjectIterator";

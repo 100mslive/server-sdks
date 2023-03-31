@@ -1,4 +1,4 @@
-import { HMS, HMSSDK } from "@100mslive/server-sdk";
+import { HMSSDK, HMS } from "@100mslive/server-sdk";
 
 const accessKey = process.env.HMS_ACCESS_KEY;
 const secret = process.env.HMS_SECRET;

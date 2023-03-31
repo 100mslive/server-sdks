@@ -1,5 +1,5 @@
 import { APIService } from "../services/APIService";
-import { QueryObjectIterator, Session, SessionFilterOptions } from "../../types";
+import { QueryObjectIterator, Session, SessionFilterOptions } from "../types";
 
 /**
  * The wrapper class that implements all
