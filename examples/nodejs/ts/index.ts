@@ -1,9 +1,9 @@
-import { HMSSDK, HMS } from "@100mslive/server-sdk";
+import HMS from "@100mslive/server-sdk";
 
 const accessKey = process.env.HMS_ACCESS_KEY;
 const secret = process.env.HMS_SECRET;
 
-const sdk = new HMSSDK(accessKey, secret);
+const sdk = new HMS.SDK(accessKey, secret);
 
 // Get Auth Token
 sdk.auth
