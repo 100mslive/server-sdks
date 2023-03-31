@@ -1,4 +1,4 @@
-import { QueryResults } from "../types";
+import { QueryResults } from ".";
 
 /**
  * An Iterator class that accepts a `queryFunction` and iterates through it

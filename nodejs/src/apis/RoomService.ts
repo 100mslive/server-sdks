@@ -1,12 +1,12 @@
 import { logger } from "../services/LoggerService";
 import { APIService } from "../services/APIService";
-import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 import {
   Room,
   RoomCreateOptions,
   RoomFilterOptions,
   RoomUpdateOptions,
   QueryResults,
+  QueryObjectIterator,
 } from "../types";
 
 /**
@@ -59,7 +59,7 @@ export class RoomService {
 
   /**
    * Create a new room with a specific configuration. If the room already exists,
-   * the object of that room will be returned.
+   * the object of that existing room will be returned.
    * @param config Config of the Room to be created
    * @returns a `HMS.Room` object
    */
