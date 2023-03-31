@@ -22,21 +22,25 @@ The `examples/nodejs` folder on root has some examples on how to use the SDK.
 Install the package with:
 
 ```
-npm install @100mslive/server-sdk --save
-# or
+# via NPM:
+npm install --save @100mslive/server-sdk
+
+# via Yarn:
 yarn add @100mslive/server-sdk
 ```
 
 ## Usage
+
+Im
 
 The SDK needs to be configured with the **Access Key** and **App Secret** from the [100ms Dashboard's Developer Section](https://dashboard.100ms.live/developer). This can be done in 2 ways:
 
 1. Passing in the credentials when initializing the SDK.
 
 ```js
-import { HMSSDK } from "@100mslive/server-sdk";
+import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMSSDK(accessKey, secret);
+const sdk = new HMS.SDK(accessKey, secret);
 ```
 
 **OR**
@@ -51,17 +55,17 @@ HMS_SECRET=secret456 // app secret
 Then initializing the SDK like this:
 
 ```js
-import { HMSSDK } from "@100mslive/server-sdk";
+import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMSSDK();
+const sdk = new HMS.SDK();
 ```
 
 ### Generate Management token for server side APIs
 
 ```js
-import { HMSSDK } from "@100mslive/server-sdk";
+import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMSSDK();
+const sdk = new HMS.SDK();
 console.log(await sdk.auth.getManagementToken());
 // with token options -
 const tokenConfig = {
@@ -75,9 +79,9 @@ console.log(await sdk.auth.getManagementToken(tokenConfig));
 ### Generating Auth token for client SDKs
 
 ```js
-import { HMSSDK } from "@100mslive/server-sdk";
+import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMSSDK();
+const sdk = new HMS.SDK();
 const tokenConfig = { roomId, role, userId };
 console.log(await sdk.auth.getAuthToken());
 // with additional token options -
@@ -95,9 +99,9 @@ console.log(await sdk.auth.getAuthToken(additionalTokenConfig));
 ### Creating and updating room
 
 ```js
-import { HMSSDK } from "@100mslive/server-sdk";
+import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMSSDK();
+const sdk = new HMS.SDK();
 // creating a room -
 const room = await sdk.rooms.create();
 // with room options -
@@ -121,9 +125,9 @@ console.log(room, roomWithOptions, updatedRoom);
 The SDK supports `ts`, `esm` and `cjs` completely. Here's how you can import the types from the SDK and use them.
 
 ```ts
-import { HMSSDK, HMS } from "@100mslive/server-sdk";
+import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMSSDK();
+const sdk = new HMS.SDK();
 // create a room with options -
 let roomWithOptions: HMS.Room;
 const roomCreateOptions: HMS.RoomCreateOptions = {
@@ -139,9 +143,9 @@ roomWithOptions = await sdk.rooms.create(roomCreateOptions);
 ### Create room codes for a room and then disable one of them
 
 ```js
-import { HMSSDK } from "@100mslive/server-sdk";
+import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMSSDK();
+const sdk = new HMS.SDK();
 // create room codes -
 const roomCodesForRoom = await sdk.roomCodes.create(roomId);
 console.log(roomCodesForRoom);
@@ -154,9 +158,9 @@ console.log(disabledRoomCode);
 ### List Peers in an active room and send a message to the room
 
 ```js
-import { HMSSDK } from "@100mslive/server-sdk";
+import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMSSDK();
+const sdk = new HMS.SDK();
 // list peers in active room -
 const peers = await sdk.activeRooms.retrieveActivePeers(roomId);
 console.log(peers);
@@ -168,9 +172,9 @@ await sdk.activeRooms.sendMessage(roomId, { message: "test" });
 ### List all sessions and the sessions in a room
 
 ```js
-import { HMSSDK } from "@100mslive/server-sdk";
+import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMSSDK();
+const sdk = new HMS.SDK();
 // list all sessions -
 const allSessionsIterable = sdk.sessions.list();
 for await (const session of allSessionsIterable) {
@@ -202,9 +206,9 @@ for await (const session of sessionsByRoomIterable) {
 Support for other endpoints are being added. If you want to consume them before it's available in the SDK, feel free to use the `api` property to make the API calls:
 
 ```js
-import { HMSSDK } from "@100mslive/server-sdk";
+import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMSSDK();
+const sdk = new HMS.SDK();
 const hmsObject = await sdk.api.get(path, params);
 console.log(hmsObject);
 ```
