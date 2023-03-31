@@ -26,25 +26,25 @@ export class HMSSDK {
    * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/object Room API calls}.
    * @returns an instance of `RoomService`
    */
-  readonly room: RoomService;
+  readonly rooms: RoomService;
 
   /**
    * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/object Active Room API calls}.
    * @returns an instance of `ActiveRoomService`
    */
-  readonly activeRoom: ActiveRoomService;
+  readonly activeRooms: ActiveRoomService;
 
   /**
    * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/Sessions/object Session API calls}.
    * @returns an instance of `SessionService`
    */
-  readonly session: SessionService;
+  readonly sessions: SessionService;
 
   /**
    * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/room-codes/room-code-object Room Code API calls}.
    * @returns an instance of `RoomCodeService`
    */
-  readonly roomCode: RoomCodeService;
+  readonly roomCodes: RoomCodeService;
 
   /**
    * @param accessKey App Access Key from Dashboard
@@ -66,10 +66,10 @@ export class HMSSDK {
     this.auth = new AuthService(accessKey, secret);
     this.api = new APIService(this.auth);
 
-    this.room = new RoomService(this.api);
-    this.activeRoom = new ActiveRoomService(this.api);
-    this.session = new SessionService(this.api);
-    this.roomCode = new RoomCodeService(this.api);
+    this.rooms = new RoomService(this.api);
+    this.activeRooms = new ActiveRoomService(this.api);
+    this.sessions = new SessionService(this.api);
+    this.roomCodes = new RoomCodeService(this.api);
   }
 
   setLogLevel(level: LogLevelOptions) {

@@ -9,12 +9,12 @@ beforeEach(() => {
 
 describe("active room service", () => {
   test.skip("gets active room details and send a message", async () => {
-    const activeRoom = await sdk.activeRoom.retrieve(TEST_ROOM_ID);
-    const peerDetails = await sdk.activeRoom.retrievePeerDetails(
+    const activeRoom = await sdk.activeRooms.retrieve(TEST_ROOM_ID);
+    const peerDetails = await sdk.activeRooms.retrievePeerDetails(
       TEST_ROOM_ID,
       activeRoom.session.peers[0]
     );
-    await sdk.activeRoom.sendMessage(TEST_ROOM_ID, { message: "hello room" });
+    await sdk.activeRooms.sendMessage(TEST_ROOM_ID, { message: "hello room" });
     expect(activeRoom.session.peers[0]).toBe(peerDetails.id);
   });
 });

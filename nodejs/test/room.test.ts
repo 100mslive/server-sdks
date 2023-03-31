@@ -10,10 +10,10 @@ beforeEach(() => {
 describe("room service", () => {
   test("create and get room works", async () => {
     // gets the prev again if already exists else create
-    const room = await sdk.room.create({ name: TEST_ROOM_NAME });
-    const roomById = await sdk.room.retrieveById(room.id);
-    const roomByName = await sdk.room.retrieveByName(room.name);
-    const inactiveRooms = sdk.room.list({ enabled: false });
+    const room = await sdk.rooms.create({ name: TEST_ROOM_NAME });
+    const roomById = await sdk.rooms.retrieveById(room.id);
+    const roomByName = await sdk.rooms.retrieveByName(room.name);
+    const inactiveRooms = sdk.rooms.list({ enabled: false });
     console.log(room);
     for await (const inactiveRoom of inactiveRooms) {
       expect(room.id).not.toBe(inactiveRoom.id);

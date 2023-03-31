@@ -8,7 +8,7 @@ beforeEach(() => {
 
 describe("session service", () => {
   test("get session details work", async () => {
-    const sessionsIterable = sdk.session.list();
+    const sessionsIterable = sdk.sessions.list();
     const allSessions: HMS.Session[] = [];
     for await (const session of sessionsIterable) {
       allSessions.push(session);
@@ -16,7 +16,7 @@ describe("session service", () => {
         console.log("the next loop is gonna take some time");
       }
     }
-    const firstSession = await sdk.session.retrieveById(allSessions.at(0)!.id);
+    const firstSession = await sdk.sessions.retrieveById(allSessions.at(0)!.id);
     expect(firstSession.id).toBe(allSessions.at(0)!.id);
     expect(firstSession.room_id).toBe(allSessions.at(0)!.room_id);
   });
