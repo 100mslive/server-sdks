@@ -1,5 +1,6 @@
 import { APIService } from "../services/APIService";
-import { RoomCode, RoomCodeFilterOptions, QueryResults, QueryObjectIterator } from "../types";
+import { RoomCode, RoomCodeFilterOptions, QueryResults } from "../types";
+import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 
 export class RoomCodeService {
   private basePath = "/room-codes";

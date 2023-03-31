@@ -6,8 +6,8 @@ import {
   RoomFilterOptions,
   RoomUpdateOptions,
   QueryResults,
-  QueryObjectIterator,
 } from "../types";
+import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 
 /**
  * The wrapper class that implements all
