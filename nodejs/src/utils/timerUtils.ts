@@ -1,4 +1,4 @@
-import { ErrorFactory } from "../services/Errors";
+import { ErrorFactory } from "../errorFactory";
 import { logger } from "../services/LoggerService";
 
 export async function sleep(timeoutMs: number) {

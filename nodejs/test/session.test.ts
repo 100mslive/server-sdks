@@ -1,5 +1,5 @@
 import { HMSSDK } from "../src";
-import { HMSSession } from "../src/apis/interfaces/sessionInterfaces";
+import { HMSSession } from "../src/types";
 
 let sdk: HMSSDK;
 

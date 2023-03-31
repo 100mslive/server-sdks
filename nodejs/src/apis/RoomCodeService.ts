@@ -1,7 +1,6 @@
 import { APIService } from "../services/APIService";
+import { HMSRoomCode, HMSRoomCodeFilterOptions, QueryResults } from "../types";
 import { HMSQueryObjectIterator } from "../utils/HMSQueryObjectIterator";
-import { QueryResults } from "./interfaces/common";
-import { HMSRoomCode } from "./interfaces/roomCodeInterfaces";
 
 export class RoomCodeService {
   private basePath = "/room-codes";
@@ -61,10 +60,4 @@ export class RoomCodeService {
       enabled,
     });
   }
-}
-
-export interface HMSRoomCodeFilterOptions {
-  role?: string;
-  enabled?: boolean;
-  limit?: number;
 }

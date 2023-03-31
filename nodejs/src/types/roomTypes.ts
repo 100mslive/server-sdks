@@ -33,3 +33,22 @@ export interface HMSRoomRecordingUploadInfo {
     secret: string;
   };
 }
+
+//param types
+export interface HMSRoomFilterOptions {
+  enabled?: boolean;
+  before?: Date;
+  after?: Date;
+  limit?: number;
+}
+
+export interface HMSRoomUpdateOptions {
+  name?: string;
+  description?: string;
+  recording_info?: HMSRoomRecordingInfo;
+  region?: string;
+}
+
+export interface HMSRoomCreateOptions extends HMSRoomUpdateOptions {
+  template_id?: string;
+}

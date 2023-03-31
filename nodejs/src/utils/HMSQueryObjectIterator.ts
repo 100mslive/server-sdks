@@ -1,4 +1,4 @@
-import { QueryResults } from "../apis/interfaces/common";
+import { QueryResults } from "../types";
 
 /**
  * An Iterator class that accepts a `queryFunction` and iterates through it

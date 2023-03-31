@@ -1,9 +1,15 @@
 import { APIService } from "../services/APIService";
 import {
+  HMSActivePeersResponse,
   HMSActiveRoom,
-  HMSActiveRoomPeerWithTrack,
   HMSActiveRoomPeer,
-} from "./interfaces/activeRoomInterfaces";
+  HMSActiveRoomPeerWithTrack,
+  HMSEndActiveRoomOptions,
+  HMSPeerUpdateOptions,
+  HMSRemovePeerByIdOptions,
+  HMSRemovePeerByRoleOptions,
+  HMSRoomMessageOptions,
+} from "../types";
 
 /**
  * The wrapper class that implements all
@@ -111,36 +117,4 @@ export class ActiveRoomService {
     await this.apiService.post(`${this.basePath}/${roomId}/end-room`, options);
     return;
   }
-}
-
-interface HMSActivePeersResponse {
-  peers: Record<string, HMSActiveRoomPeer>;
-}
-
-export interface HMSPeerUpdateOptions {
-  name?: string;
-  role?: string;
-  metadata?: string;
-}
-
-export interface HMSRoomMessageOptions {
-  peerId?: string;
-  role?: string;
-  message: string;
-  type?: string;
-}
-
-export interface HMSRemovePeerByIdOptions {
-  peer_id: string;
-  reason?: string;
-}
-
-export interface HMSRemovePeerByRoleOptions {
-  role: string;
-  reason?: string;
-}
-
-export interface HMSEndActiveRoomOptions {
-  reason?: string;
-  lock?: boolean;
 }

@@ -1,6 +1,6 @@
 import { APIService } from "../services/APIService";
+import { HMSSession, HMSSessionFilterOptions } from "../types";
 import { HMSQueryObjectIterator } from "../utils/HMSQueryObjectIterator";
-import { HMSSession } from "./interfaces/sessionInterfaces";
 
 /**
  * The wrapper class that implements all
@@ -35,12 +35,4 @@ export class SessionService {
   async getSessionById(sessionId: string): Promise<HMSSession> {
     return this.apiService.get(`${this.basePath}/${sessionId}`);
   }
-}
-
-export interface HMSSessionFilterOptions {
-  room_id?: string;
-  active?: boolean;
-  before?: Date;
-  after?: Date;
-  limit?: number;
 }

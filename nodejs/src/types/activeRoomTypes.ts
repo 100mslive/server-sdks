@@ -30,3 +30,36 @@ export interface HMSPeerTrack {
   started_at: Date;
   description: string;
 }
+
+// param types
+export interface HMSActivePeersResponse {
+  peers: Record<string, HMSActiveRoomPeer>;
+}
+
+export interface HMSPeerUpdateOptions {
+  name?: string;
+  role?: string;
+  metadata?: string;
+}
+
+export interface HMSRoomMessageOptions {
+  peerId?: string;
+  role?: string;
+  message: string;
+  type?: string;
+}
+
+export interface HMSRemovePeerByIdOptions {
+  peer_id: string;
+  reason?: string;
+}
+
+export interface HMSRemovePeerByRoleOptions {
+  role: string;
+  reason?: string;
+}
+
+export interface HMSEndActiveRoomOptions {
+  reason?: string;
+  lock?: boolean;
+}

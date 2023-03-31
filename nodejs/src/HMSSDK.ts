@@ -1,10 +1,11 @@
 import { logger, LogLevelOptions, setLogLevel } from "./services/LoggerService";
 import { RoomService } from "./apis/RoomService";
-import { AuthTokenConfig, AuthService, ManagementTokenConfig } from "./services/AuthService";
+import { AuthService } from "./services/AuthService";
 import { APIService } from "./services/APIService";
 import { ActiveRoomService } from "./apis/ActiveRoomService";
 import { SessionService } from "./apis/SessionService";
 import { RoomCodeService } from "./apis/RoomCodeService";
+import { AuthTokenConfig, ManagementTokenConfig } from "./types";
 
 /**
  * Server-side SDK for 100ms REST API endpoints.

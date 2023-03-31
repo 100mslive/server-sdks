@@ -1,8 +1,13 @@
 import { logger } from "../services/LoggerService";
 import { APIService } from "../services/APIService";
-import { HMSRoom, HMSRoomRecordingInfo } from "./interfaces/roomInterfaces";
 import { HMSQueryObjectIterator } from "../utils/HMSQueryObjectIterator";
-import { QueryResults } from "./interfaces/common";
+import {
+  HMSRoom,
+  HMSRoomCreateOptions,
+  HMSRoomFilterOptions,
+  HMSRoomUpdateOptions,
+  QueryResults,
+} from "../types";
 
 /**
  * The wrapper class that implements all
@@ -83,22 +88,4 @@ export class RoomService {
   async enableOrDisableRoom(roomId: string, enabled: boolean): Promise<HMSRoom> {
     return this.apiService.post(`${this.basePath}/${roomId}`, { enabled });
   }
-}
-
-export interface HMSRoomFilterOptions {
-  enabled?: boolean;
-  before?: Date;
-  after?: Date;
-  limit?: number;
-}
-
-export interface HMSRoomUpdateOptions {
-  name?: string;
-  description?: string;
-  recording_info?: HMSRoomRecordingInfo;
-  region?: string;
-}
-
-export interface HMSRoomCreateOptions extends HMSRoomUpdateOptions {
-  template_id?: string;
 }
