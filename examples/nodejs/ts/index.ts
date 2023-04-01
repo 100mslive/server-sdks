@@ -3,10 +3,10 @@ import HMS from "@100mslive/server-sdk";
 const accessKey = process.env.HMS_ACCESS_KEY;
 const secret = process.env.HMS_SECRET;
 
-const sdk = new HMS.SDK(accessKey, secret);
+const hms = new HMS.SDK(accessKey, secret);
 
 // Get Auth Token
-sdk.auth
+hms.auth
   .getAuthToken({
     roomId: "test_room_id",
     role: "host",
@@ -15,36 +15,36 @@ sdk.auth
   .then((tokenObj) => console.log(`Auth Token: ${tokenObj.token}`));
 
 // Get Management Token
-sdk.auth
+hms.auth
   .getManagementToken()
   .then((tokenObj) => console.log(`Management Token: ${tokenObj.token}`));
 
 // Rooms Example
 async function roomsExample() {
   // creating a room -
-  const room = await sdk.rooms.create();
+  const room = await hms.rooms.create();
   // with room options -
   const roomCreateOptions: HMS.RoomCreateOptions = {
     name: "room-name",
     description: "room description",
     region: "us",
   };
-  const roomWithOptions = await sdk.rooms.create(roomCreateOptions);
+  const roomWithOptions = await hms.rooms.create(roomCreateOptions);
 
   // updating a room -
   const roomUpdateOptions: HMS.RoomUpdateOptions = { name: "new-room-name" };
-  const updatedRoom = await sdk.rooms.update(room.id, roomUpdateOptions);
+  const updatedRoom = await hms.rooms.update(room.id, roomUpdateOptions);
   console.log(room, roomWithOptions, updatedRoom);
 }
 
 // Room Codes Example
 async function roomCodesExample() {
   // create room codes -
-  const roomCodesForRoom = await sdk.roomCodes.create("roomId");
+  const roomCodesForRoom = await hms.roomCodes.create("roomId");
   console.log(roomCodesForRoom);
 
   // disable a room code -
-  const disabledRoomCode = await sdk.roomCodes.enableOrDisable(
+  const disabledRoomCode = await hms.roomCodes.enableOrDisable(
     roomCodesForRoom[0].code,
     false
   );
@@ -54,17 +54,17 @@ async function roomCodesExample() {
 // Active Rooms Example
 async function activeRoomsExample() {
   // list peers in active room -
-  const peers = await sdk.activeRooms.retrieveActivePeers("roomId");
+  const peers = await hms.activeRooms.retrieveActivePeers("roomId");
   console.log(peers);
 
   // send broadcast message to all peers -
-  await sdk.activeRooms.sendMessage("roomId", { message: "test" });
+  await hms.activeRooms.sendMessage("roomId", { message: "test" });
 }
 
 // Sessions Example
 async function sessionsExample() {
   // list all sessions -
-  const allSessionsIterable = sdk.sessions.list();
+  const allSessionsIterable = hms.sessions.list();
   for await (const session of allSessionsIterable) {
     console.log(session);
     if (!allSessionsIterable.isNextCached) {
@@ -78,7 +78,7 @@ async function sessionsExample() {
     limit: 10, // specifies the max no. of objects in one page
     // this means `iterable.isNextCached` will be `false` once every 10 times
   };
-  const sessionsByRoomIterable = sdk.sessions.list(sessionFilters);
+  const sessionsByRoomIterable = hms.sessions.list(sessionFilters);
   for await (const session of sessionsByRoomIterable) {
     console.log(session);
   }
@@ -88,7 +88,7 @@ async function sessionsExample() {
     room_id: "test_room_id",
     active: true,
   };
-  const activeSessionInRoom = sdk.sessions.list(anotherSessionFilters);
+  const activeSessionInRoom = hms.sessions.list(anotherSessionFilters);
   let flag = false;
   for await (const session of activeSessionInRoom) {
     flag = true;

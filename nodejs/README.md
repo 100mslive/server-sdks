@@ -40,7 +40,7 @@ The SDK needs to be configured with the **Access Key** and **App Secret** from t
 ```js
 import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMS.SDK(accessKey, secret);
+const hms = new HMS.SDK(accessKey, secret);
 ```
 
 **OR**
@@ -57,7 +57,7 @@ Then initializing the SDK like this:
 ```js
 import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMS.SDK();
+const hms = new HMS.SDK();
 ```
 
 ### Generate Management token for server side APIs
@@ -65,15 +65,15 @@ const sdk = new HMS.SDK();
 ```js
 import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMS.SDK();
-console.log(await sdk.auth.getManagementToken());
+const hms = new HMS.SDK();
+console.log(await hms.auth.getManagementToken());
 // with token options -
 const tokenConfig = {
   issuedAt,
   notValidBefore,
   validForSeconds,
 };
-console.log(await sdk.auth.getManagementToken(tokenConfig));
+console.log(await hms.auth.getManagementToken(tokenConfig));
 ```
 
 ### Generating Auth token for client SDKs
@@ -81,9 +81,9 @@ console.log(await sdk.auth.getManagementToken(tokenConfig));
 ```js
 import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMS.SDK();
+const hms = new HMS.SDK();
 const tokenConfig = { roomId, role, userId };
-console.log(await sdk.auth.getAuthToken());
+console.log(await hms.auth.getAuthToken());
 // with additional token options -
 const additionalTokenConfig = {
   roomId,
@@ -93,7 +93,7 @@ const additionalTokenConfig = {
   notValidBefore,
   validForSeconds,
 };
-console.log(await sdk.auth.getAuthToken(additionalTokenConfig));
+console.log(await hms.auth.getAuthToken(additionalTokenConfig));
 ```
 
 ### Creating and updating room
@@ -101,9 +101,9 @@ console.log(await sdk.auth.getAuthToken(additionalTokenConfig));
 ```js
 import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMS.SDK();
+const hms = new HMS.SDK();
 // creating a room -
-const room = await sdk.rooms.create();
+const room = await hms.rooms.create();
 // with room options -
 const roomCreateOptions = {
   name,
@@ -112,11 +112,11 @@ const roomCreateOptions = {
   recording_info,
   region,
 };
-const roomWithOptions = await sdk.rooms.create(roomCreateOptions);
+const roomWithOptions = await hms.rooms.create(roomCreateOptions);
 
 // updating a room -
 const roomUpdateOptions = { name };
-const updatedRoom = await sdk.rooms.update(room.id, roomUpdateOptions);
+const updatedRoom = await hms.rooms.update(room.id, roomUpdateOptions);
 console.log(room, roomWithOptions, updatedRoom);
 ```
 
@@ -127,7 +127,7 @@ The SDK supports `ts`, `esm` and `cjs` completely. Here's how you can import the
 ```ts
 import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMS.SDK();
+const hms = new HMS.SDK();
 // create a room with options -
 let roomWithOptions: HMS.Room;
 const roomCreateOptions: HMS.RoomCreateOptions = {
@@ -137,7 +137,7 @@ const roomCreateOptions: HMS.RoomCreateOptions = {
   recording_info,
   region,
 };
-roomWithOptions = await sdk.rooms.create(roomCreateOptions);
+roomWithOptions = await hms.rooms.create(roomCreateOptions);
 ```
 
 ### Create room codes for a room and then disable one of them
@@ -145,13 +145,13 @@ roomWithOptions = await sdk.rooms.create(roomCreateOptions);
 ```js
 import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMS.SDK();
+const hms = new HMS.SDK();
 // create room codes -
-const roomCodesForRoom = await sdk.roomCodes.create(roomId);
+const roomCodesForRoom = await hms.roomCodes.create(roomId);
 console.log(roomCodesForRoom);
 
 // disable a room code -
-const disabledRoomCode = await sdk.roomCodes.enableOrDisable(roomCodesForRoom[0].code, false);
+const disabledRoomCode = await hms.roomCodes.enableOrDisable(roomCodesForRoom[0].code, false);
 console.log(disabledRoomCode);
 ```
 
@@ -160,13 +160,13 @@ console.log(disabledRoomCode);
 ```js
 import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMS.SDK();
+const hms = new HMS.SDK();
 // list peers in active room -
-const peers = await sdk.activeRooms.retrieveActivePeers(roomId);
+const peers = await hms.activeRooms.retrieveActivePeers(roomId);
 console.log(peers);
 
 // send broadcast message to all peers -
-await sdk.activeRooms.sendMessage(roomId, { message: "test" });
+await hms.activeRooms.sendMessage(roomId, { message: "test" });
 ```
 
 ### List all sessions and the sessions in a room
@@ -174,9 +174,9 @@ await sdk.activeRooms.sendMessage(roomId, { message: "test" });
 ```js
 import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMS.SDK();
+const hms = new HMS.SDK();
 // list all sessions -
-const allSessionsIterable = sdk.sessions.list();
+const allSessionsIterable = hms.sessions.list();
 for await (const session of allSessionsIterable) {
   console.log(session);
   if (!allSessionsIterable.isNextCached) {
@@ -190,7 +190,7 @@ const sessionFilters = {
   limit: 10, // specifies the max no. of objects in one page
   // this means `iterable.isNextCached` will be `false` once every 10 times
 };
-const sessionsByRoomIterable = sdk.sessions.list(sessionFilters);
+const sessionsByRoomIterable = hms.sessions.list(sessionFilters);
 for await (const session of sessionsByRoomIterable) {
   console.log(session);
 }
@@ -208,8 +208,8 @@ Support for other endpoints are being added. If you want to consume them before 
 ```js
 import HMS from "@100mslive/server-sdk";
 
-const sdk = new HMS.SDK();
-const hmsObject = await sdk.api.get(path, params);
+const hms = new HMS.SDK();
+const hmsObject = await hms.api.get(path, params);
 console.log(hmsObject);
 ```
 

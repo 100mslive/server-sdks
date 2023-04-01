@@ -5,20 +5,20 @@ let sdk: SDK;
 let secret: Secret = process.env.HMS_SECRET!;
 
 beforeEach(() => {
-  sdk = new SDK();
+  hms = new SDK();
 });
 
 describe("management token", () => {
   it("should give management token without any options passed in", async () => {
-    const token = await sdk.auth.getManagementToken({ validForSeconds: 30 * 24 * 3600 });
+    const token = await hms.auth.getManagementToken({ validForSeconds: 30 * 24 * 3600 });
     console.log({ token });
     verify(token.token, secret);
   });
 
   it("should give same token if called again", async () => {
-    const token1 = await sdk.auth.getManagementToken();
-    const token2 = await sdk.auth.getManagementToken();
-    const token3 = await sdk.auth.getManagementToken({ forceNew: true });
+    const token1 = await hms.auth.getManagementToken();
+    const token2 = await hms.auth.getManagementToken();
+    const token3 = await hms.auth.getManagementToken({ forceNew: true });
     expect(token1).toBe(token2);
     expect(token1).not.toBe(token3);
   });
@@ -26,9 +26,9 @@ describe("management token", () => {
 
 describe("auth token", () => {
   it("should give auth token", async () => {
-    const withoutUserId = await sdk.auth.getAuthToken({ roomId: "room123", role: "teacher" });
+    const withoutUserId = await hms.auth.getAuthToken({ roomId: "room123", role: "teacher" });
     console.log("without user id", withoutUserId);
-    const withUserId = await sdk.auth.getAuthToken({
+    const withUserId = await hms.auth.getAuthToken({
       roomId: "room123",
       role: "teacher",
       userId: "user232",
