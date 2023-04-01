@@ -1,6 +1,6 @@
 import { SDK } from "../src";
 
-let sdk: SDK;
+let hms: SDK;
 
 beforeEach(() => {
   hms = new SDK();

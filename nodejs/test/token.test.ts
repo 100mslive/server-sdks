@@ -1,7 +1,7 @@
 import { SDK } from "../src";
 import { verify, Secret } from "jsonwebtoken";
 
-let sdk: SDK;
+let hms: SDK;
 let secret: Secret = process.env.HMS_SECRET!;
 
 beforeEach(() => {

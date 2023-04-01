@@ -1,7 +1,7 @@
 import { SDK } from "../src";
 import { TEST_ROOM_ID } from "./testCommon";
 
-let sdk: SDK;
+let hms: SDK;
 
 beforeEach(() => {
   hms = new SDK();
