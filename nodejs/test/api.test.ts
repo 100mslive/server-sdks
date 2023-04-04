@@ -1,15 +1,14 @@
-import { HMSSDK } from "../src";
+import { SDK } from "../src";
 
-let sdk: HMSSDK;
+let hms: SDK;
 
 beforeEach(() => {
-  sdk = new HMSSDK();
+  hms = new SDK();
 });
 
 describe("api service", () => {
   test("get rooms endpoint is working", async () => {
-    const apiService = sdk.getApiService();
-    const rooms: { data: any[] } = await apiService.get("/rooms");
+    const rooms: { data: any[] } = await hms.api.get("/rooms");
     expect(rooms.data.length).toBeGreaterThan(0);
   });
 });

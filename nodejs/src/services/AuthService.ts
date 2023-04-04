@@ -1,11 +1,23 @@
 import { sign, decode, SignOptions, JwtPayload } from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
-import { logger } from "../LoggerService";
+import {
+  AuthToken,
+  AuthTokenConfig,
+  BaseTokenConfig,
+  ManagementToken,
+  ManagementTokenConfig,
+  TokenType,
+} from "../types";
+import { logger } from "./LoggerService";
 
 export class AuthService {
   private managementToken?: ManagementToken;
   constructor(private accessKey: string, private secret: string) {}
 
+  /**
+   * Management token allows to make API calls to 100ms backend.
+   * @returns Management token of type `ManagementToken`
+   */
   async getManagementToken(tokenConfig?: ManagementTokenConfig): Promise<ManagementToken> {
     if (
       tokenConfig?.forceNew ||
@@ -18,7 +30,11 @@ export class AuthService {
     return this.managementToken;
   }
 
-  async getAppToken(tokenConfig: AppTokenConfig) {
+  /**
+   * Auth Token allows for joining Room on client side.
+   * @returns Auth token of type `AuthToken`
+   */
+  async getAuthToken(tokenConfig: AuthTokenConfig): Promise<AuthToken> {
     const details: Record<string, string> = {
       room_id: tokenConfig.roomId,
       role: tokenConfig.role,
@@ -26,20 +42,29 @@ export class AuthService {
     if (tokenConfig.userId) {
       details.user_id = tokenConfig.userId;
     }
-    return this.generateToken(TokenType.App, tokenConfig, details);
+    return this.generateToken(TokenType.Auth, tokenConfig, details);
   }
 
   private async generateToken(
+    type: TokenType.Auth,
+    config: AuthTokenConfig,
+    extras: Record<string, any>
+  ): Promise<AuthToken>;
+  private async generateToken(
+    type: TokenType.Management,
+    config?: ManagementTokenConfig
+  ): Promise<ManagementToken>;
+  private async generateToken(
     type: TokenType,
-    { issuedAt, notValidBefore, validForSeconds }: BaseTokenConfig = {},
+    config: BaseTokenConfig = {},
     extras: Record<string, any> = {}
-  ): Promise<ManagementToken> {
+  ): Promise<AuthToken | ManagementToken> {
     // buffer to handle slight mismatch between time of token creating server and HMS backend
     const bufferSeconds = 10;
     const currTimeSeconds = Math.floor(Date.now() / 1000);
-    const iat = issuedAt || currTimeSeconds - bufferSeconds;
-    const nbf = notValidBefore || iat;
-    const exp = nbf + (validForSeconds || 24 * 3600);
+    const iat = config.issuedAt || currTimeSeconds - bufferSeconds;
+    const nbf = config.notValidBefore || iat;
+    const exp = nbf + (config.validForSeconds || 24 * 3600);
     const payload = {
       access_key: this.accessKey,
       type,
@@ -80,50 +105,4 @@ export class AuthService {
       });
     });
   }
-}
-
-interface BaseTokenConfig {
-  /**
-   * value in seconds
-   */
-  issuedAt?: number;
-  /**
-   * value in seconds
-   */
-  notValidBefore?: number;
-  /**
-   * value in seconds, once the token is valid how long will it stay valid
-   */
-  validForSeconds?: number;
-}
-
-export interface ManagementTokenConfig extends BaseTokenConfig {
-  /**
-   * always generate new token even if prev is unexpired
-   */
-  forceNew?: boolean;
-}
-
-export interface AppTokenConfig extends BaseTokenConfig {
-  /**
-   * room id for which the app token needs to be generated
-   */
-  roomId: string;
-  /**
-   * a reference user id from your side
-   */
-  userId?: string;
-  /**
-   * The role should exist in your dashboard account
-   */
-  role: string;
-}
-
-export interface ManagementToken {
-  token: string;
-}
-
-enum TokenType {
-  Management = "management",
-  App = "app",
 }
