@@ -2,7 +2,7 @@ import { AuthService } from "./AuthService";
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 import { logger } from "./LoggerService";
 import { ErrorFactory } from "../errorFactory";
-import { castDateFields } from "../utils/typeUtils";
+import { castDateFields, serializeQueryParams } from "../utils/typeUtils";
 
 export class APIService {
   private baseUrl =
@@ -23,7 +23,10 @@ export class APIService {
   }
 
   async get<T>(path: string, queryParams?: Record<string, any>): Promise<T> {
-    const resp: AxiosResponse = await this.axios.get(path, { params: queryParams });
+    const resp: AxiosResponse = await this.axios.get(path, {
+      params: queryParams,
+      paramsSerializer: (params) => serializeQueryParams(params),
+    });
     logger.debug(`get call to path - ${path}, status code - ${resp.status}`);
     return castDateFields<T>(resp.data);
   }
