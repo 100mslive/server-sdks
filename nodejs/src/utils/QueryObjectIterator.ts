@@ -1,4 +1,4 @@
-import { QueryResults } from "../types";
+import { EventResults, QueryResults } from "../types";
 
 /**
  * An Iterator class that accepts a `queryFunction` and iterates through it
@@ -20,13 +20,15 @@ import { QueryResults } from "../types";
  * ```
  */
 export class QueryObjectIterator<T> {
-  private results?: QueryResults<T>;
+  private results?: QueryResults<T> | EventResults<T>;
   private queryParams: Record<string, any>;
-  private readonly queryFunction: (queryParams: Record<string, any>) => Promise<QueryResults<T>>;
+  private readonly queryFunction: (
+    queryParams: Record<string, any>
+  ) => Promise<QueryResults<T> | EventResults<T>>;
   isNextCached: boolean;
 
   constructor(
-    queryFunction: (queryParams: Record<string, any>) => Promise<QueryResults<T>>,
+    queryFunction: (queryParams: Record<string, any>) => Promise<QueryResults<T> | EventResults<T>>,
     queryParams: Record<string, any>
   ) {
     this.queryFunction = queryFunction;
@@ -40,26 +42,34 @@ export class QueryObjectIterator<T> {
    */
   async *[Symbol.asyncIterator](): AsyncIterator<T> {
     // if first iteration (results is undefined) or latest query returned data
-    while (!this.results || this.results?.data) {
+    while (
+      !this.results ||
+      (this.results as QueryResults<T>)?.data ||
+      (this.results as EventResults<T>)?.events
+    ) {
+      let data =
+        (this.results as QueryResults<T>)?.data ?? (this.results as EventResults<T>)?.events;
+
       // set "last" of latest query as "start" for current query
-      if (this.results?.last) {
-        this.queryParams["start"] = this.results?.last;
+      if ((this.results as QueryResults<T>)?.last || (this.results as EventResults<T>)?.next) {
+        this.queryParams["start"] =
+          (this.results as QueryResults<T>)?.last ?? (this.results as EventResults<T>)?.next;
       }
       // call query function and set `isNextCached` to true
       this.results = await this.queryFunction(this.queryParams);
       this.isNextCached = true;
-      if (this.results.data) {
+      if (data) {
         // iterate through returned data if present and yield it
-        for (let i = 0; i < this.results.data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
           // before yielding the last element in data, set `isNextCached` to false
-          if (i == this.results.data.length - 1) {
+          if (i == data.length - 1) {
             this.isNextCached = false;
           }
-          yield this.results.data[i];
+          yield data[i];
         }
         // if returned data count is less than specified `limit` or default 10
         // break the loop since the final page has been reached
-        if (this.results.data.length < this.queryParams["limit"] ?? 10) break;
+        if (data.length < this.queryParams["limit"] ?? 10) break;
       }
     }
   }
