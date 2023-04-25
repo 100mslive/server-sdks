@@ -6,9 +6,21 @@ export interface RecordingAsset extends BaseRecordingAsset {
   session_id: string;
 }
 
-export interface PreSignedURLForRecordingAsset {
+export interface RecordingAssetPreSignedURL {
   id: string;
   path: string;
   url: string;
   expiry: number;
+}
+
+// param types
+export interface RecordingAssetFilterParams {
+  room_id?: string;
+  session_id?: string;
+  status?: string;
+  limit?: number;
+}
+
+export interface RecordingAssetPreSignedURLParams {
+  presign_duration?: number;
 }

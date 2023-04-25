@@ -14,7 +14,7 @@ export interface BaseBeamObject {
   id: string;
   room_id: string;
   session_id: string;
-  status: string;
+  status: "starting" | "running" | "stopping" | "post_processing" | "completed" | "failed";
   created_at: Date;
   started_at?: Date;
   updated_at: Date;
@@ -29,9 +29,9 @@ export interface BaseRecordingAsset {
   thumbnails?: string[];
   duration: number;
   path: string;
-  status: string;
+  status: "completed" | "failed";
   created_at: Date;
-  type: string;
+  type: "room-composite" | "room-vod" | "chat";
   size: number;
   metadata: RecordingMetadata;
 }

@@ -1,6 +1,7 @@
 // interfaces
 export * from "./activeRoomTypes";
 export * from "./authTypes";
+export * from "./analyticsTypes";
 export * from "./common";
 export * from "./exceptionTypes";
 export * from "./externalStreamTypes";
