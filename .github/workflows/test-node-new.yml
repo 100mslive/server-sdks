@@ -1,0 +1,57 @@
+name: Test
+
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+      - 'LICENSE'
+      - '.editorconfig'
+
+jobs:
+  loadtest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+        with:
+          repository: 100mslive/go-sdk
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libvpx-dev libogg-dev libvorbis-dev libopus-dev portaudio19-dev pkg-config
+
+      - name: Run Load Test
+        run: |
+          sed 's/"duration": 600/"duration": 300/; s#"url": "https://supernova.qa-app.100ms.live/meeting/61dd8b374d8aa67e67402dfa/host"#"url": "https://karthikeyan-test.app.100ms.live/preview/ort-tjj-kcu"#; s/"count": 1/"count": 3/' example.config.json > config.json
+          make loadtest
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+#          - windows-latest
+        node: [16.x]
+    defaults:
+      run:
+        working-directory: ./nodejs
+
+    steps:
+      - name: Sleep for a minute
+        run: sleep 60
+      - uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Install modules
+        run: yarn
+      - name: Run tests
+        run: yarn test
+        env:
+          HMS_ACCESS_KEY: ${{ secrets.HMS_ACCESS_KEY }}
+          HMS_SECRET: ${{ secrets.HMS_SECRET }}
