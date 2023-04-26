@@ -23,7 +23,10 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libvpx-dev libogg-dev libvorbis-dev libopus-dev portaudio19-dev pkg-config
-
+      
+      - name: Configure git
+        run: git config --global --add url."git@github.com:".insteadOf "https://github.com/"
+      
       - name: Run Load Test
         run: |
           sed 's/"duration": 600/"duration": 300/; s#"url": "https://supernova.qa-app.100ms.live/meeting/61dd8b374d8aa67e67402dfa/host"#"url": "https://karthikeyan-test.app.100ms.live/preview/ort-tjj-kcu"#; s/"count": 1/"count": 3/' example.config.json > config.json
