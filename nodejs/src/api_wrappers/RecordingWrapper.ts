@@ -2,7 +2,7 @@ import { APIService } from "../services/APIService";
 import { Recording, RecordingFilterParams, RecordingStartParams } from "../types";
 import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 
-export class RecordingService {
+export default class RecordingWrapper {
   private basePath = "/recordings";
 
   constructor(private apiService: APIService) {}

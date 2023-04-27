@@ -7,7 +7,7 @@ import {
 } from "../types";
 import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 
-export class LiveStreamService {
+export default class LiveStreamWrapper {
   private basePath = "/live-streams";
 
   constructor(private apiService: APIService) {}

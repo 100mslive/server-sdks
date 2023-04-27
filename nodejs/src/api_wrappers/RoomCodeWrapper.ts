@@ -2,7 +2,7 @@ import { APIService } from "../services/APIService";
 import { RoomCode, RoomCodeFilterOptions, QueryResults } from "../types";
 import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 
-export class RoomCodeService {
+export default class RoomCodeWrapper {
   private basePath = "/room-codes";
 
   constructor(private apiService: APIService) {}

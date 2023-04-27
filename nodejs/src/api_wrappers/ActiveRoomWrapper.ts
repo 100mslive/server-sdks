@@ -15,7 +15,7 @@ import {
  * The wrapper class that implements all
  * {@link https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/object Active Room API} calls.
  */
-export class ActiveRoomService {
+export default class ActiveRoomWrapper {
   private basePath = "/active-rooms";
 
   constructor(private apiService: APIService) {}

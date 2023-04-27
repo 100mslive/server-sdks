@@ -13,7 +13,7 @@ import { QueryObjectIterator } from "../utils/QueryObjectIterator";
  * The wrapper class that implements all
  * {@link https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/object Room API} calls.
  */
-export class RoomService {
+export default class RoomWrapper {
   private basePath = "/rooms";
 
   constructor(private apiService: APIService) {}

@@ -2,7 +2,7 @@ import { APIService } from "../services/APIService";
 import { RecordingEvent, RecordingEventFilterParams, TrackEventFilterParams } from "../types";
 import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 
-export class AnalyticsService {
+export default class AnalyticsWrapper {
   private basePath = "/analytics/events";
 
   constructor(private apiService: APIService) {}

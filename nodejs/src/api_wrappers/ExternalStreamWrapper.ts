@@ -2,7 +2,7 @@ import { APIService } from "../services/APIService";
 import { ExternalStream, ExternalStreamFilterParams, ExternalStreamStartParams } from "../types";
 import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 
-export class ExternalStreamService {
+export default class ExternalStreamWrapper {
   private basePath = "/external-streams";
 
   constructor(private apiService: APIService) {}

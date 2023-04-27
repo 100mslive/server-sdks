@@ -1,10 +1,7 @@
 import { logger, LogLevelOptions, setLogLevel } from "./services/LoggerService";
 import { AuthService } from "./services/AuthService";
 import { APIService } from "./services/APIService";
-import { RoomService } from "./apis/RoomService";
-import { ActiveRoomService } from "./apis/ActiveRoomService";
-import { SessionService } from "./apis/SessionService";
-import { RoomCodeService } from "./apis/RoomCodeService";
+import { ActiveRoomWrapper, RoomCodeWrapper, RoomWrapper, SessionWrapper } from "./api_wrappers";
 
 /**
  * Server-side SDK for 100ms REST API endpoints.
@@ -26,25 +23,25 @@ export class HMSSDK {
    * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/object Room API calls}.
    * @returns an instance of `RoomService`
    */
-  readonly rooms: RoomService;
+  readonly rooms: RoomWrapper;
 
   /**
    * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/object Active Room API calls}.
    * @returns an instance of `ActiveRoomService`
    */
-  readonly activeRooms: ActiveRoomService;
+  readonly activeRooms: ActiveRoomWrapper;
 
   /**
    * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/Sessions/object Session API calls}.
    * @returns an instance of `SessionService`
    */
-  readonly sessions: SessionService;
+  readonly sessions: SessionWrapper;
 
   /**
    * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/room-codes/room-code-object Room Code API calls}.
    * @returns an instance of `RoomCodeService`
    */
-  readonly roomCodes: RoomCodeService;
+  readonly roomCodes: RoomCodeWrapper;
 
   /**
    * @param accessKey App Access Key from Dashboard
@@ -66,10 +63,10 @@ export class HMSSDK {
     this.auth = new AuthService(accessKey, secret);
     this.api = new APIService(this.auth);
 
-    this.rooms = new RoomService(this.api);
-    this.activeRooms = new ActiveRoomService(this.api);
-    this.sessions = new SessionService(this.api);
-    this.roomCodes = new RoomCodeService(this.api);
+    this.rooms = new RoomWrapper(this.api);
+    this.activeRooms = new ActiveRoomWrapper(this.api);
+    this.sessions = new SessionWrapper(this.api);
+    this.roomCodes = new RoomCodeWrapper(this.api);
   }
 
   setLogLevel(level: LogLevelOptions) {
