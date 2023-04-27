@@ -10,7 +10,7 @@ import {
 } from "../types";
 import { logger } from "./LoggerService";
 
-export class AuthService {
+export default class AuthService {
   private managementToken?: ManagementToken;
   constructor(private accessKey: string, private secret: string) {}
 

@@ -1,10 +1,10 @@
-import { AuthService } from "./AuthService";
+import AuthService from "./AuthService";
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 import { logger } from "./LoggerService";
 import { ErrorFactory } from "../errorFactory";
 import { castDateFields, serializeQueryParams } from "../utils/typeUtils";
 
-export class APIService {
+export default class APIService {
   private baseUrl =
     process.env.HMS_ENV === "nonprod"
       ? "https://api-nonprod.100ms.live/v2"

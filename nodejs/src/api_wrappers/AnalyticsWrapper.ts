@@ -1,4 +1,4 @@
-import { APIService } from "../services/APIService";
+import APIService from "../services/APIService";
 import { Analytics } from "../types";
 import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 

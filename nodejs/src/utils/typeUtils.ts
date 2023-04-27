@@ -1,6 +1,8 @@
 /**
  * Utility functions to parse the response and cast date strings
- * to proper `Date` objects
+ * to proper `Date` objects.
+ *
+ * @internal
  */
 export function castDateFields<T>(payload: Record<string, any>): T {
   let key: keyof typeof payload;
@@ -21,13 +23,11 @@ export function castDateFields<T>(payload: Record<string, any>): T {
  * Utility functions to serializes the query params to construct
  * the query param string, with proper support for arrays.
  *
- *  **Without serializeQueryParams**:
- * - query params: `{ foo = [1,2,3] }`
- * - query param string: `?foo[]=1&foo[]=2&foo[]=3`
- *
- * **With serializeQueryParams**:
- * - query params: `{ foo = [1,2,3] }`
- * - query param string: `?foo=1&foo=2&foo=3`
+ * @internal
+ * @remarks
+ * Query params: `{ foo = [1,2,3] }`
+ * - **Without serializeQueryParams**: `?foo[]=1&foo[]=2&foo[]=3`
+ * - **With serializeQueryParams**: `?foo=1&foo=2&foo=3`
  */
 export function serializeQueryParams(params: any) {
   let options = "";

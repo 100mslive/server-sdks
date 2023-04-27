@@ -1,5 +1,5 @@
 import { logger } from "../services/LoggerService";
-import { APIService } from "../services/APIService";
+import APIService from "../services/APIService";
 import { Room, QueryResults } from "../types";
 import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 

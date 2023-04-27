@@ -1,6 +1,6 @@
 import { logger, LogLevelOptions, setLogLevel } from "./services/LoggerService";
-import { AuthService } from "./services/AuthService";
-import { APIService } from "./services/APIService";
+import AuthService from "./services/AuthService";
+import APIService from "./services/APIService";
 import { ActiveRoomWrapper, RoomCodeWrapper, RoomWrapper, SessionWrapper } from "./api_wrappers";
 
 /**
