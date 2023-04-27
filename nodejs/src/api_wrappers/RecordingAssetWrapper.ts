@@ -1,5 +1,5 @@
 import { APIService } from "../services/APIService";
-import { Object, RecordingAssetFilterParams, RecordingAssetPreSignedURLParams } from "../types";
+import { RecordingAsset } from "../types";
 import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 
 export default class RecordingAssetWrapper {
@@ -7,7 +7,7 @@ export default class RecordingAssetWrapper {
 
   constructor(private apiService: APIService) {}
 
-  list(filters?: RecordingAssetFilterParams): QueryObjectIterator<Object> {
+  list(filters?: RecordingAsset.FilterParams): QueryObjectIterator<Object> {
     const queryResultsIterable = new QueryObjectIterator<Object>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       filters ?? {}
@@ -19,7 +19,10 @@ export default class RecordingAssetWrapper {
     return this.apiService.get(`${this.basePath}/${assetId}`);
   }
 
-  generatePreSignedURL(assetId: string, params: RecordingAssetPreSignedURLParams): Promise<Object> {
+  generatePreSignedURL(
+    assetId: string,
+    params: RecordingAsset.PreSignedURLParams
+  ): Promise<Object> {
     return this.apiService.get(`${this.basePath}/${assetId}/presigned-url`, params);
   }
 }

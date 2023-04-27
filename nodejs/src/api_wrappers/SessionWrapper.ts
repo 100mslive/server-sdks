@@ -1,5 +1,5 @@
 import { APIService } from "../services/APIService";
-import { Session, SessionFilterOptions } from "../types";
+import { Session } from "../types";
 import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 
 /**
@@ -19,8 +19,8 @@ export default class SessionWrapper {
    * @param filters Session filters like room id, active status and time range
    * @returns a `HMS.QueryObjectIterator<HMS.Session>` object
    */
-  list(filters?: SessionFilterOptions): QueryObjectIterator<Session> {
-    const queryResultsIterable = new QueryObjectIterator<Session>(
+  list(filters?: Session.FilterParams): QueryObjectIterator<Session.Object> {
+    const queryResultsIterable = new QueryObjectIterator<Session.Object>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       filters ?? {}
     );
@@ -32,7 +32,7 @@ export default class SessionWrapper {
    * @param sessionId Session ID
    * @returns a `HMS.Session` object
    */
-  async retrieveById(sessionId: string): Promise<Session> {
+  async retrieveById(sessionId: string): Promise<Session.Object> {
     return this.apiService.get(`${this.basePath}/${sessionId}`);
   }
 }

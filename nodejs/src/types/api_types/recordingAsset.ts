@@ -1,12 +1,12 @@
 import { BaseRecordingAsset } from "./common";
 
-export interface RecordingAsset extends BaseRecordingAsset {
+export interface Object extends BaseRecordingAsset {
   job_id: string;
   room_id: string;
   session_id: string;
 }
 
-export interface RecordingAssetPreSignedURL {
+export interface PreSignedURL {
   id: string;
   path: string;
   url: string;
@@ -14,13 +14,13 @@ export interface RecordingAssetPreSignedURL {
 }
 
 // param types
-export interface RecordingAssetFilterParams {
+export interface FilterParams {
   room_id?: string;
   session_id?: string;
   status?: string;
   limit?: number;
 }
 
-export interface RecordingAssetPreSignedURLParams {
+export interface PreSignedURLParams {
   presign_duration?: number;
 }

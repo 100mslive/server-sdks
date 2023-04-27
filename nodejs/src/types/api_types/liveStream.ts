@@ -1,29 +1,29 @@
 import { BaseBeamObject, BaseRecordingAsset } from "./common";
 
-export interface LiveStream extends BaseBeamObject {
-  recording: LiveStreamRecording;
-  playback: LiveStreamPlayback;
+export interface Object extends BaseBeamObject {
+  recording: Recording;
+  playback: Playback;
   destination: string;
   recording_assets?: BaseRecordingAsset[];
 }
 
-export interface LiveStreamRecording {
+export interface Recording {
   hls_vod: boolean;
   single_file_per_layer: boolean;
 }
 
-export interface LiveStreamPlayback {
+export interface Playback {
   url: string;
 }
 
 // param types
-export interface LiveStreamStartParams {
+export interface StartParams {
   meeting_url: string;
-  recording?: LiveStreamRecording;
+  recording?: Recording;
   destination?: string;
 }
 
-export interface LiveStreamFilterParams {
+export interface FilterParams {
   room_id?: string;
   session_id?: string;
   status?: string;

@@ -1,5 +1,5 @@
 import { APIService } from "../services/APIService";
-import { RecordingEvent, RecordingEventFilterParams, TrackEventFilterParams } from "../types";
+import { Analytics } from "../types";
 import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 
 export default class AnalyticsWrapper {
@@ -7,7 +7,7 @@ export default class AnalyticsWrapper {
 
   constructor(private apiService: APIService) {}
 
-  listTrackEvents(filters: TrackEventFilterParams): QueryObjectIterator<TrackEvent> {
+  listTrackEvents(filters: Analytics.TrackEventFilterParams): QueryObjectIterator<TrackEvent> {
     const queryResultsIterable = new QueryObjectIterator<TrackEvent>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       filters ?? {}
@@ -15,8 +15,10 @@ export default class AnalyticsWrapper {
     return queryResultsIterable;
   }
 
-  listRecordingEvents(filters: RecordingEventFilterParams): QueryObjectIterator<RecordingEvent> {
-    const queryResultsIterable = new QueryObjectIterator<RecordingEvent>(
+  listRecordingEvents(
+    filters: Analytics.RecordingEventFilterParams
+  ): QueryObjectIterator<Analytics.RecordingEvent> {
+    const queryResultsIterable = new QueryObjectIterator<Analytics.RecordingEvent>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       filters ?? {}
     );

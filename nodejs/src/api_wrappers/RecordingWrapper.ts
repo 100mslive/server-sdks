@@ -1,5 +1,5 @@
 import { APIService } from "../services/APIService";
-import { Recording, RecordingFilterParams, RecordingStartParams } from "../types";
+import { Recording } from "../types";
 import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 
 export default class RecordingWrapper {
@@ -7,28 +7,28 @@ export default class RecordingWrapper {
 
   constructor(private apiService: APIService) {}
 
-  list(filters?: RecordingFilterParams): QueryObjectIterator<Recording> {
-    const queryResultsIterable = new QueryObjectIterator<Recording>(
+  list(filters?: Recording.FilterParams): QueryObjectIterator<Recording.Object> {
+    const queryResultsIterable = new QueryObjectIterator<Recording.Object>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       filters ?? {}
     );
     return queryResultsIterable;
   }
 
-  retrieve(objectId: string): Promise<Recording> {
+  retrieve(objectId: string): Promise<Recording.Object> {
     return this.apiService.get(`${this.basePath}/${objectId}`);
   }
 
-  start(roomId: string, params: RecordingStartParams): Promise<Recording> {
+  start(roomId: string, params: Recording.StartParams): Promise<Recording.Object> {
     return this.apiService.post(`${this.basePath}/room/${roomId}/start`, params);
   }
 
-  stop(objectId: string): Promise<Recording> {
+  stop(objectId: string): Promise<Recording.Object> {
     return this.apiService.post(`${this.basePath}/${objectId}/stop`, {});
   }
 
-  stopAll(roomId: string): QueryObjectIterator<Recording> {
-    const queryResultsIterable = new QueryObjectIterator<Recording>(
+  stopAll(roomId: string): QueryObjectIterator<Recording.Object> {
+    const queryResultsIterable = new QueryObjectIterator<Recording.Object>(
       (queryParams: Record<string, any>) =>
         this.apiService.post(`${this.basePath}/room/${roomId}/stop`, queryParams),
       {}

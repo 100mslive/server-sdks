@@ -1,18 +1,23 @@
 import { BaseBeamObject, BaseRecordingAsset, VideoResolution } from "./common";
 
-export interface Recording extends BaseBeamObject {
-  asset_types: string[];
+export interface Object extends BaseBeamObject {
+  destination: string;
+  rtmp_urls: string[];
+  recording: boolean;
+  resolution: VideoResolution;
   recording_assets?: BaseRecordingAsset[];
 }
 
 // param types
-export interface RecordingStartParams {
+export interface StartParams {
   meeting_url: string;
+  rtmp_urls: string[];
+  recording?: boolean;
   resolution?: VideoResolution;
-  audio_only?: boolean;
+  destination?: string;
 }
 
-export interface RecordingFilterParams {
+export interface FilterParams {
   room_id?: string;
   session_id?: string;
   status?: string;

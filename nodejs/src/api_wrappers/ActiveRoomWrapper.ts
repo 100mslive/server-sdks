@@ -1,15 +1,5 @@
 import { APIService } from "../services/APIService";
-import {
-  ActivePeersResponse,
-  ActiveRoom,
-  ActiveRoomPeer,
-  ActiveRoomPeerWithTrack,
-  EndActiveRoomOptions,
-  PeerUpdateOptions,
-  RemovePeerByIdOptions,
-  RemovePeerByRoleOptions,
-  RoomMessageOptions,
-} from "../types";
+import { ActiveRoom } from "../types";
 
 /**
  * The wrapper class that implements all
@@ -25,7 +15,7 @@ export default class ActiveRoomWrapper {
    * @param roomId Room ID
    * @returns a `HMS.ActiveRoom` object
    */
-  async retrieve(roomId: string): Promise<ActiveRoom> {
+  async retrieve(roomId: string): Promise<ActiveRoom.Object> {
     return this.apiService.get(`${this.basePath}/${roomId}`);
   }
 
@@ -36,7 +26,7 @@ export default class ActiveRoomWrapper {
    * @param peerId Peer ID
    * @returns a `HMS.ActiveRoomPeerWithTrack` object
    */
-  async retrievePeerDetails(roomId: string, peerId: string): Promise<ActiveRoomPeerWithTrack> {
+  async retrievePeerDetails(roomId: string, peerId: string): Promise<ActiveRoom.PeerWithTrack> {
     return this.apiService.get(`${this.basePath}/${roomId}/peers/${peerId}`);
   }
 
@@ -55,8 +45,8 @@ export default class ActiveRoomWrapper {
    * @param roomId Room ID
    * @returns a `Record<string, HMS.ActiveRoomPeer>` object
    */
-  async retrieveActivePeers(roomId: string): Promise<Record<string, ActiveRoomPeer>> {
-    const activePeers = await this.apiService.get<ActivePeersResponse>(
+  async retrieveActivePeers(roomId: string): Promise<Record<string, ActiveRoom.Peer>> {
+    const activePeers = await this.apiService.get<ActiveRoom.ActivePeersResponse>(
       `${this.basePath}/${roomId}/peers`
     );
     return activePeers.peers;
@@ -65,31 +55,31 @@ export default class ActiveRoomWrapper {
   /**
    * Update the `name`, `role` and `metadata` of a peer in an active room with
    * the room id and peer id. Specify the optional fields that need to be updated in
-   * the `options` param.
+   * the `params` param.
    * @param roomId Room ID
    * @param peerId Peer ID
-   * @param options Options of the Peer to be updated
+   * @param params params of the Peer to be updated
    * @returns a `HMS.ActiveRoomPeerWithTrack` object
    */
   async updatePeer(
     roomId: string,
     peerId: string,
-    options: PeerUpdateOptions
-  ): Promise<ActiveRoomPeerWithTrack> {
-    return this.apiService.post(`${this.basePath}/${roomId}/peers/${peerId}`, options);
+    params: ActiveRoom.PeerUpdateParams
+  ): Promise<ActiveRoom.PeerWithTrack> {
+    return this.apiService.post(`${this.basePath}/${roomId}/peers/${peerId}`, params);
   }
 
   /**
-   * Send a message to an active room. Specifying the receiver in `options`:
+   * Send a message to an active room. Specifying the receiver in `params`:
    * 1. `peer_id` - only that peer
    * 2. `role` - peers of that role
    * 3. `peer_id` and `role` - only to that peer (peer id has higher precedence)
    * 4. no `peer_id` or `role` specified - message broadcast to all peers
    * @param roomId Room ID
-   * @param options Options of the Message to be sent
+   * @param params params of the Message to be sent
    */
-  async sendMessage(roomId: string, options: RoomMessageOptions): Promise<void> {
-    await this.apiService.post(`${this.basePath}/${roomId}/send-message`, options);
+  async sendMessage(roomId: string, params: ActiveRoom.RoomMessageParams): Promise<void> {
+    await this.apiService.post(`${this.basePath}/${roomId}/send-message`, params);
     return;
   }
 
@@ -97,24 +87,24 @@ export default class ActiveRoomWrapper {
    * Remove a specific peer or a group of peers with same `role` in an active
    * room.
    * @param roomId Room ID
-   * @param options Options for removing a Peer
+   * @param params params for removing a Peer
    */
   async removePeer(
     roomId: string,
-    options: RemovePeerByIdOptions | RemovePeerByRoleOptions
+    params: ActiveRoom.RemovePeerByIdParams | ActiveRoom.RemovePeerByRoleParams
   ): Promise<void> {
-    await this.apiService.post(`${this.basePath}/${roomId}/remove-peers`, options);
+    await this.apiService.post(`${this.basePath}/${roomId}/remove-peers`, params);
     return;
   }
 
   /**
    * End the ongoing session in a room by removing all the peers. Use the `lock` field
-   * in `options` to disable the room. No peer can join until the room is enabled once again(refer `RoomService`).
+   * in `params` to disable the room. No peer can join until the room is enabled once again(refer `RoomService`).
    * @param roomId Room ID
-   * @param options Options for Ending an Active Room
+   * @param params params for Ending an Active Room
    */
-  async end(roomId: string, options: EndActiveRoomOptions): Promise<void> {
-    await this.apiService.post(`${this.basePath}/${roomId}/end-room`, options);
+  async end(roomId: string, params: ActiveRoom.EndRoomParams): Promise<void> {
+    await this.apiService.post(`${this.basePath}/${roomId}/end-room`, params);
     return;
   }
 }

@@ -1,5 +1,5 @@
 import { APIService } from "../services/APIService";
-import { RoomCode, RoomCodeFilterOptions, QueryResults } from "../types";
+import { RoomCode, QueryResults } from "../types";
 import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 
 export default class RoomCodeWrapper {
@@ -15,8 +15,8 @@ export default class RoomCodeWrapper {
    * @param filters Room Code filters like `enabled` status and `role`
    * @returns a `HMS.QueryObjectIterator<HMS.RoomCode>` object
    */
-  list(roomId: string, filters?: RoomCodeFilterOptions): QueryObjectIterator<RoomCode> {
-    const queryResultsIterable = new QueryObjectIterator<RoomCode>(
+  list(roomId: string, filters?: RoomCode.FilterParams): QueryObjectIterator<RoomCode.Object> {
+    const queryResultsIterable = new QueryObjectIterator<RoomCode.Object>(
       (queryParams: Record<string, any>) =>
         this.apiService.get(`${this.basePath}/room/${roomId}`, queryParams),
       filters ?? {}
@@ -30,8 +30,8 @@ export default class RoomCodeWrapper {
    * @param roomId Room ID
    * @returns a `RoomCode[]` object
    */
-  async create(roomId: string): Promise<RoomCode[]> {
-    const results: QueryResults<RoomCode> = await this.apiService.post(
+  async create(roomId: string): Promise<RoomCode.Object[]> {
+    const results: QueryResults<RoomCode.Object> = await this.apiService.post(
       `${this.basePath}/room/${roomId}`,
       {}
     );
@@ -45,7 +45,7 @@ export default class RoomCodeWrapper {
    * @param role Role for which the Room Code is to be created
    * @returns a `RoomCode` object
    */
-  async createForRole(roomId: string, role: string): Promise<RoomCode> {
+  async createForRole(roomId: string, role: string): Promise<RoomCode.Object> {
     return this.apiService.post(`${this.basePath}/room/${roomId}/role/${role}`, {});
   }
 
@@ -56,7 +56,7 @@ export default class RoomCodeWrapper {
    * @param enabled Enabled status of the Room Code
    * @returns a `RoomCode` object
    */
-  async enableOrDisable(code: string, enabled: boolean): Promise<RoomCode> {
+  async enableOrDisable(code: string, enabled: boolean): Promise<RoomCode.Object> {
     return this.apiService.post(`${this.basePath}/code`, {
       code,
       enabled,

@@ -1,15 +1,17 @@
 // interfaces
-export * from "./activeRoomTypes";
-export * from "./authTypes";
-export * from "./analyticsTypes";
-export * from "./common";
-export * from "./exceptionTypes";
-export * from "./externalStreamTypes";
-export * from "./liveStreamTypes";
-export * from "./paginationTypes";
-export * from "./policyTypes";
-export * from "./recordingAssetTypes";
-export * from "./recordingTypes";
-export * from "./roomCodeTypes";
-export * from "./roomTypes";
-export * from "./sessionTypes";
+export * from "./auth";
+export * from "./exception";
+export * from "./pagination";
+
+export * as Common from "./api_types/common";
+
+export * as ActiveRoom from "./api_types/activeRoom";
+export * as Analytics from "./api_types/analytics";
+export * as ExternalStream from "./api_types/externalStream";
+export * as LiveStream from "./api_types/liveStream";
+export * as Policy from "./api_types/policy";
+export * as RecordingAsset from "./api_types/recordingAsset";
+export * as Recording from "./api_types/recording";
+export * as RoomCode from "./api_types/roomCode";
+export * as Room from "./api_types/room";
+export * as Session from "./api_types/session";
