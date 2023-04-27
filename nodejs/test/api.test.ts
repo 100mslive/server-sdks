@@ -1,9 +1,9 @@
-import { SDK } from "../src";
+import * as HMS from "../src";
 
-let hms: SDK;
+let hms: HMS.SDK;
 
 beforeEach(() => {
-  hms = new SDK();
+  hms = new HMS.SDK();
 });
 
 describe("api service", () => {

@@ -1,10 +1,10 @@
-import { SDK } from "../src";
+import * as HMS from "../src";
 import { TEST_ROOM_ID } from "./testCommon";
 
-let hms: SDK;
+let hms: HMS.SDK;
 
 beforeEach(() => {
-  hms = new SDK();
+  hms = new HMS.SDK();
 });
 
 describe("active room service", () => {

@@ -1,4 +1,4 @@
-import { SDK } from "../src";
+import * as HMS from "../src";
 import { verify, Secret } from "jsonwebtoken";
 
 let hms: SDK;

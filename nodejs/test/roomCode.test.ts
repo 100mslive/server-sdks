@@ -1,10 +1,10 @@
-import { SDK } from "../src";
+import * as HMS from "../src";
 import { TEST_ROOM_ID } from "./testCommon";
 
-let hms: SDK;
+let hms: HMS.SDK;
 
 beforeEach(() => {
-  hms = new SDK();
+  hms = new HMS.SDK();
 });
 
 describe("room codes service", () => {
@@ -12,10 +12,8 @@ describe("room codes service", () => {
     const roomCodes = await hms.roomCodes.create(TEST_ROOM_ID);
     const roomCodesFromSameRoom = hms.roomCodes.list(roomCodes[0].room_id);
 
-    let index = 0;
-    for await (const roomCode of roomCodesFromSameRoom) {
-      expect(roomCodes).toContainEqual(roomCode);
-      index++;
+    for await (const roomCode of roomCodes) {
+      expect(roomCodesFromSameRoom).toContainEqual(roomCode);
     }
   });
 });
