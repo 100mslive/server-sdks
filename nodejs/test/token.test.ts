@@ -1,11 +1,11 @@
 import * as HMS from "../src";
 import { verify, Secret } from "jsonwebtoken";
 
-let hms: SDK;
+let hms: HMS.SDK;
 let secret: Secret = process.env.HMS_SECRET!;
 
 beforeEach(() => {
-  hms = new SDK();
+  hms = new HMS.SDK();
 });
 
 describe("management token", () => {
