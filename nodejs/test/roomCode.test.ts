@@ -8,7 +8,7 @@ beforeEach(() => {
 });
 
 describe("room codes service", () => {
-  test.skip("creates room codes and then get them", async () => {
+  test("creates room codes and then get them", async () => {
     const roomCodes = await hms.roomCodes.create(TEST_ROOM_ID);
     const roomCodesFromSameRoom = hms.roomCodes.list(roomCodes[0].room_id);
 

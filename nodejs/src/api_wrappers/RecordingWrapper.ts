@@ -1,5 +1,5 @@
 import APIService from "../services/APIService";
-import { Recording } from "../types";
+import { QueryResults, Recording } from "../types";
 import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 
 /**
@@ -30,7 +30,7 @@ export default class RecordingWrapper {
    * @param objectId Object ID
    * @returns a `HMS.Recording.Object` object
    */
-  retrieve(objectId: string): Promise<Recording.Object> {
+  async retrieve(objectId: string): Promise<Recording.Object> {
     return this.apiService.get(`${this.basePath}/${objectId}`);
   }
 
@@ -40,7 +40,7 @@ export default class RecordingWrapper {
    * @param params Params to start a room recording
    * @returns a `HMS.Recording.Object` object
    */
-  start(roomId: string, params: Recording.StartParams): Promise<Recording.Object> {
+  async start(roomId: string, params: Recording.StartParams): Promise<Recording.Object> {
     return this.apiService.post(`${this.basePath}/room/${roomId}/start`, params);
   }
 
@@ -49,21 +49,20 @@ export default class RecordingWrapper {
    * @param objectId Object ID
    * @returns a `HMS.Recording.Object` object
    */
-  stop(objectId: string): Promise<Recording.Object> {
+  async stop(objectId: string): Promise<Recording.Object> {
     return this.apiService.post(`${this.basePath}/${objectId}/stop`, {});
   }
 
   /**
    * Stop all recordings in a room.
    * @param roomId Room ID
-   * @returns a `HMS.QueryObjectIterator<HMS.Recording.Object>` object
+   * @returns a `HMS.Recording.Object[]` object
    */
-  stopAll(roomId: string): QueryObjectIterator<Recording.Object> {
-    const queryObjectIterable = new QueryObjectIterator<Recording.Object>(
-      (queryParams: Record<string, any>) =>
-        this.apiService.post(`${this.basePath}/room/${roomId}/stop`, queryParams),
+  async stopAll(roomId: string): Promise<Recording.Object[]> {
+    const results: QueryResults<Recording.Object> = await this.apiService.post(
+      `${this.basePath}/room/${roomId}/stop`,
       {}
     );
-    return queryObjectIterable;
+    return results.data ?? [];
   }
 }

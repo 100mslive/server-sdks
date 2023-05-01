@@ -1,5 +1,5 @@
 import APIService from "../services/APIService";
-import { ExternalStream } from "../types";
+import { ExternalStream, QueryResults } from "../types";
 import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 
 /**
@@ -30,7 +30,7 @@ export default class ExternalStreamWrapper {
    * @param streamId Stream ID
    * @returns a `HMS.ExternalStream.Object` object
    */
-  retrieve(streamId: string): Promise<ExternalStream.Object> {
+  async retrieve(streamId: string): Promise<ExternalStream.Object> {
     return this.apiService.get(`${this.basePath}/${streamId}`);
   }
 
@@ -40,7 +40,7 @@ export default class ExternalStreamWrapper {
    * @param params Params to start an external stream
    * @returns a `HMS.ExternalStream.Object` object
    */
-  start(roomId: string, params: ExternalStream.StartParams): Promise<ExternalStream.Object> {
+  async start(roomId: string, params: ExternalStream.StartParams): Promise<ExternalStream.Object> {
     return this.apiService.post(`${this.basePath}/room/${roomId}/start`, params);
   }
 
@@ -49,21 +49,20 @@ export default class ExternalStreamWrapper {
    * @param streamId Stream ID
    * @returns a `HMS.ExternalStream.Object` object
    */
-  stop(streamId: string): Promise<ExternalStream.Object> {
+  async stop(streamId: string): Promise<ExternalStream.Object> {
     return this.apiService.post(`${this.basePath}/${streamId}/stop`, {});
   }
 
   /**
    * Stop all external streams for a room.
    * @param roomId Room ID
-   * @returns a `HMS.QueryObjectIterator<HMS.ExternalStream.Object>` object
+   * @returns a `HMS.ExternalStream.Object[]` object
    */
-  stopAll(roomId: string): QueryObjectIterator<ExternalStream.Object> {
-    const queryObjectIterable = new QueryObjectIterator<ExternalStream.Object>(
-      (queryParams: Record<string, any>) =>
-        this.apiService.post(`${this.basePath}/room/${roomId}/stop`, queryParams),
+  async stopAll(roomId: string): Promise<ExternalStream.Object[]> {
+    const results: QueryResults<ExternalStream.Object> = await this.apiService.post(
+      `${this.basePath}/room/${roomId}/stop`,
       {}
     );
-    return queryObjectIterable;
+    return results.data ?? [];
   }
 }

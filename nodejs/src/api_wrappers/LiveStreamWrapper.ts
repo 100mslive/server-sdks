@@ -1,5 +1,5 @@
 import APIService from "../services/APIService";
-import { LiveStream } from "../types";
+import { LiveStream, QueryResults } from "../types";
 import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 
 /**
@@ -30,7 +30,7 @@ export default class LiveStreamWrapper {
    * @param streamId Stream ID
    * @returns a `HMS.LiveStream.Object` object
    */
-  retrieve(streamId: string): Promise<LiveStream.Object> {
+  async retrieve(streamId: string): Promise<LiveStream.Object> {
     return this.apiService.get(`${this.basePath}/${streamId}`);
   }
 
@@ -40,7 +40,7 @@ export default class LiveStreamWrapper {
    * @param params Params to start a live stream
    * @returns a `HMS.LiveStream.Object` object
    */
-  start(roomId: string, params: LiveStream.StartParams): Promise<LiveStream.Object> {
+  async start(roomId: string, params: LiveStream.StartParams): Promise<LiveStream.Object> {
     return this.apiService.post(`${this.basePath}/room/${roomId}/start`, params);
   }
 
@@ -51,7 +51,7 @@ export default class LiveStreamWrapper {
    * @param params Timed Metadata params
    * @returns a `HMS.LiveStream.Object` object
    */
-  sendTimedMetadata(
+  async sendTimedMetadata(
     streamId: string,
     params: LiveStream.TimedMetadataParams
   ): Promise<LiveStream.Object> {
@@ -63,7 +63,7 @@ export default class LiveStreamWrapper {
    * @param streamId Stream ID
    * @returns a `HMS.LiveStream.Object` object
    */
-  pauseRecording(streamId: string): Promise<LiveStream.Object> {
+  async pauseRecording(streamId: string): Promise<LiveStream.Object> {
     return this.apiService.post(`${this.basePath}/${streamId}/pause-recording`, {});
   }
 
@@ -72,7 +72,7 @@ export default class LiveStreamWrapper {
    * @param streamId Stream ID
    * @returns a `HMS.LiveStream.Object` object
    */
-  resumeRecording(streamId: string): Promise<LiveStream.Object> {
+  async resumeRecording(streamId: string): Promise<LiveStream.Object> {
     return this.apiService.post(`${this.basePath}/${streamId}/resume-recording`, {});
   }
 
@@ -81,21 +81,20 @@ export default class LiveStreamWrapper {
    * @param streamId Stream ID
    * @returns a `HMS.LiveStream.Object` object
    */
-  stop(streamId: string): Promise<LiveStream.Object> {
+  async stop(streamId: string): Promise<LiveStream.Object> {
     return this.apiService.post(`${this.basePath}/${streamId}/stop`, {});
   }
 
   /**
    * Stop all live streams for a room.
    * @param roomId Room ID
-   * @returns a `HMS.QueryObjectIterator<HMS.LiveStream.Object>` object
+   * @returns a `HMS.LiveStream.Object[]` object
    */
-  stopAll(roomId: string): QueryObjectIterator<LiveStream.Object> {
-    const queryObjectIterable = new QueryObjectIterator<LiveStream.Object>(
-      (queryParams: Record<string, any>) =>
-        this.apiService.post(`${this.basePath}/room/${roomId}/stop`, queryParams),
+  async stopAll(roomId: string): Promise<LiveStream.Object[]> {
+    const results: QueryResults<LiveStream.Object> = await this.apiService.post(
+      `${this.basePath}/room/${roomId}/stop`,
       {}
     );
-    return queryObjectIterable;
+    return results.data ?? [];
   }
 }

@@ -30,7 +30,7 @@ export default class RecordingAssetWrapper {
    * @param assetId Asset ID
    * @returns a `HMS.RecordingAsset.Object` object
    */
-  retrieve(assetId: string): Promise<RecordingAsset.Object> {
+  async retrieve(assetId: string): Promise<RecordingAsset.Object> {
     return this.apiService.get(`${this.basePath}/${assetId}`);
   }
 
@@ -40,7 +40,7 @@ export default class RecordingAssetWrapper {
    * @param params Params to generate pre-signed URL
    * @returns a `HMS.RecordingAsset.PreSignedURL` object
    */
-  generatePreSignedURL(
+  async generatePreSignedURL(
     assetId: string,
     presign_duration: number = 3600
   ): Promise<RecordingAsset.PreSignedURL> {
