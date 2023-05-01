@@ -30,8 +30,8 @@ export function castDateFields<T>(payload: Record<string, any>): T {
  * - **With serializeQueryParams**: `?foo=1&foo=2&foo=3`
  */
 export function serializeQueryParams(params: any) {
-  let options = "";
-  if (!params) return options;
+  let queryParamString = "";
+  if (!params) return queryParamString;
 
   const keys = Object.keys(params);
 
@@ -40,15 +40,15 @@ export function serializeQueryParams(params: any) {
     const isParamTypeArray = isParamTypeObject && params[key].length >= 0;
 
     if (!isParamTypeObject) {
-      options += `${key}=${params[key]}&`;
+      queryParamString += `${key}=${params[key]}&`;
     }
 
     if (isParamTypeObject && isParamTypeArray) {
       params[key].forEach((element: any) => {
-        options += `${key}=${element}&`;
+        queryParamString += `${key}=${element}&`;
       });
     }
   });
 
-  return options ? options.slice(0, -1) : options;
+  return queryParamString ? queryParamString.slice(0, -1) : queryParamString;
 }
