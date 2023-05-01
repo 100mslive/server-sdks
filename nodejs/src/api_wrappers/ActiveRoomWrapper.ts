@@ -13,7 +13,7 @@ export default class ActiveRoomWrapper {
   /**
    * Retrieve the details of an active room by specifying room id.
    * @param roomId Room ID
-   * @returns a `HMS.ActiveRoom` object
+   * @returns a `HMS.ActiveRoom.Object` object
    */
   async retrieve(roomId: string): Promise<ActiveRoom.Object> {
     return this.apiService.get(`${this.basePath}/${roomId}`);
@@ -24,7 +24,7 @@ export default class ActiveRoomWrapper {
    * room id and peer id.
    * @param roomId Room ID
    * @param peerId Peer ID
-   * @returns a `HMS.ActiveRoomPeerWithTrack` object
+   * @returns a `HMS.ActiveRoom.PeerWithTrack` object
    */
   async retrievePeerDetails(roomId: string, peerId: string): Promise<ActiveRoom.PeerWithTrack> {
     return this.apiService.get(`${this.basePath}/${roomId}/peers/${peerId}`);
@@ -33,17 +33,17 @@ export default class ActiveRoomWrapper {
   /**
    * Retrieve the list of peers currently present in an active room
    * with the room id. The returned list is a `Record` where every
-   * `HMS.ActiveRoomPeer` object is matched by its corresponding peer id.
+   * `HMS.ActiveRoom.Peer` object is matched by its corresponding peer id.
    * ### Example
    * ```ts
-   * Record<string, HMS.ActiveRoomPeer>{
+   * Record<string, HMS.ActiveRoom.Peer>{
    *  "peer_id_1": peerObj1
    *  "peer_id_2": peerObj2
    *  ...
    * }
    * ```
    * @param roomId Room ID
-   * @returns a `Record<string, HMS.ActiveRoomPeer>` object
+   * @returns a `Record<string, HMS.ActiveRoom.Peer>` object
    */
   async retrieveActivePeers(roomId: string): Promise<Record<string, ActiveRoom.Peer>> {
     const activePeers = await this.apiService.get<ActiveRoom.ActivePeersResponse>(
@@ -59,7 +59,7 @@ export default class ActiveRoomWrapper {
    * @param roomId Room ID
    * @param peerId Peer ID
    * @param params params of the Peer to be updated
-   * @returns a `HMS.ActiveRoomPeerWithTrack` object
+   * @returns a `HMS.ActiveRoom.PeerWithTrack` object
    */
   async updatePeer(
     roomId: string,
@@ -99,7 +99,7 @@ export default class ActiveRoomWrapper {
 
   /**
    * End the ongoing session in a room by removing all the peers. Use the `lock` field
-   * in `params` to disable the room. No peer can join until the room is enabled once again(refer `RoomService`).
+   * in `params` to disable the room. No peer can join until the room is enabled once again (using `RoomWrapper`).
    * @param roomId Room ID
    * @param params params for Ending an Active Room
    */

@@ -13,24 +13,24 @@ export default class RoomWrapper {
   constructor(private apiService: APIService) {}
 
   /**
-   * Get a list of room objects that satisfy the `filter` options. If you want
+   * Get a list of room objects that satisfy the `filter` params. If you want
    * to get all the rooms related to your account, don't pass in any param. A
-   * `HMS.Room` iterable is returned that can be iterated with a `for await` loop.
+   * `HMS.Room.Object` iterable is returned that can be iterated with a `for await` loop.
    * @param filters Room filters like enabled status and time range
-   * @returns a `HMS.QueryObjectIterator<HMS.Room>` object
+   * @returns a `HMS.QueryObjectIterator<HMS.Room.Object>` object
    */
   list(filters?: Room.FilterParams): QueryObjectIterator<Room.Object> {
-    const queryResultsIterable = new QueryObjectIterator<Room.Object>(
+    const queryObjectIterable = new QueryObjectIterator<Room.Object>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
       filters ?? {}
     );
-    return queryResultsIterable;
+    return queryObjectIterable;
   }
 
   /**
    * Get the details of a room by room id.
    * @param roomId Room ID
-   * @returns a `HMS.Room` object
+   * @returns a `HMS.Room.Object` object
    */
   async retrieveById(roomId: string): Promise<Room.Object> {
     return this.apiService.get(`${this.basePath}/${roomId}`);
@@ -39,7 +39,7 @@ export default class RoomWrapper {
   /**
    * Get the details of a room by room name.
    * @param name Room name
-   * @returns a `HMS.Room` object
+   * @returns a `HMS.Room.Object` object
    */
   async retrieveByName(name: string): Promise<Room.Object> {
     const results: QueryResults<Room.Object> = await this.apiService.get(this.basePath, { name });
@@ -55,7 +55,7 @@ export default class RoomWrapper {
    * Create a new room with a specific configuration. If the room already exists,
    * the object of that existing room will be returned.
    * @param config Config of the Room to be created
-   * @returns a `HMS.Room` object
+   * @returns a `HMS.Room.Object` object
    */
   async create(config?: Room.CreateParams): Promise<Room.Object> {
     return this.apiService.post(this.basePath, config);
@@ -66,7 +66,7 @@ export default class RoomWrapper {
    * `recording_info` and `region` by specifying the room id.
    * @param roomId Room ID
    * @param params Options of the Room to be updated
-   * @returns a `HMS.Room` object
+   * @returns a `HMS.Room.Object` object
    */
   async update(roomId: string, params: Room.UpdateParams): Promise<Room.Object> {
     return this.apiService.post(`${this.basePath}/${roomId}`, params);
@@ -77,7 +77,7 @@ export default class RoomWrapper {
    * any future attempts of joining that room until it is enabled again.
    * @param roomId Room ID
    * @param enabled Enabled status of Room
-   * @returns a `HMS.Room` object
+   * @returns a `HMS.Room.Object` object
    */
   async enableOrDisable(roomId: string, enabled: boolean): Promise<Room.Object> {
     return this.apiService.post(`${this.basePath}/${roomId}`, { enabled });

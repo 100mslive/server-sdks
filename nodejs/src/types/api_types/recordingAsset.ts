@@ -20,7 +20,3 @@ export interface FilterParams {
   status?: string;
   limit?: number;
 }
-
-export interface PreSignedURLParams {
-  presign_duration?: number;
-}

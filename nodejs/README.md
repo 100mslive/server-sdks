@@ -104,7 +104,7 @@ import HMS from "@100mslive/server-sdk";
 const hms = new HMS.SDK();
 // creating a room -
 const room = await hms.rooms.create();
-// with room options -
+// with room params -
 const roomCreateOptions = {
   name,
   description,
@@ -128,7 +128,7 @@ The SDK supports `ts`, `esm` and `cjs` completely. Here's how you can import the
 import HMS from "@100mslive/server-sdk";
 
 const hms = new HMS.SDK();
-// create a room with options -
+// create a room with params -
 let roomWithOptions: HMS.Room;
 const roomCreateOptions: HMS.RoomCreateOptions = {
   name,
