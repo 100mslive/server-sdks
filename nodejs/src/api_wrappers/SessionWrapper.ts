@@ -1,5 +1,6 @@
 import APIService from "../services/APIService";
-import { Session } from "../types";
+import { logger } from "../services/LoggerService";
+import { QueryResults, Session } from "../types";
 import { QueryObjectIterator } from "../utils/QueryObjectIterator";
 
 /**
@@ -34,5 +35,24 @@ export default class SessionWrapper {
    */
   async retrieveById(sessionId: string): Promise<Session.Object> {
     return this.apiService.get(`${this.basePath}/${sessionId}`);
+  }
+
+  /**
+   * Get the active session in a room. Throws an error if there's no active session in the
+   * specified room, so use this with a `try-catch` block.
+   * @param roomId Room ID
+   * @returns
+   */
+  async retrieveActiveByRoom(roomId: string): Promise<Session.Object> {
+    const results: QueryResults<Session.Object> = await this.apiService.get(this.basePath, {
+      room_id: roomId,
+      active: true,
+    });
+    if (!results.data || results.data.length === 0) {
+      const err = new Error(`no active Session found in the room with id - ${roomId}`);
+      logger.error("no active Session found", err);
+      throw err;
+    }
+    return results.data[0];
   }
 }

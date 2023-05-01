@@ -37,15 +37,16 @@ export default class RoomWrapper {
   }
 
   /**
-   * Get the details of a room by room name.
+   * Get the details of a room by room name. Throws an error if there's no room with that name,
+   * so use this with a `try-catch` block.
    * @param name Room name
    * @returns a `HMS.Room.Object` object
    */
   async retrieveByName(name: string): Promise<Room.Object> {
     const results: QueryResults<Room.Object> = await this.apiService.get(this.basePath, { name });
     if (!results.data || results.data.length === 0) {
-      const err = new Error(`no Roomfound with passed in name - ${name}`);
-      logger.error("no Roomfound", err);
+      const err = new Error(`no Room found with passed in name - ${name}`);
+      logger.error("no Room found", err);
       throw err;
     }
     return results.data[0];
