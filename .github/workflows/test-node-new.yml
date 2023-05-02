@@ -10,27 +10,34 @@ on:
       - '.editorconfig'
 
 jobs:
-  loadtest:
+  populate-room:
     runs-on: ubuntu-latest
+    env:
+      GOPRIVATE: github.com/brytecam/*,github.com/100mslive/*
+      GH_ACCESS_TOKEN: ${{ secrets.DOCKER_GIT_TOKEN }}
+      
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
         with:
           repository: 100mslive/go-sdk
-          token: ${{ secrets.DOCKER_GIT_TOKEN }}
-
-      - name: Install Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libvpx-dev libogg-dev libvorbis-dev libopus-dev portaudio19-dev pkg-config
+          token: ${{ GH_ACCESS_TOKEN }}
+          
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.20.3
       
-      - name: Configure git
-        run: git config --global --add url."git@github.com:".insteadOf "https://github.com/"
+      - name: Configure git and install deps
+        run: |
+          git config --global url.https://$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
+          make prep-gh
       
       - name: Run Load Test
         run: |
           sed 's/"duration": 600/"duration": 300/; s#"url": "https://supernova.qa-app.100ms.live/meeting/61dd8b374d8aa67e67402dfa/host"#"url": "https://karthikeyan-test.app.100ms.live/preview/ort-tjj-kcu"#; s/"count": 1/"count": 3/' example.config.json > config.json
           make loadtest
+          
   test:
     runs-on: ${{ matrix.os }}
     strategy:
