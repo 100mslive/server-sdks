@@ -32,7 +32,10 @@ jobs:
           node-version: ${{ matrix.node }}
           
       - name: Install modules
-        run: yarn
+        run: |
+          yarn
+          node_sdk_path=$(pwd)
+          cd
         working-directory: ./nodejs
         
       - name: Checkout go-sdk repo
@@ -84,8 +87,9 @@ jobs:
         run: sleep 10s
         
       - name: Run tests
-        run: yarn test
-        working-directory: ./nodejs
+        run: |
+          cd $node_sdk_path
+          yarn test
         env:
           HMS_ACCESS_KEY: ${{ secrets.HMS_ACCESS_KEY }}
           HMS_SECRET: ${{ secrets.HMS_SECRET }}
