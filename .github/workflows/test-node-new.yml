@@ -9,15 +9,33 @@ on:
       - 'LICENSE'
       - '.editorconfig'
 
-jobs:
-  populate-room:
-    runs-on: ubuntu-latest
+jobs:   
+  test:
+    runs-on: ${{ matrix.os }}
     env:
       GOPRIVATE: github.com/brytecam/*,github.com/100mslive/*
       GH_ACCESS_TOKEN: ${{ secrets.DOCKER_GIT_TOKEN }}
       
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+        node: [16.x]
+        
     steps:
-      - name: Checkout Repository
+      - name: Checkout this repo
+        uses: actions/checkout@v2
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+          
+      - name: Install modules
+        run: yarn
+        working-directory: ./nodejs
+        
+      - name: Checkout go-sdk repo
         uses: actions/checkout@v2
         with:
           repository: 100mslive/go-sdk
@@ -27,41 +45,47 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: 1.20.3
-      
-      - name: Configure git and install deps
+          
+      - name: Configure git and Install deps for go-sdk
         run: |
           git config --global url.https://$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
           make prep-gh
-      
-      - name: Run Load Test
-        run: |
-          sed 's/"duration": 600/"duration": 300/; s#"url": "https://supernova.qa-app.100ms.live/meeting/61dd8b374d8aa67e67402dfa/host"#"url": "https://karthikeyan-test.app.100ms.live/preview/ort-tjj-kcu"#; s/"count": 1/"count": 3/' example.config.json > config.json
-          make loadtest
           
-  test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-#          - windows-latest
-        node: [16.x]
-    defaults:
-      run:
-        working-directory: ./nodejs
+      - name: Set populate-room config
+        run: |
+          echo '{
+              "url": "https://karthikeyan-test.app.100ms.live/preview/ort-tjj-kcu",
+              "duration": 600,
+              "count": 3,
+              "subscribe_max_video": {
+                  "high": 1,
+                  "medium": 5,
+                  "low": 0,
+                  "priority": [
+                      "medium",
+                      "high"
+                  ]
+              },
+              "subscribe_max_audio": 0,
+              "join_rate": 5,
+              "logger": {
+                  "level": "none",
+                  "console_events": true,
+                  "output": ""
+              }
+          }' > config.json
 
-    steps:
-      - name: Sleep for a minute
-        run: sleep 60
-      - uses: actions/checkout@v2
-      - name: Set up Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node }}
-      - name: Install modules
-        run: yarn
+      - name: Start populate-room
+        run: |
+          make loadtest &
+          populate_room_pid=$!
+          
+      - name: Sleep for 10s
+        run: sleep 10s
+        
       - name: Run tests
         run: yarn test
+        working-directory: ./nodejs
         env:
           HMS_ACCESS_KEY: ${{ secrets.HMS_ACCESS_KEY }}
           HMS_SECRET: ${{ secrets.HMS_SECRET }}
