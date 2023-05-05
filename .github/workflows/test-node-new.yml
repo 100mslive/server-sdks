@@ -23,22 +23,7 @@ jobs:
           - ubuntu-latest
         node: [16.x]
         
-    defaults:
-      run:
-        working-directory: ./nodejs
-        
-    steps:
-      - name: Checkout this repo
-        uses: actions/checkout@v2
-        
-      - name: Set up Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node }}
-          
-      - name: Install modules
-        run: yarn
-        
+    steps:  
       - name: Checkout go-sdk repo
         uses: actions/checkout@v2
         with:
@@ -54,7 +39,6 @@ jobs:
         run: |
           git config --global url.https://$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
           make prep-gh
-        working-directory: go-sdk
           
       - name: Set populate-room config
         run: |
@@ -79,19 +63,30 @@ jobs:
                   "output": ""
               }
           }' > config.json
-        working-directory: go-sdk
 
       - name: Start populate-room
         run: |
           make loadtest &
           populate_room_pid=$!
-        working-directory: go-sdk
+        
+      - name: Checkout this repo
+        uses: actions/checkout@v2
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
           
+      - name: Install modules
+        run: yarn
+        working-directory: ./nodejs
+        
       - name: Sleep for 10s
         run: sleep 10s
         
       - name: Run tests
         run: yarn test
+        working-directory: ./nodejs
         env:
           HMS_ACCESS_KEY: ${{ secrets.HMS_ACCESS_KEY }}
           HMS_SECRET: ${{ secrets.HMS_SECRET }}
