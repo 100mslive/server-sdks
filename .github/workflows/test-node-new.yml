@@ -60,7 +60,7 @@ jobs:
               "subscribe_max_audio": 0,
               "join_rate": 5,
               "logger": {
-                  "level": "none",
+                  "level": "panic",
                   "console_events": true,
                   "output": ""
               }
