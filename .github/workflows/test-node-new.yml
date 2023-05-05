@@ -9,91 +9,45 @@ on:
       - 'LICENSE'
       - '.editorconfig'
 
-jobs:   
+jobs:
   test:
-    runs-on: ${{ matrix.os }}
-    
+    runs-on: ubuntu-latest
     env:
       GOPRIVATE: github.com/brytecam/*,github.com/100mslive/*
       GH_ACCESS_TOKEN: ${{ secrets.DOCKER_GIT_TOKEN }}
-      
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-        node: [16.x]
-        
-    steps:  
-      - name: Checkout go-sdk repo
+      HMS_ACCESS_KEY: ${{ secrets.HMS_ACCESS_KEY }}
+      HMS_SECRET: ${{ secrets.HMS_SECRET }}
+
+    steps:
+      - name: Checkout this repo
         uses: actions/checkout@v2
+
+      - name: Checkout submodules
+        run: |
+          git config --global url.https://$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
+          git submodule update --init --recursive
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
         with:
-          repository: 100mslive/go-sdk
-          token: ${{ env.GH_ACCESS_TOKEN }}
-          path: go-sdk
-          
+          node-version: 16.x
+
+      - name: Install modules
+        run: yarn
+        working-directory: ./nodejs
+
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
           go-version: 1.20.3
-          
+
       - name: Configure git and Install deps for go-sdk
         run: |
           git config --global url.https://$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
           make prep-gh
         working-directory: go-sdk
-          
-      - name: Set populate-room config
-        run: |
-          echo '{
-              "url": "https://karthikeyan-test.app.100ms.live/preview/ort-tjj-kcu",
-              "duration": 600,
-              "count": 3,
-              "subscribe_max_video": {
-                  "high": 1,
-                  "medium": 5,
-                  "low": 0,
-                  "priority": [
-                      "medium",
-                      "high"
-                  ]
-              },
-              "subscribe_max_audio": 0,
-              "join_rate": 5,
-              "logger": {
-                  "level": "panic",
-                  "console_events": true,
-                  "output": ""
-              }
-          }' > config.json
-        working-directory: go-sdk
 
-      - name: Start populate-room
-        run: |
-          make loadtest &
-          populate_room_pid=$!
-        working-directory: go-sdk
-        
-      - name: Checkout this repo
-        uses: actions/checkout@v2
-        
-      - name: Set up Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node }}
-          
-      - name: Install modules
-        run: yarn
-        working-directory: ./nodejs
-        
-      - name: Sleep for 10s
-        run: sleep 10s
-        
       - name: Run tests
-        run: yarn test
-        working-directory: ./nodejs
-        env:
-          HMS_ACCESS_KEY: ${{ secrets.HMS_ACCESS_KEY }}
-          HMS_SECRET: ${{ secrets.HMS_SECRET }}
-          
-      - name: Stop populate-room
-        run: kill $populate_room_pid
+        run: |
+          bash -x run-test.sh
+
