@@ -54,6 +54,7 @@ jobs:
         run: |
           git config --global url.https://$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
           make prep-gh
+        working-directory: ./go-sdk
           
       - name: Set populate-room config
         run: |
@@ -78,11 +79,13 @@ jobs:
                   "output": ""
               }
           }' > config.json
+        working-directory: ./go-sdk
 
       - name: Start populate-room
         run: |
           make loadtest &
           populate_room_pid=$!
+        working-directory: ./go-sdk
           
       - name: Sleep for 10s
         run: sleep 10s
