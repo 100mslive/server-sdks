@@ -89,3 +89,6 @@ jobs:
         env:
           HMS_ACCESS_KEY: ${{ secrets.HMS_ACCESS_KEY }}
           HMS_SECRET: ${{ secrets.HMS_SECRET }}
+          
+      - name: Stop populate-room
+        run: kill $populate_room_pid
