@@ -8,12 +8,12 @@ beforeEach(() => {
 });
 
 describe("room codes service", () => {
-  test.skip("creates room codes and then get them", async () => {
+  test("creates room codes and then get them", async () => {
     const roomCodes = await hms.roomCodes.create(TEST_ROOM_ID);
     const roomCodesFromSameRoom = hms.roomCodes.list(roomCodes[0].room_id);
 
-    for await (const roomCode of roomCodes) {
-      expect(roomCodesFromSameRoom).toContainEqual(roomCode);
+    for await (const roomCode of roomCodesFromSameRoom) {
+      expect(roomCodes).toContainEqual(roomCode);
     }
   });
 });
