@@ -1,0 +1,53 @@
+name: Test
+
+on:
+  workflow_dispatch:
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+      - 'LICENSE'
+      - '.editorconfig'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GOPRIVATE: github.com/brytecam/*,github.com/100mslive/*
+      GH_ACCESS_TOKEN: ${{ secrets.DOCKER_GIT_TOKEN }}
+      HMS_ACCESS_KEY: ${{ secrets.HMS_ACCESS_KEY }}
+      HMS_SECRET: ${{ secrets.HMS_SECRET }}
+
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v2
+
+      - name: Checkout submodules
+        run: |
+          git config --global url.https://$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
+          git submodule update --init --recursive
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+
+      - name: Install modules
+        run: yarn
+        working-directory: ./nodejs
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.20.3
+
+      - name: Configure git and Install deps for go-sdk
+        run: |
+          git config --global url.https://$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
+          make prep-gh
+        working-directory: go-sdk
+
+      - name: Run tests
+        run: |
+          bash -x run-test.sh
+
