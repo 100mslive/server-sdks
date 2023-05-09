@@ -68,8 +68,14 @@ export class QueryObjectIterator<T> {
           yield data[i];
         }
         // if returned data count is less than specified `limit` or default 10
-        // break the loop since the final page has been reached
-        if (data.length < this.queryParams["limit"] ?? 10) break;
+        // or `null` or an empty string, then break the loop
+        // since the final page has been reached
+        if (
+          data.length < (this.queryParams["limit"] ?? 10) ||
+          this.results["limit"] == null ||
+          this.queryParams["limit"] == ""
+        )
+          break;
       }
     }
   }
