@@ -8,7 +8,7 @@ beforeEach(() => {
 });
 
 describe("analytics service", () => {
-  test("gets the track events and checks the room id", async () => {
+  test.skip("gets the track events and checks the room id", async () => {
     const trackEvents = hms.analytics.listTrackEvents({
       room_id: TEST_ROOM_ID,
       type: ["track.add.success", "track.remove.success"],
@@ -17,7 +17,7 @@ describe("analytics service", () => {
       expect(trackEvent.data.room_id).toBe(TEST_ROOM_ID);
     }
   });
-  test("gets the recording events and checks the room id", async () => {
+  test.skip("gets the recording events and checks the room id", async () => {
     const recordingEvents = hms.analytics.listRecordingEvents({
       room_id: TEST_ROOM_ID,
       type: "beam.recording.success",

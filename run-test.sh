@@ -3,7 +3,7 @@ ls -la
 cd ./go-sdk
 
 echo '{
-		"url": "https://karthikeyan-test.app.100ms.live/preview/ort-tjj-kcu",
+		"url": ${TEST_MEETING_URL},
 		"duration": 600,
 		"count": 3,
 		"subscribe_max_video": {

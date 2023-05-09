@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
   push:
     paths-ignore:
-      - 'docs/**'
-      - 'README.md'
-      - 'LICENSE'
-      - '.editorconfig'
+      - "docs/**"
+      - "README.md"
+      - "LICENSE"
+      - ".editorconfig"
 
 jobs:
   test:
@@ -17,6 +17,9 @@ jobs:
       GH_ACCESS_TOKEN: ${{ secrets.DOCKER_GIT_TOKEN }}
       HMS_ACCESS_KEY: ${{ secrets.HMS_ACCESS_KEY }}
       HMS_SECRET: ${{ secrets.HMS_SECRET }}
+      TEST_ROOM_ID: ${{ secrets.TEST_ROOM_ID }}
+      TEST_ROOM_NAME: ${{ secrets.TEST_ROOM_NAME }}
+      TEST_MEETING_URL: ${{ secrets.TEST_MEETING_URL }}
 
     steps:
       - name: Checkout this repo
@@ -50,4 +53,3 @@ jobs:
       - name: Run tests
         run: |
           bash -x run-test.sh
-
