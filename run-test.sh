@@ -2,10 +2,10 @@ ls -la
 
 cd ./go-sdk
 
-echo '{
-		"url": ' > config.json
-echo "$TEST_MEETING_URL" >> config.json
-echo ',
+echo -n '{
+		"url": "' > config.json
+echo -n "$TEST_MEETING_URL" >> config.json
+echo '",
 		"duration": 600,
 		"count": 3,
 		"subscribe_max_video": {
