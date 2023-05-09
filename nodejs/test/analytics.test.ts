@@ -18,7 +18,7 @@ describe("analytics service", () => {
       break;
     }
   });
-  test.skip("gets the recording events and checks the room id", async () => {
+  test("gets the recording events and checks the room id", async () => {
     const recordingEvents = hms.analytics.listRecordingEvents({
       room_id: TEST_ROOM_ID,
       type: "beam.recording.success",

@@ -12,6 +12,8 @@ describe("recording service", () => {
     const startedRecording = await hms.recordings.start(TEST_ROOM_ID, {
       meeting_url: TEST_MEETING_URL,
     });
+    // wait for 1 minute
+    await new Promise((resolve) => setTimeout(resolve, 60000));
     const stoppedRecording = await hms.recordings.stop(startedRecording.id);
     expect(stoppedRecording.session_id).toEqual(startedRecording.session_id);
 
@@ -24,5 +26,5 @@ describe("recording service", () => {
       }
     }
     expect(flag).toBeTruthy;
-  });
+  }, 120000);
 });

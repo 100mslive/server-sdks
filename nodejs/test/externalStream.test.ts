@@ -1,5 +1,5 @@
 import * as HMS from "../src";
-import { TEST_MEETING_URL, TEST_ROOM_ID } from "./testCommon";
+import { TEST_MEETING_URL, TEST_ROOM_ID, TEST_RTMP_URL } from "./testCommon";
 
 let hms: HMS.SDK;
 
@@ -11,8 +11,10 @@ describe("external stream service", () => {
   test("starts and stops an external stream, then checks if it's present in list", async () => {
     const startedExternalStream = await hms.externalStreams.start(TEST_ROOM_ID, {
       meeting_url: TEST_MEETING_URL,
-      rtmp_urls: [],
+      rtmp_urls: [TEST_RTMP_URL],
     });
+    // wait for 1 minute
+    await new Promise((resolve) => setTimeout(resolve, 60000));
     const stoppedExternalStream = await hms.externalStreams.stop(startedExternalStream.id);
     expect(stoppedExternalStream.session_id).toEqual(startedExternalStream.session_id);
 
@@ -25,5 +27,5 @@ describe("external stream service", () => {
       }
     }
     expect(flag).toBeTruthy;
-  });
+  }, 120000);
 });
