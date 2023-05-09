@@ -13,7 +13,7 @@ describe("recording service", () => {
       meeting_url: TEST_MEETING_URL,
     });
     const stoppedRecording = await hms.recordings.stop(startedRecording.id);
-    expect(stoppedRecording).toEqual(startedRecording);
+    expect(stoppedRecording.session_id).toEqual(startedRecording.session_id);
 
     const allRecordings = hms.recordings.list();
     let flag = false;

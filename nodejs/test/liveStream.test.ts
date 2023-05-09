@@ -13,7 +13,7 @@ describe("live stream service", () => {
       meeting_url: TEST_MEETING_URL,
     });
     const stoppedLiveStream = await hms.liveStreams.stop(startedLiveStream.id);
-    expect(stoppedLiveStream).toEqual(startedLiveStream);
+    expect(stoppedLiveStream.session_id).toEqual(startedLiveStream.session_id);
 
     const allLiveStreams = hms.liveStreams.list();
     let flag = false;

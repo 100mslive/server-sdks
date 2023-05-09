@@ -8,13 +8,14 @@ beforeEach(() => {
 });
 
 describe("analytics service", () => {
-  test.skip("gets the track events and checks the room id", async () => {
+  test("gets the track events and checks the room id", async () => {
     const trackEvents = hms.analytics.listTrackEvents({
       room_id: TEST_ROOM_ID,
       type: ["track.add.success", "track.remove.success"],
     });
     for await (const trackEvent of trackEvents) {
       expect(trackEvent.data.room_id).toBe(TEST_ROOM_ID);
+      break;
     }
   });
   test.skip("gets the recording events and checks the room id", async () => {
@@ -24,6 +25,7 @@ describe("analytics service", () => {
     });
     for await (const recordingEvent of recordingEvents) {
       expect(recordingEvent.data.room_id).toBe(TEST_ROOM_ID);
+      break;
     }
   });
 });

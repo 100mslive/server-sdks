@@ -4,7 +4,7 @@ cd ./go-sdk
 
 echo '{
 		"url": ' > config.json
-echo ${{ secrets.TEST_MEETING_URL }} >> config.json
+echo "$TEST_MEETING_URL" >> config.json
 echo ',
 		"duration": 600,
 		"count": 3,

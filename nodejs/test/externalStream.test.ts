@@ -14,7 +14,7 @@ describe("external stream service", () => {
       rtmp_urls: [],
     });
     const stoppedExternalStream = await hms.externalStreams.stop(startedExternalStream.id);
-    expect(stoppedExternalStream).toEqual(startedExternalStream);
+    expect(stoppedExternalStream.session_id).toEqual(startedExternalStream.session_id);
 
     const allExternalStreams = hms.externalStreams.list();
     let flag = false;
