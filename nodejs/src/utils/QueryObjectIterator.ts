@@ -72,8 +72,8 @@ export class QueryObjectIterator<T> {
         // since the final page has been reached
         if (
           data.length < (this.queryParams["limit"] ?? 10) ||
-          this.results["limit"] == null ||
-          this.queryParams["limit"] == ""
+          (this.results as QueryResults<T>).last == null ||
+          (this.results as QueryResults<T>).last == ""
         )
           break;
       }
