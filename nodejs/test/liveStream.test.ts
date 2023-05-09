@@ -12,8 +12,8 @@ describe("live stream service", () => {
     const startedLiveStream = await hms.liveStreams.start(TEST_ROOM_ID, {
       meeting_url: TEST_MEETING_URL,
     });
-    // wait for 1 minute
-    await new Promise((resolve) => setTimeout(resolve, 60000));
+    // wait for 30 secs
+    await new Promise((resolve) => setTimeout(resolve, 30000));
     const stoppedLiveStream = await hms.liveStreams.stop(startedLiveStream.id);
     expect(stoppedLiveStream.session_id).toEqual(startedLiveStream.session_id);
 
@@ -26,5 +26,5 @@ describe("live stream service", () => {
       }
     }
     expect(flag).toBeTruthy;
-  }, 120000);
+  }, 40000);
 });

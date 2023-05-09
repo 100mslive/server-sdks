@@ -13,8 +13,8 @@ describe("external stream service", () => {
       meeting_url: TEST_MEETING_URL,
       rtmp_urls: [TEST_RTMP_URL],
     });
-    // wait for 1 minute
-    await new Promise((resolve) => setTimeout(resolve, 60000));
+    // wait for 30 secs
+    await new Promise((resolve) => setTimeout(resolve, 30000));
     const stoppedExternalStream = await hms.externalStreams.stop(startedExternalStream.id);
     expect(stoppedExternalStream.session_id).toEqual(startedExternalStream.session_id);
 
@@ -27,5 +27,5 @@ describe("external stream service", () => {
       }
     }
     expect(flag).toBeTruthy;
-  }, 120000);
+  }, 40000);
 });
