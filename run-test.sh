@@ -3,7 +3,9 @@ ls -la
 cd ./go-sdk
 
 echo '{
-		"url": ${TEST_MEETING_URL},
+		"url": ' > config.json
+echo ${{ secrets.TEST_MEETING_URL }} >> config.json
+echo ',
 		"duration": 600,
 		"count": 3,
 		"subscribe_max_video": {
@@ -22,7 +24,7 @@ echo '{
 				"console_events": true,
 				"output": ""
 		}
-}' > config.json
+}' >> config.json
 
 cat config.json
 make loadtest &
