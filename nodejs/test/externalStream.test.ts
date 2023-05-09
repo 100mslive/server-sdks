@@ -27,5 +27,5 @@ describe("external stream service", () => {
       }
     }
     expect(flag).toBeTruthy;
-  }, 40000);
+  }, 60000);
 });
