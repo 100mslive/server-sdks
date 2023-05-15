@@ -59,10 +59,13 @@ export default class APIService {
       },
       async (error: AxiosError) => {
         const originalRequest = error.config;
-        logger.error(`Error in making API call - ${originalRequest.url}`, {
-          statusCode: error.response?.status,
-          response: error.response?.data,
-        });
+        logger.error(
+          `Error in ${originalRequest.method?.toUpperCase()} API call - ${originalRequest.url}`,
+          {
+            statusCode: error.response?.status,
+            response: error.response?.data,
+          }
+        );
         if (
           (error.response?.status === 403 || error.response?.status === 401) &&
           !(originalRequest as any)._retry
