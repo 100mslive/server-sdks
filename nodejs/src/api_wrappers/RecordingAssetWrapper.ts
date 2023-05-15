@@ -20,7 +20,7 @@ export default class RecordingAssetWrapper {
   list(filters?: RecordingAsset.FilterParams): QueryObjectIterator<RecordingAsset.Object> {
     const queryObjectIterable = new QueryObjectIterator<RecordingAsset.Object>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
-      filters ?? {}
+      filters
     );
     return queryObjectIterable;
   }

@@ -20,7 +20,7 @@ export default class RecordingWrapper {
   list(filters?: Recording.FilterParams): QueryObjectIterator<Recording.Object> {
     const queryObjectIterable = new QueryObjectIterator<Recording.Object>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
-      filters ?? {}
+      filters
     );
     return queryObjectIterable;
   }
@@ -50,7 +50,7 @@ export default class RecordingWrapper {
    * @returns a `HMS.Recording.Object` object
    */
   async stop(objectId: string): Promise<Recording.Object> {
-    return this.apiService.post(`${this.basePath}/${objectId}/stop`, {});
+    return this.apiService.post(`${this.basePath}/${objectId}/stop`);
   }
 
   /**
@@ -60,8 +60,7 @@ export default class RecordingWrapper {
    */
   async stopAll(roomId: string): Promise<Recording.Object[]> {
     const results: QueryResults<Recording.Object> = await this.apiService.post(
-      `${this.basePath}/room/${roomId}/stop`,
-      {}
+      `${this.basePath}/room/${roomId}/stop`
     );
     return results.data ?? [];
   }

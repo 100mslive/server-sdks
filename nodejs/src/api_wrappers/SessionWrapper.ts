@@ -23,7 +23,7 @@ export default class SessionWrapper {
   list(filters?: Session.FilterParams): QueryObjectIterator<Session.Object> {
     const queryObjectIterable = new QueryObjectIterator<Session.Object>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
-      filters ?? {}
+      filters
     );
     return queryObjectIterable;
   }

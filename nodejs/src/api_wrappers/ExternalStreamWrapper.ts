@@ -20,7 +20,7 @@ export default class ExternalStreamWrapper {
   list(filters?: ExternalStream.FilterParams): QueryObjectIterator<ExternalStream.Object> {
     const queryObjectIterable = new QueryObjectIterator<ExternalStream.Object>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
-      filters ?? {}
+      filters
     );
     return queryObjectIterable;
   }
@@ -50,7 +50,7 @@ export default class ExternalStreamWrapper {
    * @returns a `HMS.ExternalStream.Object` object
    */
   async stop(streamId: string): Promise<ExternalStream.Object> {
-    return this.apiService.post(`${this.basePath}/${streamId}/stop`, {});
+    return this.apiService.post(`${this.basePath}/${streamId}/stop`);
   }
 
   /**
@@ -60,8 +60,7 @@ export default class ExternalStreamWrapper {
    */
   async stopAll(roomId: string): Promise<ExternalStream.Object[]> {
     const results: QueryResults<ExternalStream.Object> = await this.apiService.post(
-      `${this.basePath}/room/${roomId}/stop`,
-      {}
+      `${this.basePath}/room/${roomId}/stop`
     );
     return results.data ?? [];
   }

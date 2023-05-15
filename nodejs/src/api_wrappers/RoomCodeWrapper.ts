@@ -23,7 +23,7 @@ export default class RoomCodeWrapper {
     const queryObjectIterable = new QueryObjectIterator<RoomCode.Object>(
       (queryParams: Record<string, any>) =>
         this.apiService.get(`${this.basePath}/room/${roomId}`, queryParams),
-      filters ?? {}
+      filters
     );
     return queryObjectIterable;
   }
@@ -36,8 +36,7 @@ export default class RoomCodeWrapper {
    */
   async create(roomId: string): Promise<RoomCode.Object[]> {
     const results: QueryResults<RoomCode.Object> = await this.apiService.post(
-      `${this.basePath}/room/${roomId}`,
-      {}
+      `${this.basePath}/room/${roomId}`
     );
     return results.data ?? [];
   }
@@ -50,7 +49,7 @@ export default class RoomCodeWrapper {
    * @returns a `HMS.RoomCode.Object` object
    */
   async createForRole(roomId: string, role: string): Promise<RoomCode.Object> {
-    return this.apiService.post(`${this.basePath}/room/${roomId}/role/${role}`, {});
+    return this.apiService.post(`${this.basePath}/room/${roomId}/role/${role}`);
   }
 
   /**

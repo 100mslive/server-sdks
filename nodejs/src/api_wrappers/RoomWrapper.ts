@@ -22,7 +22,7 @@ export default class RoomWrapper {
   list(filters?: Room.FilterParams): QueryObjectIterator<Room.Object> {
     const queryObjectIterable = new QueryObjectIterator<Room.Object>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
-      filters ?? {}
+      filters
     );
     return queryObjectIterable;
   }

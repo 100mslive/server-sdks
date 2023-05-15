@@ -29,10 +29,10 @@ export class QueryObjectIterator<T> {
 
   constructor(
     queryFunction: (queryParams: Record<string, any>) => Promise<QueryResults<T> | EventResults<T>>,
-    queryParams: Record<string, any>
+    queryParams?: Record<string, any>
   ) {
     this.queryFunction = queryFunction;
-    this.queryParams = queryParams;
+    this.queryParams = queryParams ?? {};
     this.isNextCached = false;
   }
 
@@ -52,7 +52,7 @@ export class QueryObjectIterator<T> {
 
       // set "last" of latest query as "start" for current query
       if ((this.results as QueryResults<T>)?.last || (this.results as EventResults<T>)?.next) {
-        this.queryParams["start"] =
+        this.queryParams.start =
           (this.results as QueryResults<T>)?.last ?? (this.results as EventResults<T>)?.next;
       }
       // call query function and set `isNextCached` to true
@@ -71,7 +71,7 @@ export class QueryObjectIterator<T> {
         // or `null` or an empty string, then break the loop
         // since the final page has been reached
         if (
-          data.length < (this.queryParams["limit"] ?? 10) ||
+          data.length < (this.queryParams.limit ?? 10) ||
           (this.results as QueryResults<T>).last == null ||
           (this.results as QueryResults<T>).last == ""
         )

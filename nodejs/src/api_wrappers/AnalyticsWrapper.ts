@@ -25,7 +25,7 @@ export default class AnalyticsWrapper {
   ): QueryObjectIterator<Analytics.TrackEvent.Object> {
     const queryObjectIterable = new QueryObjectIterator<Analytics.TrackEvent.Object>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
-      filters ?? {}
+      filters
     );
     return queryObjectIterable;
   }
@@ -42,7 +42,7 @@ export default class AnalyticsWrapper {
   ): QueryObjectIterator<Analytics.RecordingEvent.Object> {
     const queryObjectIterable = new QueryObjectIterator<Analytics.RecordingEvent.Object>(
       (queryParams: Record<string, any>) => this.apiService.get(this.basePath, queryParams),
-      filters ?? {}
+      filters
     );
     return queryObjectIterable;
   }
