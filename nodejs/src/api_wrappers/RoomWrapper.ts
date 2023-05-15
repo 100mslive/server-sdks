@@ -45,8 +45,8 @@ export default class RoomWrapper {
   async retrieveByName(name: string): Promise<Room.Object> {
     const results: QueryResults<Room.Object> = await this.apiService.get(this.basePath, { name });
     if (!results.data || results.data.length === 0) {
-      const err = new Error(`no Room found with passed in name - ${name}`);
-      logger.error("no Room found", err);
+      const err = new Error(`No Room found with passed in name - ${name}`);
+      logger.error("No Room found", err);
       throw err;
     }
     return results.data[0];

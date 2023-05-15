@@ -49,8 +49,8 @@ export default class SessionWrapper {
       active: true,
     });
     if (!results.data || results.data.length === 0) {
-      const err = new Error(`no active Session found in the room with id - ${roomId}`);
-      logger.error("no active Session found", err);
+      const err = new Error(`No active Session found in the room with id - ${roomId}`);
+      logger.error("No active Session found", err);
       throw err;
     }
     return results.data[0];

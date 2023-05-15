@@ -89,7 +89,7 @@ export class HMSSDK {
     }
     if (!accessKey || !secret) {
       const err = new Error("Please provide access key and secret key.");
-      logger.error("access key or secret is not defined", err);
+      logger.error("Access key or secret not defined", err);
       throw err;
     }
     this.auth = new AuthService(accessKey, secret);

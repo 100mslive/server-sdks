@@ -24,7 +24,7 @@ export default class AuthService {
       !this.managementToken ||
       this.isTokenExpired(this.managementToken.token)
     ) {
-      logger.debug("generating management token", tokenConfig);
+      logger.debug("Generating management token", tokenConfig);
       this.managementToken = await this.generateToken(TokenType.Management, tokenConfig);
     }
     return this.managementToken;
@@ -85,7 +85,7 @@ export default class AuthService {
       const currTimeSeconds = Math.floor(Date.now() / 1000);
       return !exp || exp + buffer < currTimeSeconds;
     } catch (err) {
-      logger.error("error in decoding token", err);
+      logger.error("Error in decoding token", err);
     }
   }
 

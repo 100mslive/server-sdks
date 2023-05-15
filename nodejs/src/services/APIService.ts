@@ -1,5 +1,5 @@
 import AuthService from "./AuthService";
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { logger } from "./LoggerService";
 import { ErrorFactory } from "../errorFactory";
 import { castDateFields, serializeQueryParams } from "../utils/typeUtils";
@@ -15,9 +15,6 @@ export default class APIService {
     this.axios = axios.create({
       baseURL: this.baseUrl,
       timeout: 3 * 60000,
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
     this.setupAxios();
   }
@@ -27,13 +24,19 @@ export default class APIService {
       params: queryParams,
       paramsSerializer: (params) => serializeQueryParams(params),
     });
-    logger.debug(`get call to path - ${path}, status code - ${resp.status}`);
+    logger.debug(
+      `GET - ${path}
+          Status code: ${resp.status}`
+    );
     return castDateFields<T>(resp.data);
   }
 
-  async post<T, P>(path: string, payload: P): Promise<T> {
-    const resp: AxiosResponse = await this.axios.post(path, payload || {});
-    logger.debug(`post call to path - ${path}, status code - ${resp.status}`);
+  async post<T, P>(path: string, payload?: P): Promise<T> {
+    const resp: AxiosResponse = await this.axios.post(path, payload ?? {});
+    logger.debug(
+      `POST - ${path}
+          Status code: ${resp.status}`
+    );
     return castDateFields<T>(resp.data);
   }
 
@@ -54,15 +57,18 @@ export default class APIService {
       (response) => {
         return response;
       },
-      async (error) => {
-        logger.error("error in making api call", { response: error.response?.data });
+      async (error: AxiosError) => {
         const originalRequest = error.config;
+        logger.error(`Error in making API call - ${originalRequest.url}`, {
+          statusCode: error.response?.status,
+          response: error.response?.data,
+        });
         if (
           (error.response?.status === 403 || error.response?.status === 401) &&
-          !originalRequest._retry
+          !(originalRequest as any)._retry
         ) {
-          logger.debug("retrying request with refreshed token");
-          originalRequest._retry = true;
+          logger.debug("Retrying request with refreshed token");
+          (originalRequest as any)._retry = true;
           const { token: authToken } = await this.authService.getManagementToken({
             forceNew: true,
           });
