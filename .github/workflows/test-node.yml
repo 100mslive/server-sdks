@@ -20,6 +20,7 @@ jobs:
       TEST_ROOM_ID: ${{ secrets.TEST_ROOM_ID }}
       TEST_ROOM_NAME: ${{ secrets.TEST_ROOM_NAME }}
       TEST_MEETING_URL: ${{ secrets.TEST_MEETING_URL }}
+      TEST_RTMP_URL: ${{ secrets.TEST_RTMP_URL }}
 
     steps:
       - name: Checkout this repo
