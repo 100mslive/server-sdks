@@ -49,7 +49,7 @@ jobs:
         run: |
           git config --global url.https://$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
           make prep-gh
-        working-directory: ./go-sdk
+        working-directory: ./.github/populate-room
 
       - name: Populate Room
         run: |
@@ -82,7 +82,7 @@ jobs:
           populate_room_pid=$!
           sleep 100
           echo "started load-test pid=$populate_room_pid"
-        working-directory: ./go-sdk
+        working-directory: ./.github/populate-room
 
       - name: Run tests
         run: |
