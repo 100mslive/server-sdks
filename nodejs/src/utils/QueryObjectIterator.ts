@@ -47,9 +47,6 @@ export class QueryObjectIterator<T> {
       (this.results as QueryResults<T>)?.data ||
       (this.results as EventResults<T>)?.events
     ) {
-      let data =
-        (this.results as QueryResults<T>)?.data ?? (this.results as EventResults<T>)?.events;
-
       // set "last" of latest query as "start" for current query
       if ((this.results as QueryResults<T>)?.last || (this.results as EventResults<T>)?.next) {
         this.queryParams.start =
@@ -58,6 +55,9 @@ export class QueryObjectIterator<T> {
       // call query function and set `isNextCached` to true
       this.results = await this.queryFunction(this.queryParams);
       this.isNextCached = true;
+      let data =
+        (this.results as QueryResults<T>)?.data ?? (this.results as EventResults<T>)?.events;
+
       if (data) {
         // iterate through returned data if present and yield it
         for (let i = 0; i < data.length; i++) {
