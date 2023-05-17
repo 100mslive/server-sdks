@@ -1,4 +1,4 @@
-export interface RoomCode {
+export interface Object {
   code: string;
   room_id: string;
   role: string;
@@ -8,7 +8,7 @@ export interface RoomCode {
 }
 
 //param types
-export interface RoomCodeFilterOptions {
+export interface FilterParams {
   role?: string;
   enabled?: boolean;
   limit?: number;

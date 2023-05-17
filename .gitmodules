@@ -1,0 +1,3 @@
+[submodule "populate-room"]
+	path = .github/populate-room
+	url = https://github.com/100mslive/go-sdk

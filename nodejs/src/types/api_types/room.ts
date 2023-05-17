@@ -1,4 +1,4 @@
-export interface Room {
+export interface Object {
   id: string;
   name: string;
   enabled: boolean;
@@ -7,7 +7,7 @@ export interface Room {
   app_id: string;
   recording_source_template?: boolean;
   enabled_source_template?: boolean;
-  recording_info?: RoomRecordingInfo;
+  recording_info?: RecordingInfo;
   template_id: string;
   template: string;
   region: string;
@@ -16,12 +16,12 @@ export interface Room {
   customer: string;
 }
 
-export interface RoomRecordingInfo {
+export interface RecordingInfo {
   enabled: boolean;
-  upload_info?: RoomRecordingUploadInfo;
+  upload_info?: RecordingUploadInfo;
 }
 
-export interface RoomRecordingUploadInfo {
+export interface RecordingUploadInfo {
   type: string;
   location: string;
   prefix?: string;
@@ -35,20 +35,20 @@ export interface RoomRecordingUploadInfo {
 }
 
 //param types
-export interface RoomFilterOptions {
+export interface FilterParams {
   enabled?: boolean;
   before?: Date;
   after?: Date;
   limit?: number;
 }
 
-export interface RoomUpdateOptions {
+export interface UpdateParams {
   name?: string;
   description?: string;
-  recording_info?: RoomRecordingInfo;
+  recording_info?: RecordingInfo;
   region?: string;
 }
 
-export interface RoomCreateOptions extends RoomUpdateOptions {
+export interface CreateParams extends UpdateParams {
   template_id?: string;
 }

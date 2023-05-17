@@ -1,10 +1,10 @@
-import { SDK } from "../src";
+import * as HMS from "../src";
 import { TEST_ROOM_NAME } from "./testCommon";
 
-let hms: SDK;
+let hms: HMS.SDK;
 
 beforeEach(() => {
-  hms = new SDK();
+  hms = new HMS.SDK();
 });
 
 describe("room service", () => {
@@ -14,7 +14,7 @@ describe("room service", () => {
     const roomById = await hms.rooms.retrieveById(room.id);
     const roomByName = await hms.rooms.retrieveByName(room.name);
     const inactiveRooms = hms.rooms.list({ enabled: false });
-    console.log(room);
+
     for await (const inactiveRoom of inactiveRooms) {
       expect(room.id).not.toBe(inactiveRoom.id);
     }

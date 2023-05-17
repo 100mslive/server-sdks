@@ -1,9 +1,10 @@
-import { AuthService } from "./AuthService";
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
+import AuthService from "./AuthService";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { logger } from "./LoggerService";
 import { ErrorFactory } from "../errorFactory";
+import { castDateFields, serializeQueryParams } from "../utils/typeUtils";
 
-export class APIService {
+export default class APIService {
   private baseUrl =
     process.env.HMS_ENV === "nonprod"
       ? "https://api-nonprod.100ms.live/v2"
@@ -14,23 +15,29 @@ export class APIService {
     this.axios = axios.create({
       baseURL: this.baseUrl,
       timeout: 3 * 60000,
-      headers: {
-        "Content-Type": "application/json",
-      },
     });
     this.setupAxios();
   }
 
   async get<T>(path: string, queryParams?: Record<string, any>): Promise<T> {
-    const resp: AxiosResponse = await this.axios.get(path, { params: queryParams });
-    logger.debug(`get call to path - ${path}, status code - ${resp.status}`);
-    return resp.data;
+    const resp: AxiosResponse = await this.axios.get(path, {
+      params: queryParams,
+      paramsSerializer: (params) => serializeQueryParams(params),
+    });
+    logger.debug(
+      `GET - ${path}
+          Status code: ${resp.status}`
+    );
+    return castDateFields<T>(resp.data);
   }
 
-  async post<T, P>(path: string, payload: P): Promise<T> {
-    const resp: AxiosResponse = await this.axios.post(path, payload || {});
-    logger.debug(`post call to path - ${path}, status code - ${resp.status}`);
-    return resp.data;
+  async post<T, P>(path: string, payload?: P): Promise<T> {
+    const resp: AxiosResponse = await this.axios.post(path, payload ?? {});
+    logger.debug(
+      `POST - ${path}
+          Status code: ${resp.status}`
+    );
+    return castDateFields<T>(resp.data);
   }
 
   private setupAxios() {
@@ -50,15 +57,21 @@ export class APIService {
       (response) => {
         return response;
       },
-      async (error) => {
-        logger.error("error in making api call", { response: error.response?.data });
+      async (error: AxiosError) => {
         const originalRequest = error.config;
+        logger.error(
+          `Error in ${originalRequest.method?.toUpperCase()} API call - ${originalRequest.url}`,
+          {
+            statusCode: error.response?.status,
+            response: error.response?.data,
+          }
+        );
         if (
           (error.response?.status === 403 || error.response?.status === 401) &&
-          !originalRequest._retry
+          !(originalRequest as any)._retry
         ) {
-          logger.debug("retrying request with refreshed token");
-          originalRequest._retry = true;
+          logger.debug("Retrying request with refreshed token");
+          (originalRequest as any)._retry = true;
           const { token: authToken } = await this.authService.getManagementToken({
             forceNew: true,
           });

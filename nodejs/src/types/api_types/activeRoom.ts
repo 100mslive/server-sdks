@@ -1,23 +1,23 @@
 import { BasePeer } from "./common";
 
-export interface ActiveRoom {
+export interface Object {
   id: string;
   name: string;
   customer_id: string;
-  session: ActiveRoomSession;
+  session: Session;
 }
 
-export interface ActiveRoomSession {
+export interface Session {
   id: string;
   created_at: Date;
   peers: string[];
 }
 
-export interface ActiveRoomPeer extends BasePeer {
+export interface Peer extends BasePeer {
   metadata: string;
 }
 
-export interface ActiveRoomPeerWithTrack extends ActiveRoomPeer {
+export interface PeerWithTrack extends Peer {
   tracks: Record<string, PeerTrack>;
 }
 
@@ -33,33 +33,33 @@ export interface PeerTrack {
 
 // param types
 export interface ActivePeersResponse {
-  peers: Record<string, ActiveRoomPeer>;
+  peers: Record<string, Peer>;
 }
 
-export interface PeerUpdateOptions {
+export interface PeerUpdateParams {
   name?: string;
   role?: string;
   metadata?: string;
 }
 
-export interface RoomMessageOptions {
+export interface RoomMessageParams {
   peerId?: string;
   role?: string;
   message: string;
   type?: string;
 }
 
-export interface RemovePeerByIdOptions {
+export interface RemovePeerByIdParams {
   peer_id: string;
   reason?: string;
 }
 
-export interface RemovePeerByRoleOptions {
+export interface RemovePeerByRoleParams {
   role: string;
   reason?: string;
 }
 
-export interface EndActiveRoomOptions {
+export interface EndRoomParams {
   reason?: string;
   lock?: boolean;
 }

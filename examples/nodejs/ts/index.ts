@@ -1,105 +1,69 @@
 import HMS from "@100mslive/server-sdk";
+// OR, in case that doesn't work:
+// import * as HMS from "@100mslive/server-sdk";
 
 const accessKey = process.env.HMS_ACCESS_KEY;
 const secret = process.env.HMS_SECRET;
+const TEST_MEETING_URL = "test_meeting_id";
 
-const hms = new HMS.SDK(accessKey, secret);
+async function exampleUsage() {
+  const hms = new HMS.SDK(accessKey, secret);
 
-// Get Auth Token
-hms.auth
-  .getAuthToken({
-    roomId: "test_room_id",
-    role: "host",
-    userId: "test_user",
-  })
-  .then((tokenObj) => console.log(`Auth Token: ${tokenObj.token}`));
-
-// Get Management Token
-hms.auth
-  .getManagementToken()
-  .then((tokenObj) => console.log(`Management Token: ${tokenObj.token}`));
-
-// Rooms Example
-async function roomsExample() {
-  // creating a room -
-  const room = await hms.rooms.create();
-  // with room options -
-  const roomCreateOptions: HMS.RoomCreateOptions = {
-    name: "room-name",
+  // create room -
+  const roomCreateOptions: HMS.Room.CreateParams = {
+    name: "new-room",
     description: "room description",
     region: "us",
   };
-  const roomWithOptions = await hms.rooms.create(roomCreateOptions);
+  const room = await hms.rooms.create(roomCreateOptions);
 
-  // updating a room -
-  const roomUpdateOptions: HMS.RoomUpdateOptions = { name: "new-room-name" };
-  const updatedRoom = await hms.rooms.update(room.id, roomUpdateOptions);
-  console.log(room, roomWithOptions, updatedRoom);
-}
+  // get auth token -
+  const authToken = await hms.auth.getAuthToken({
+    roomId: room.id,
+    role: "host",
+    userId: "test_user",
+  });
+  console.log(`Auth Token: ${authToken.token}`);
 
-// Room Codes Example
-async function roomCodesExample() {
   // create room codes -
-  const roomCodesForRoom = await hms.roomCodes.create("roomId");
+  const roomCodesForRoom = await hms.roomCodes.create(room.id);
   console.log(roomCodesForRoom);
 
-  // disable a room code -
-  const disabledRoomCode = await hms.roomCodes.enableOrDisable(
-    roomCodesForRoom[0].code,
-    false
-  );
-  console.log(disabledRoomCode);
-}
-
-// Active Rooms Example
-async function activeRoomsExample() {
-  // list peers in active room -
-  const peers = await hms.activeRooms.retrieveActivePeers("roomId");
-  console.log(peers);
-
   // send broadcast message to all peers -
-  await hms.activeRooms.sendMessage("roomId", { message: "test" });
-}
+  await hms.activeRooms.sendMessage(room.id, { message: "test" });
 
-// Sessions Example
-async function sessionsExample() {
-  // list all sessions -
-  const allSessionsIterable = hms.sessions.list();
-  for await (const session of allSessionsIterable) {
-    console.log(session);
-    if (!allSessionsIterable.isNextCached) {
-      console.log("the next loop is gonna take some time");
-    }
-  }
+  // start room recording -
+  const recording = await hms.recordings.start(room.id, {
+    meeting_url: TEST_MEETING_URL,
+  });
+
+  // wait for 30 secs and stop the recording -
+  await new Promise((resolve) => setTimeout(resolve, 30000));
+  await hms.recordings.stop(recording.id);
 
   // list sessions associated with a specific room -
-  const sessionFilters = {
-    room_id: "test_room_id",
+  const sessionFilters: HMS.Session.FilterParams = {
+    room_id: room.id,
     limit: 10, // specifies the max no. of objects in one page
     // this means `iterable.isNextCached` will be `false` once every 10 times
   };
-  const sessionsByRoomIterable = hms.sessions.list(sessionFilters);
-  for await (const session of sessionsByRoomIterable) {
+  let latestSession: HMS.Session.Object | undefined;
+  const sessionsByRoom = hms.sessions.list(sessionFilters);
+  for await (const session of sessionsByRoom) {
+    // store the latest session
+    if (latestSession == undefined) {
+      latestSession = session;
+    }
     console.log(session);
   }
 
-  // get the active session in a room
-  const anotherSessionFilters = {
-    room_id: "test_room_id",
-    active: true,
-  };
-  const activeSessionInRoom = hms.sessions.list(anotherSessionFilters);
-  let flag = false;
-  for await (const session of activeSessionInRoom) {
-    flag = true;
-    console.log("A session is active in the room: ", session);
-  }
-  if (!flag) {
-    console.log("No active session found!");
+  // get a recording assets by session
+  const recordingAssets = hms.recordingAssets.list({
+    session_id: latestSession?.id,
+  });
+  for await (const recordingAsset of recordingAssets) {
+    console.log(recordingAsset);
   }
 }
 
-roomsExample();
-roomCodesExample();
-activeRoomsExample();
-sessionsExample();
+exampleUsage();

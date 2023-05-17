@@ -1,55 +1,84 @@
 import { logger, LogLevelOptions, setLogLevel } from "./services/LoggerService";
-import { AuthService } from "./services/AuthService";
-import { APIService } from "./services/APIService";
-import { RoomService } from "./apis/RoomService";
-import { ActiveRoomService } from "./apis/ActiveRoomService";
-import { SessionService } from "./apis/SessionService";
-import { RoomCodeService } from "./apis/RoomCodeService";
+import AuthService from "./services/AuthService";
+import APIService from "./services/APIService";
+import {
+  ActiveRoomWrapper,
+  AnalyticsWrapper,
+  ExternalStreamWrapper,
+  LiveStreamWrapper,
+  RecordingAssetWrapper,
+  RecordingWrapper,
+  RoomCodeWrapper,
+  RoomWrapper,
+  SessionWrapper,
+} from "./api_wrappers";
 
 /**
  * Server-side SDK for 100ms REST API endpoints.
  */
 export class HMSSDK {
   /**
-   * Can be used to generate `ManagementToken` that allows to make API calls to
-   * 100ms backend and `AuthToken` that allows for joining Room on client side.
+   * Can be used to generate `HMS.ManagementToken` that allows to make API calls to
+   * 100ms backend and `HMS.AuthToken` that allows for joining Room on client side.
+   * @returns an instance of `HMS.AuthService`
    */
   readonly auth: AuthService;
 
   /**
    * Can be used to make 100ms API calls not supported in the SDK.
-   * @returns an instance of `APIService`
+   * @returns an instance of `HMS.APIService`
    */
   readonly api: APIService;
 
   /**
-   * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/Rooms/object Room API calls}.
-   * @returns an instance of `RoomService`
+   * @returns an instance of `HMS.ActiveRoomWrapper`
    */
-  readonly rooms: RoomService;
+  readonly activeRooms: ActiveRoomWrapper;
 
   /**
-   * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/active-rooms/object Active Room API calls}.
-   * @returns an instance of `ActiveRoomService`
+   * @returns an instance of `HMS.AnalyticsWrapper`
    */
-  readonly activeRooms: ActiveRoomService;
+  readonly analytics: AnalyticsWrapper;
 
   /**
-   * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/Sessions/object Session API calls}.
-   * @returns an instance of `SessionService`
+   * @returns an instance of `HMS.ExternalStreamWrapper`
    */
-  readonly sessions: SessionService;
+  readonly externalStreams: ExternalStreamWrapper;
 
   /**
-   * Wrapper for {@link https://www.100ms.live/docs/server-side/v2/api-reference/room-codes/room-code-object Room Code API calls}.
-   * @returns an instance of `RoomCodeService`
+   * @returns an instance of `HMS.LiveStreamWrapper`
    */
-  readonly roomCodes: RoomCodeService;
+  readonly liveStreams: LiveStreamWrapper;
+
+  /**
+   * @returns an instance of `HMS.RecordingAssetWrapper`
+   */
+  readonly recordingAssets: RecordingAssetWrapper;
+
+  /**
+   * @returns an instance of `HMS.RecordingWrapper`
+   */
+  readonly recordings: RecordingWrapper;
+
+  /**
+   * @returns an instance of `HMS.RoomCodeWrapper`
+   */
+  readonly roomCodes: RoomCodeWrapper;
+
+  /**
+   * @returns an instance of `HMS.RoomWrapper`
+   */
+  readonly rooms: RoomWrapper;
+
+  /**
+   * @returns an instance of `HMS.SessionWrapper`
+   */
+  readonly sessions: SessionWrapper;
 
   /**
    * @param accessKey App Access Key from Dashboard
    * @param secret App Secret from Dashboard
-   * @returns an instance of `HMSSDK`
+   * @returns an instance of `HMS.SDK`
    */
   constructor(accessKey?: string, secret?: string) {
     if (!accessKey) {
@@ -60,16 +89,21 @@ export class HMSSDK {
     }
     if (!accessKey || !secret) {
       const err = new Error("Please provide access key and secret key.");
-      logger.error("access key or secret is not defined", err);
+      logger.error("Access key or secret not defined", err);
       throw err;
     }
     this.auth = new AuthService(accessKey, secret);
     this.api = new APIService(this.auth);
 
-    this.rooms = new RoomService(this.api);
-    this.activeRooms = new ActiveRoomService(this.api);
-    this.sessions = new SessionService(this.api);
-    this.roomCodes = new RoomCodeService(this.api);
+    this.activeRooms = new ActiveRoomWrapper(this.api);
+    this.analytics = new AnalyticsWrapper(this.api);
+    this.externalStreams = new ExternalStreamWrapper(this.api);
+    this.liveStreams = new LiveStreamWrapper(this.api);
+    this.recordingAssets = new RecordingAssetWrapper(this.api);
+    this.recordings = new RecordingWrapper(this.api);
+    this.roomCodes = new RoomCodeWrapper(this.api);
+    this.rooms = new RoomWrapper(this.api);
+    this.sessions = new SessionWrapper(this.api);
   }
 
   setLogLevel(level: LogLevelOptions) {
