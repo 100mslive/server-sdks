@@ -15,7 +15,7 @@ The 100ms Node.js SDK provides an easy-to-use wrapper around [100ms REST APIs](h
 
 ## Documentation
 
-The `examples/nodejs` folder on root has some examples on how to use the SDK.
+Checkout the [`examples/nodejs`](https://github.com/100mslive/server-sdks/tree/main/examples/nodejs) folder on root of the repository has some examples on how to use the SDK.
 
 ## Installation
 
